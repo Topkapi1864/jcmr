@@ -29,7 +29,7 @@ Sign in at `/crew/signin` with the crew password, pick a name. Gary and Fiona ar
 ## Backups
 
 - Admin → **Download board as CSV** and **Download full backup** (every table as JSON).
-- `GET /api/backup?key=$BACKUP_KEY` returns the same JSON — the nightly job is a GitHub Actions workflow (`ops/backup.workflow.yml` — move it to `.github/workflows/backup.yml` to enable it) that fetches it and keeps the file as a workflow artifact for 90 days. Set `BACKUP_KEY` and `SITE_URL` as repository secrets.
+- `GET /api/backup?key=$BACKUP_KEY` returns the same JSON — the nightly job is a GitHub Actions workflow (`.github/workflows/backup.yml`) that fetches it and keeps the file as a workflow artifact for 90 days. Set `BACKUP_KEY` and `SITE_URL` as repository secrets.
 - `npm run backup` writes `backups/jcmr-<date>.json` from whatever `DATABASE_URL` points at.
 
 ## Content and route files
