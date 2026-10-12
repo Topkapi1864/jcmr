@@ -1,9 +1,25 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
-  cacheComponents: true,
-  partialPrefetching: true,
+  // Classic rendering model: the crew board is dynamic, the public pages are
+  // cheap server renders. Cache Components are not needed for a site this size.
+  cacheComponents: false,
+  // The GPX files and seed CSV are read from disk at request time.
+  outputFileTracingIncludes: {
+    "/**": ["./content/**/*"],
+  },
+  serverExternalPackages: ["@libsql/client"],
+  async headers() {
+    return [
+      {
+        source: "/(.*)",
+        headers: [
+          { key: "X-Content-Type-Options", value: "nosniff" },
+          { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
+        ],
+      },
+    ];
+  },
 };
 
 export default nextConfig;
