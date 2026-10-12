@@ -706,6 +706,7 @@ label.field > span {
   margin-bottom: 6px;
 }
 input[type="text"],
+input[type="search"],
 input[type="password"],
 input[type="date"],
 input[type="url"],

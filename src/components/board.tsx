@@ -119,6 +119,7 @@ export function StaleStrip({ amber, red }: { amber: number; red: number }) {
 export function FilterBar({ filters, path }: { filters: Filters; path: string }) {
   return (
     <form method="get" action={path} className="filters">
+      <input type="search" name="q" defaultValue={filters.q ?? ""} placeholder="Search items" aria-label="Search" style={{ width: "auto", minHeight: 38, borderRadius: "var(--radius-pill)", padding: "0 14px", flex: "1 1 10rem" }} />
       <select name="status" defaultValue={filters.status ?? ""} aria-label="Status">
         <option value="">Any status</option>
         {STATUSES.map((s) => (
@@ -141,7 +142,7 @@ export function FilterBar({ filters, path }: { filters: Filters; path: string })
       <button className="btn btn-sm" type="submit">
         Filter
       </button>
-      {(filters.status || filters.area || filters.hideDone) && (
+      {(filters.status || filters.area || filters.hideDone || filters.q) && (
         <Link href={path} className="small">
           clear
         </Link>
@@ -182,5 +183,6 @@ export function readFilters(sp: Record<string, string | undefined>): Filters {
     status: STATUSES.includes(status as Status) ? status : "",
     area: AREAS.includes((sp.area ?? "") as (typeof AREAS)[number]) ? (sp.area as (typeof AREAS)[number]) : "",
     hideDone: sp.hideDone === "1",
+    q: (sp.q ?? "").slice(0, 80),
   };
 }

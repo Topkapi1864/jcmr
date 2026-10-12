@@ -7,7 +7,7 @@ import { fmtDay, fmtWhen } from "@/lib/time";
 import { autoLink } from "@/lib/util";
 import { StatusBadge } from "@/components/board";
 import { DoneButton } from "@/components/done-button";
-import { addNoteAction, deleteItemAction, reassignAction, updateItemAction } from "../../actions";
+import { addNoteAction, deleteItemAction, reassignAction, setStatusAction, updateItemAction } from "../../actions";
 
 export default async function ItemPage({ params }: { params: Promise<{ id: string }> }) {
   const s = await requireCrew();
@@ -38,6 +38,16 @@ export default async function ItemPage({ params }: { params: Promise<{ id: strin
           {item.status !== "done" && editable && <DoneButton id={item.id} label="Mark done" />}
         </div>
         <h1 style={{ margin: 0 }}>{item.title}</h1>
+        {editable && (
+          <form action={setStatusAction} className="row" aria-label="Set status">
+            <input type="hidden" name="id" value={item.id} />
+            {STATUSES.map((st) => (
+              <button key={st} className={`btn btn-sm${item.status === st ? " btn-primary" : ""}`} type="submit" name="status" value={st} disabled={item.status === st}>
+                {STATUS_LABELS[st]}
+              </button>
+            ))}
+          </form>
+        )}
         <dl className="small muted stack-sm" style={{ margin: 0 }}>
           <div>
             <b>Owner</b> {item.owner.name}

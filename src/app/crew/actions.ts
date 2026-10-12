@@ -39,6 +39,19 @@ export async function undoDoneAction(id: number, previous?: Status): Promise<voi
   bump();
 }
 
+/** One-tap status change from the item page (owner, creator or admin). */
+export async function setStatusAction(form: FormData) {
+  const s = await requireCrew();
+  const id = Number(form.get("id"));
+  const status = String(form.get("status") ?? "") as Status;
+  if (!STATUSES.includes(status)) throw new Error("Bad status");
+  const it = await loadItem(id);
+  if (!canEditFields(s, it)) throw new Error("Only the owner (or an admin) can change the status");
+  await updateItem(s, id, { status });
+  bump();
+  redirect(`/crew/items/${id}`);
+}
+
 export async function addNoteAction(form: FormData) {
   const s = await requireCrew();
   const id = Number(form.get("id"));

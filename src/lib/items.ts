@@ -18,6 +18,7 @@ export type Filters = {
   status?: Status | "";
   area?: Area | "";
   hideDone?: boolean;
+  q?: string;
 };
 
 export function staleLevel(days: number): ItemRow["staleLevel"] {
@@ -62,6 +63,10 @@ export async function listItems(filters: Filters = {}): Promise<ItemRow[]> {
   if (filters.status) out = out.filter((i) => i.status === filters.status);
   if (filters.area) out = out.filter((i) => i.area === filters.area);
   if (filters.hideDone) out = out.filter((i) => i.status !== "done");
+  if (filters.q?.trim()) {
+    const q = filters.q.trim().toLowerCase();
+    out = out.filter((i) => [i.title, i.waitingOn, i.owner.shortName, i.owner.name, i.latestNote?.text ?? ""].some((t) => t.toLowerCase().includes(q)));
+  }
   return out;
 }
 
