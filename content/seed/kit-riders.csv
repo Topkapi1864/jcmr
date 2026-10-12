@@ -1,0 +1,55 @@
+rider,name,category,qty,status,storage,notes,link
+Simon,Bike,bike,1,have,bike,Might need servicing,
+Simon,Pump (compact),ride-kit,1,have,bike,,
+Simon,Bike computer,ride-kit,1,have,bike,Charge before the start and overnight,
+Simon,Derailleur charger,lights-power,1,have,robyn,Need to work out how they will be charged,
+Simon,Spare derailleur batteries,lights-power,1,need,car,,
+Simon,Winter bib tights / warm padded lower kit,clothing,2,need,bag,Only have one,
+Simon,Warm cycling socks,clothing,6,need,bag,Have 3 good pairs,
+Simon,Gels,nutrition,50,need,car,Work out how many I need and order,
+Gary,Bike,bike,1,have,bike,Bars and brake lever plus service after the 4 Oct fall,
+Gary,Pump (compact),ride-kit,1,have,bike,,
+Gary,Bike computer,ride-kit,1,have,bike,Charge before the start and overnight,
+Gary,Derailleur charger,lights-power,1,have,robyn,Need to work out how they will be charged,
+Gary,Spare derailleur batteries,lights-power,1,need,car,,
+Gary,Winter bib tights / warm padded lower kit,clothing,2,need,bag,Only have one,
+Gary,Warm cycling socks,clothing,6,need,bag,Have 3 good pairs,
+Gary,Properly fitting cycling helmet,ride-kit,1,need,bike,Replace — the old one took the 4 Oct hit,
+Gary,Cycling shoes / winter footwear,ride-kit,2,ordered,bike,Second pair ordered from Lake 26/9,
+Gary,Bottle cages,ride-kit,2,need,bike,Have 1,
+Gary,Drinking bottles,ride-kit,6,need,car,Uniform G-labelled bottles,
+Gary,Mudguards with rear mudflap,ride-kit,1,need,bike,,
+Gary,Bell,ride-kit,1,need,bike,Probably wise but not sure,
+Gary,Top-tube food bag,ride-kit,2,need,bike,Have 1 — need one in the car for swapover,
+Gary,Main white front light,lights-power,1,need,bike,Have a helmet light but changing helmets,
+Gary,Main red rear light,lights-power,1,need,bike,?,
+Gary,Reflective vest / accessories,lights-power,1,ordered,bike,Proviz vest — Simon buying,
+Gary,Compact power bank,lights-power,1,need,bike,,
+Gary,Personal charging cable set,lights-power,1,need,car,,
+Gary,Gels,nutrition,50,need,car,Work out how many I need and order,
+Nathan,Bike,bike,1,have,bike,,https://www.scott-sports.com/gb/en/product/scott-addict-40-bike?article=4253573020014
+Nathan,Wheels,bike,1,have,bike,,https://www.biketart.com/products/zipp-303-s-carbon-tubeless-disc-brake-wheel?variant=40810384294067
+Nathan,Tyres,bike,2,have,bike,,https://www.sigmasports.com/item/Hutchinson/Blackbird-Tubeless-Ready-Road-Bike-Tyre/12NFJ
+Nathan,Pump (compact),ride-kit,1,have,bike,Electric,https://www.halfords.com/cycling/bike-maintenance/bike-pumps/truflo-electron-compact-electric-pump-474155.html
+Nathan,Main white front light,lights-power,1,have,bike,,https://www.amazon.co.uk/dp/B0DCZ2T2RB
+Nathan,Main red rear light,lights-power,1,have,bike,,https://www.amazon.co.uk/dp/B0BZVRSXJL
+Nathan,Thermal wicking base-layer tops,clothing,1,have,bag,,https://www.altura.co.uk/collections/mens-base-layers
+Nathan,Long-sleeved thermal jerseys,clothing,1,have,bag,,https://www.altura.co.uk/collections/mens-jerseys
+Nathan,Bib shorts,clothing,1,have,bag,,https://www.altura.co.uk/products/altura-progel-plus-mens-cycling-bib-shorts?variant=46019002302753
+Nathan,Waterproof cycling jacket,clothing,1,have,bike,,
+Nathan,Waterproof leggings,clothing,1,need,bag,,
+Nathan,Warm winter cycling gloves,clothing,1,need,bike,,
+Nathan,Cycling shoes / winter footwear,ride-kit,1,need,bike,,https://www.sigmasports.com/item/Lake/CX190-Road-Cycling-Shoes/16D30
+Nathan,Weatherproof overshoes,clothing,1,have,bike,,
+Nathan,Warm cycling socks,clothing,1,need,bag,,
+Nathan,Saddlebag,ride-kit,1,have,bike,,https://www.altura.co.uk/products/altura-nightvision-large-saddle-bag
+Nathan,Heart rate monitor,ride-kit,1,have,bike,,https://www.amazon.co.uk/Garmin-Adult-Unisex-Premium-HRM-Dual-Bluetooth/dp/B07N3C5WRG
+Nathan,Bike computer,ride-kit,1,have,bike,Wahoo Bolt,https://uk.wahoofitness.com/devices/bike-computers/elemnt-bolt-buy
+Nathan,Phone mount,ride-kit,1,have,bike,,https://www.quadlockcase.co.uk/collections/shop-mounts/products/bike-mount
+Nathan,Gels,nutrition,1,have,car,,https://www.amazon.co.uk/HIGH5-Release-Performance-Caffeine-Free-Endurance/dp/B005K8IGPS
+Nathan,Electrolyte tablets,nutrition,1,have,car,,https://www.amazon.co.uk/HIGH5-ZERO-Electrolyte-Tablet-Performance/dp/B003Y3LWXY/
+Nathan,Energy bars,nutrition,1,have,car,,https://www.amazon.co.uk/HIGH5-Energy-Artificial-Sweeteners-Caramel/dp/B0C2NHTVGF
+Nathan,Hot food on the day,nutrition,1,need,robyn,Ideally pasta / sauce / easy to swallow and digest,
+Nathan,Peanut butter and jam sandwiches,nutrition,1,need,car,Make the day before,
+Nathan,Balaclava,clothing,1,need,bike,,
+Nathan,Multitool with chain breaker,repair,1,need,bike,,

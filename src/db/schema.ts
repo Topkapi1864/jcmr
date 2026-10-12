@@ -199,6 +199,71 @@ export const links = sqliteTable("links", {
   sortOrder: integer("sort_order").notNull().default(0),
 });
 
+// ---- Kit (equipment lists) ---------------------------------------------
+
+export const KIT_CATEGORIES = ["bike", "ride-kit", "lights-power", "clothing", "repair", "nutrition", "off-bike", "tools-spares", "other"] as const;
+export type KitCategory = (typeof KIT_CATEGORIES)[number];
+export const KIT_CATEGORY_LABELS: Record<KitCategory, string> = {
+  bike: "Bike",
+  "ride-kit": "Ride kit",
+  "lights-power": "Lights & power",
+  clothing: "Clothing",
+  repair: "On-bike repair",
+  nutrition: "Nutrition",
+  "off-bike": "Off the bike",
+  "tools-spares": "Tools & spares (car / camper)",
+  other: "Other",
+};
+export const KIT_STATUSES = ["need", "ordered", "have"] as const;
+export type KitStatus = (typeof KIT_STATUSES)[number];
+export const KIT_STATUS_LABELS: Record<KitStatus, string> = { need: "Need", ordered: "Ordered", have: "Have" };
+export const KIT_STORAGE = ["", "bike", "car", "robyn", "bag", "van", "home"] as const;
+export const KIT_STORAGE_LABELS: Record<(typeof KIT_STORAGE)[number], string> = {
+  "": "— not decided",
+  bike: "On the bike",
+  car: "Leapfrog car",
+  robyn: "Robyn (camper)",
+  bag: "Overnight bag",
+  van: "Yasmin's van",
+  home: "Stays at home",
+};
+
+export const kitCatalogue = sqliteTable("kit_catalogue", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
+  name: text("name").notNull(),
+  category: text("category", { enum: KIT_CATEGORIES }).notNull().default("other"),
+  suggestedQty: integer("suggested_qty").notNull().default(1),
+  carriedIn: text("carried_in", { enum: KIT_STORAGE }).notNull().default(""),
+  notes: text("notes").notNull().default(""),
+  source: text("source").notNull().default(""),
+  sortOrder: integer("sort_order").notNull().default(100),
+  active: integer("active", { mode: "boolean" }).notNull().default(true),
+});
+
+export const kitItems = sqliteTable(
+  "kit_items",
+  {
+    id: integer("id").primaryKey({ autoIncrement: true }),
+    riderId: integer("rider_id")
+      .notNull()
+      .references(() => riders.id),
+    catalogueId: integer("catalogue_id").references(() => kitCatalogue.id),
+    name: text("name").notNull(),
+    category: text("category", { enum: KIT_CATEGORIES }).notNull().default("other"),
+    qty: integer("qty").notNull().default(1),
+    status: text("status", { enum: KIT_STATUSES }).notNull().default("need"),
+    storage: text("storage", { enum: KIT_STORAGE }).notNull().default(""),
+    notes: text("notes").notNull().default(""),
+    link: text("link").notNull().default(""),
+    updatedBy: text("updated_by").notNull(),
+    updatedAt: text("updated_at").notNull(),
+  },
+  (t) => [index("kit_items_rider_idx").on(t.riderId)],
+);
+
+export type KitCatalogueRow = typeof kitCatalogue.$inferSelect;
+export type KitItem = typeof kitItems.$inferSelect;
+
 export const audit = sqliteTable("audit", {
   id: integer("id").primaryKey({ autoIncrement: true }),
   actor: text("actor").notNull(),

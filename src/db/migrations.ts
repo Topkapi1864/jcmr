@@ -111,6 +111,32 @@ export const MIGRATIONS: string[] = [
      url TEXT NOT NULL,
      sort_order INTEGER NOT NULL DEFAULT 0
    )`,
+  `CREATE TABLE IF NOT EXISTS kit_catalogue (
+     id INTEGER PRIMARY KEY AUTOINCREMENT,
+     name TEXT NOT NULL,
+     category TEXT NOT NULL DEFAULT 'other',
+     suggested_qty INTEGER NOT NULL DEFAULT 1,
+     carried_in TEXT NOT NULL DEFAULT '',
+     notes TEXT NOT NULL DEFAULT '',
+     source TEXT NOT NULL DEFAULT '',
+     sort_order INTEGER NOT NULL DEFAULT 100,
+     active INTEGER NOT NULL DEFAULT 1
+   )`,
+  `CREATE TABLE IF NOT EXISTS kit_items (
+     id INTEGER PRIMARY KEY AUTOINCREMENT,
+     rider_id INTEGER NOT NULL REFERENCES riders(id),
+     catalogue_id INTEGER REFERENCES kit_catalogue(id),
+     name TEXT NOT NULL,
+     category TEXT NOT NULL DEFAULT 'other',
+     qty INTEGER NOT NULL DEFAULT 1,
+     status TEXT NOT NULL DEFAULT 'need',
+     storage TEXT NOT NULL DEFAULT '',
+     notes TEXT NOT NULL DEFAULT '',
+     link TEXT NOT NULL DEFAULT '',
+     updated_by TEXT NOT NULL,
+     updated_at TEXT NOT NULL
+   )`,
+  `CREATE INDEX IF NOT EXISTS kit_items_rider_idx ON kit_items(rider_id)`,
   `CREATE TABLE IF NOT EXISTS audit (
      id INTEGER PRIMARY KEY AUTOINCREMENT,
      actor TEXT NOT NULL,

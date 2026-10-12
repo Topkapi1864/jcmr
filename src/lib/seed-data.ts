@@ -132,6 +132,21 @@ export async function seedAll(withItems: boolean, log: (s: string) => void = con
     .onConflictDoUpdate({ target: schema.settings.key, set: { value: "refused — x-frame-options: SAMEORIGIN (checked 12 Oct 2026)" } });
   say("settings + content: ok");
 
+  {
+    const { importCatalogueCsv, importRiderItemsCsv } = await import("./kit");
+    const catPath = path.join(process.cwd(), "content", "seed", "kit-catalogue.csv");
+    const ridersPath = path.join(process.cwd(), "content", "seed", "kit-riders.csv");
+    if (fs.existsSync(catPath)) {
+      const r = await importCatalogueCsv(fs.readFileSync(catPath, "utf8"));
+      say(`kit suggested list: ${r.imported} imported, ${r.updated} updated, ${r.rejected.length} rejected`);
+    }
+    if (fs.existsSync(ridersPath)) {
+      const fiona = await db.select().from(schema.people).where(eq(schema.people.shortName, "Fiona")).get();
+      const r = await importRiderItemsCsv({ name: "Fiona", pid: fiona!.id, role: "admin" }, fs.readFileSync(ridersPath, "utf8"));
+      say(`kit riders' lists: ${r.imported} imported, ${r.updated} updated, ${r.rejected.length} rejected`);
+    }
+  }
+
   if (withItems) {
     const { importItemsCsv } = await import("./import");
     const csvPath = path.join(process.cwd(), "content", "seed", "items.csv");
