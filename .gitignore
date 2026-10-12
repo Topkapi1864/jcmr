@@ -6,5 +6,4 @@ data/
 *.db
 *.db-journal
 .DS_Store
-_to_delete/
 tsconfig.tsbuildinfo
