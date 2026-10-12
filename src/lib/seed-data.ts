@@ -60,7 +60,7 @@ const LINKS = [
 ];
 
 const CONTENT: Record<string, string> = {
-  home_intro_md: "On 14–15 November 2026 four of us are cycling from Barnes in London, where Mum died, to Yeadon in Yorkshire, where she came from and where she rests — about 240 miles over two days, finishing on the second anniversary.",
+  home_intro_md: "On 15 November 2024 we lost our Mum, Janet. Two years on, four of us are cycling 240 miles from the house in Barnes where she died to Yeadon in West Yorkshire, where she came from and where she is buried. We are raising money for the Royal British Legion.",
   mum_story_md: "_Simon's \"our story\" piece goes here — the same text as the JustGiving page. Admin → Content._",
 };
 
@@ -108,6 +108,9 @@ export async function seedAll(withItems: boolean, log: (s: string) => void = con
     say(`links: ${LINKS.length} (blank URLs to fill in Admin → Links)`);
   }
 
+  const mumPhoto = await db.select().from(schema.assets).where(eq(schema.assets.kind, "mum_photo")).get();
+  if (!mumPhoto) await db.insert(schema.assets).values({ kind: "mum_photo", path: "/photos/janet-portrait.jpg", chosenBy: "handoff", at: new Date().toISOString() });
+
   for (const [key, md] of Object.entries(CONTENT)) {
     const ex = await db.select().from(schema.content).where(eq(schema.content.key, key)).get();
     if (!ex) await db.insert(schema.content).values({ key, md });
@@ -117,6 +120,11 @@ export async function seedAll(withItems: boolean, log: (s: string) => void = con
     const ex = await db.select().from(schema.settings).where(eq(schema.settings.key, key)).get();
     if (!ex) await db.insert(schema.settings).values({ key, value });
   }
+  // The placeholder strapline and intro from the first build give way to the handoff copy.
+  const strap = await db.select().from(schema.settings).where(eq(schema.settings.key, "site.strapline")).get();
+  if (strap?.value?.startsWith("Four of us, 240 miles")) await db.update(schema.settings).set({ value: SETTING_DEFAULTS["site.strapline"] }).where(eq(schema.settings.key, "site.strapline"));
+  const intro = await db.select().from(schema.content).where(eq(schema.content.key, "home_intro_md")).get();
+  if (intro?.md?.startsWith("On 14–15 November 2026 four of us")) await db.update(schema.content).set({ md: CONTENT.home_intro_md }).where(eq(schema.content.key, "home_intro_md"));
   // The embed verdict is a fact of the first build (12 Oct 2026).
   await db
     .insert(schema.settings)

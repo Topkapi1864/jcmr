@@ -1,8 +1,9 @@
 import Link from "next/link";
 import { NavLink } from "./nav-link";
+import { Lockup } from "./logo";
 import { JUSTGIVING_URL } from "@/lib/constants";
 
-// The three shells (spec §3.4). Design drops in here: header, footer, nav.
+// The three shells (spec §3.4), in the JCMR identity (design handoff v1).
 
 const PUBLIC_NAV = [
   { href: "/mum", label: "Mum" },
@@ -15,10 +16,12 @@ export function PublicShell({
   children,
   preview,
   liveActive,
+  hero,
 }: {
   children: React.ReactNode;
   preview?: boolean;
   liveActive?: boolean;
+  hero?: React.ReactNode;
 }) {
   return (
     <div data-shell="public">
@@ -32,12 +35,12 @@ export function PublicShell({
           </div>
         </div>
       )}
-      <header className="shell-header">
+      <header className="pub-header">
         <div className="container">
-          <Link href="/" className="brand">
-            JCMR
+          <Link href="/" className="lockup" aria-label="JCMR home">
+            <Lockup />
           </Link>
-          <nav className="nav" aria-label="Site">
+          <nav className="pub-nav" aria-label="Site">
             {PUBLIC_NAV.map((n) => (
               <NavLink key={n.href} href={n.href}>
                 {n.label}
@@ -45,20 +48,21 @@ export function PublicShell({
             ))}
             {liveActive && <NavLink href="/live">Live</NavLink>}
           </nav>
-          <a className="btn btn-primary btn-sm" href={JUSTGIVING_URL} target="_blank" rel="noopener">
-            Give on JustGiving
+          <a className="btn-donate" href={JUSTGIVING_URL} target="_blank" rel="noopener">
+            Donate
           </a>
         </div>
       </header>
-      <main className="shell-main">
+      {hero}
+      <main className="pub-main">
         <div className="container">{children}</div>
       </main>
-      <footer className="shell-footer">
-        <div className="container row-between">
-          <span>The Janet Channon Memorial Ride · 14–15 November 2026</span>
-          <span>
-            In memory of Janet Channon, 1945–2024 · <a href={JUSTGIVING_URL}>Royal British Legion</a>
-          </span>
+      <footer className="pub-footer">
+        <div className="container">
+          <div className="memorial-line">In memory of Janet Channon · 15 November 2024</div>
+          <div>
+            Royal British Legion, registered charity 219279 (England and Wales) and SC054446 (Scotland) · <Link href="/crew">Crew</Link>
+          </div>
         </div>
       </footer>
     </div>
@@ -83,36 +87,51 @@ export function CrewShell({
   name: string;
   isAdmin: boolean;
 }) {
+  const nav = isAdmin ? [...CREW_NAV, { href: "/crew/admin", label: "Admin" }] : CREW_NAV;
   return (
-    <div data-shell="crew">
-      <header className="shell-header">
-        <div className="container">
-          <Link href="/crew" className="brand">
-            JCMR crew
-          </Link>
-          <nav className="nav" aria-label="Crew">
-            {CREW_NAV.map((n) => (
-              <NavLink key={n.href} href={n.href}>
-                {n.label}
-              </NavLink>
-            ))}
-            {isAdmin && (
-              <NavLink href="/crew/admin" exact={false}>
-                Admin
-              </NavLink>
-            )}
-          </nav>
-          <form action="/crew/signout" method="post" className="row">
-            <span className="small muted">{name}</span>
-            <button className="btn btn-sm btn-quiet" type="submit">
+    <div data-shell="crew" className="crew">
+      <nav className="rail" aria-label="Crew">
+        <div className="rail-top">
+          <Lockup onDark size="lg" />
+          <div className="label">Crew · 14–15 Nov 2026</div>
+        </div>
+        <div className="rail-nav">
+          {nav.map((n) => (
+            <NavLink key={n.href} href={n.href} exact={n.href !== "/crew/admin"}>
+              {n.label}
+            </NavLink>
+          ))}
+        </div>
+        <div className="rail-foot">
+          <img src="/photos/janet-garden.jpg" alt="Janet" />
+          <div>
+            <div className="for">For Janet</div>
+            <div className="date">15 November 2024</div>
+          </div>
+        </div>
+      </nav>
+      <div className="crew-main">
+        <header className="crew-head">
+          <div>
+            <h1>JCMR crew</h1>
+            <div className="sub">The job board — one owner, a due date, what it&rsquo;s waiting on.</div>
+          </div>
+          <form action="/crew/signout" method="post" className="crew-who">
+            <span className="name">{name}</span>
+            <button className="btn btn-sm" type="submit">
               Sign out
             </button>
           </form>
-        </div>
-      </header>
-      <main className="shell-main">
-        <div className="container">{children}</div>
-      </main>
+        </header>
+        <main className="crew-body">{children}</main>
+      </div>
+      <nav className="tabbar" aria-label="Crew">
+        {(isAdmin ? [CREW_NAV[0], CREW_NAV[1], CREW_NAV[2], CREW_NAV[5], { href: "/crew/admin", label: "Admin" }] : [CREW_NAV[0], CREW_NAV[1], CREW_NAV[2], CREW_NAV[4], CREW_NAV[5]]).map((n) => (
+          <NavLink key={n.href} href={n.href} exact={n.href !== "/crew/admin"}>
+            {n.label}
+          </NavLink>
+        ))}
+      </nav>
     </div>
   );
 }

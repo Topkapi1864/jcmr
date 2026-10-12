@@ -15,20 +15,21 @@ export default async function DonatePage({ searchParams }: { searchParams: Promi
 
   return (
     <PublicShell preview={g.preview} liveActive={g.liveActive}>
-      <header className="hero" style={{ paddingBottom: 0 }}>
-        <h1>Give</h1>
-        <p className="strap">
+      <header className="section">
+        <div className="dates">In Janet’s name</div>
+        <h1 className="page-title">Give</h1>
+        <p className="prose">
           We are riding for the Royal British Legion, in Mum&rsquo;s name. Every gift goes straight to them through JustGiving, and your message sits on
           the donor wall there.
         </p>
       </header>
       <div className="stack mt-6" style={{ maxWidth: "32rem" }}>
-        <a className="btn btn-primary btn-big" href={JUSTGIVING_URL} target="_blank" rel="noopener">
+        <a className="btn-donate btn-donate-big" href={JUSTGIVING_URL} target="_blank" rel="noopener" style={{ width: "100%" }}>
           Give on JustGiving
         </a>
         {total.amount !== null && (
-          <section className="card">
-            <div className="small muted">Raised so far</div>
+          <section className="card card-lg">
+            <div className="label">Raised so far</div>
             <div className="total">{fmtPounds(total.amount)}</div>
             <div className="small muted">
               {total.target ? `of a ${fmtPounds(total.target)} target` : ""}

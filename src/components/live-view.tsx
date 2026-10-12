@@ -117,59 +117,56 @@ export function LiveView({ initial, tv }: { initial: LivePayload; tv: boolean })
   }
 
   return (
-    <div className="stack">
-      <section className="live-top">
-        <div className="live-day">
-          {dayLabel}
-          {offline && <span> · offline — last updated {hhmm(new Date(lastUpdated).toISOString())}</span>}
+    <div className="stack section">
+      <section className="live-card">
+        <div className="live-card-head">
+          <div>
+            <div className="label">
+              <span className="live-dot" data-level={data.status ? (age.level === "none" ? "live" : age.level) : "none"} />
+              {dayLabel}
+              {data.status ? ` · posted ${age.text}` : ""}
+              {offline ? ` · offline, last updated ${hhmm(new Date(lastUpdated).toISOString())}` : ""}
+            </div>
+            <div className="live-status">{data.status ? data.status.text : "Waiting for the first update from the road."}</div>
+            {data.status && (
+              <div className="small muted">
+                {data.status.place && `${data.status.place} · `}
+                {hhmm(data.status.postedAt)} · {data.status.postedBy}, crew
+              </div>
+            )}
+          </div>
+          {data.nextStop && (
+            <div className="live-next">
+              <div className="label">Next planned stop</div>
+              <div className="name">{data.nextStop.name}</div>
+              {data.nextStop.plannedTime && <div className="when">about {data.nextStop.plannedTime}</div>}
+            </div>
+          )}
         </div>
-        <div className="live-status">{data.status ? data.status.text : "Waiting for the first update from the road."}</div>
-        {data.status && (
-          <div className="small muted">
-            {data.status.place && `${data.status.place} · `}
-            {hhmm(data.status.postedAt)} · {data.status.postedBy} ·{" "}
-            <span className="age" data-level={age.level}>
-              {age.text}
-            </span>
-          </div>
-        )}
-        {data.nextStop && (
-          <div className="small mt-4">
-            Next planned stop: <b>{data.nextStop.name}</b>
-            {data.nextStop.plannedTime && ` around ${data.nextStop.plannedTime}`}
-          </div>
-        )}
-      </section>
-
-      <section className="stack-sm">
-        {data.links.length === 0 && <p className="muted">No live map link yet. It appears here once the riders set off.</p>}
         {framed && <iframe key={frameKey} className="live-frame" src={framed.url} title={`Live map — ${framed.label}`} />}
-        {data.mode === "single" && primary && !framed && (
-          <a className="btn btn-primary btn-big" href={primary.url} target="_blank" rel="noopener">
-            Open the live map{primary.rider ? ` — ${primary.rider}` : ""}
-          </a>
-        )}
-        {(data.mode === "all" || (data.mode === "single" && data.links.length > 1)) && (
-          <div className="stack-sm">
-            {data.mode === "single" && <p className="small muted">The others:</p>}
-            {data.links
-              .filter((l) => data.mode === "all" || !l.primary)
-              .map((l) => (
-                <a key={l.id} className="btn" href={l.url} target="_blank" rel="noopener">
-                  {l.label} ({l.provider})
-                </a>
-              ))}
-          </div>
-        )}
-      </section>
-
-      <section className="card row-between">
-        <div>
-          <div className="small muted">Raised so far</div>
-          <div className="total">{pounds(data.total.amount)}</div>
+        <div className="live-actions">
+          {data.links.length === 0 && <p className="muted small" style={{ margin: 0 }}>No live map link yet. It appears here once the riders set off.</p>}
+          {data.mode === "single" && primary && !framed && (
+            <a className="btn btn-primary" href={primary.url} target="_blank" rel="noopener">
+              Open the live map{primary.rider ? ` — ${primary.rider}` : ""}
+            </a>
+          )}
+          {data.links
+            .filter((l) => data.mode === "all" || (!l.primary && l !== framed))
+            .map((l) => (
+              <a key={l.id} className="btn" href={l.url} target="_blank" rel="noopener">
+                {l.label} · {l.provider}
+              </a>
+            ))}
         </div>
-        <a className="btn btn-primary" href={JUSTGIVING_URL} target="_blank" rel="noopener">
-          Give
+      </section>
+      <p className="small muted">Positions come from the riders&rsquo; own live-tracking links and open in the provider&rsquo;s page. The crew post a line at every stop.</p>
+
+      <section className="donate-card" style={{ maxWidth: "32rem" }}>
+        <div className="label">Raised so far</div>
+        <div className="total" style={{ color: "var(--duck-egg)", margin: "8px 0 14px" }}>{pounds(data.total.amount)}</div>
+        <a className="btn-donate btn-donate-big" href={JUSTGIVING_URL} target="_blank" rel="noopener">
+          Give on JustGiving
         </a>
       </section>
     </div>

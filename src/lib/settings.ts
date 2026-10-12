@@ -17,7 +17,7 @@ export type SettingKey = (typeof SETTING_KEYS)[number];
 
 export const SETTING_DEFAULTS: Record<SettingKey, string> = {
   "site.public_live": "false",
-  "site.strapline": "Four of us, 240 miles, from where she died to where she rests.",
+  "site.strapline": "Riding from Mum’s last home to her first one",
   "route.start_label": "Barnes, London",
   "tracker.mode": "single",
   "tracker.primary_rider": "",

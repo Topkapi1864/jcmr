@@ -4,6 +4,15 @@ import type { ItemRow, Filters } from "@/lib/items";
 import { fmtDay } from "@/lib/time";
 import { DoneButton } from "./done-button";
 import { CopySummary } from "./copy-summary";
+import { NavLink } from "./nav-link";
+
+const VIEWS = [
+  { href: "/crew", label: "Mine" },
+  { href: "/crew/stale", label: "Stale" },
+  { href: "/crew/area", label: "By area" },
+  { href: "/crew/owner", label: "By owner" },
+  { href: "/crew/due", label: "By due" },
+];
 
 export function StatusBadge({ status }: { status: Status }) {
   return <span className={`badge badge-${status}`}>{STATUS_LABELS[status]}</span>;
@@ -144,8 +153,15 @@ export function FilterBar({ filters, path }: { filters: Filters; path: string })
 export function BoardHeader({ title, counts, filters, path, children }: { title: string; counts: React.ComponentProps<typeof Counts>["c"]; filters: Filters; path: string; children?: React.ReactNode }) {
   return (
     <div className="stack-sm">
+      <nav className="views" aria-label="Views">
+        {VIEWS.map((v) => (
+          <NavLink key={v.href} href={v.href}>
+            {v.label}
+          </NavLink>
+        ))}
+      </nav>
       <div className="row-between">
-        <h1 style={{ margin: 0 }}>{title}</h1>
+        <h2 style={{ margin: 0 }}>{title}</h2>
         <div className="row">
           <CopySummary />
           <Link href="/crew/items/new" className="btn btn-primary btn-sm">

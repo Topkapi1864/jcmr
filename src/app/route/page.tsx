@@ -24,9 +24,10 @@ export default async function RoutePage({ searchParams }: { searchParams: Promis
 
   return (
     <PublicShell preview={g.preview} liveActive={g.liveActive}>
-      <header className="hero" style={{ paddingBottom: 0 }}>
-        <h1>The route</h1>
-        <p className="strap">
+      <header className="section">
+        <div className="dates">Saturday 14 – Sunday 15 November 2026</div>
+        <h1 className="page-title">The route</h1>
+        <p className="prose">
           {startLabel} to Yeadon Cemetery — about 240 miles over two days, the finish on the second anniversary.
         </p>
       </header>
@@ -41,7 +42,7 @@ export default async function RoutePage({ searchParams }: { searchParams: Promis
         {days.map((d) => {
           const ds = stops.filter((s) => s.dayId === d.id);
           return (
-            <section key={d.id} className="card day-block">
+            <section key={d.id} className="card card-lg day-block">
               <h2>{d.label}</h2>
               <p className="muted" style={{ margin: 0 }}>
                 {d.day === 1 ? startLabel : d.startLabel} → {d.endLabel}

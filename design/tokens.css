@@ -1,70 +1,117 @@
 /*
-  JCMR design tokens — PLACEHOLDER THEME.
+  JCMR design tokens — the Asarte / JCMR identity (design handoff v1, 12 Oct 2026).
 
-  This is the one file Gary's Claude Design export replaces. Every colour,
-  font, type step, spacing step, radius and shadow in the site is one of
-  these custom properties; components never use a literal. `npm run
-  lint:tokens` fails the build if a colour or font literal appears anywhere
-  under src/.
+  Every colour, font, type step, spacing step, radius and shadow in the site is
+  one of these custom properties; components never use a literal. `npm run
+  lint:tokens` (part of the build) fails on any literal under src/.
 
-  Keep every property name. Change only the values.
+  Palette (from the handoff README):
+    navy #14213D · deep navy app ground #0D1526 · panel #141F36 · duck egg #B9DAD6
+    deep duck egg #6AA39D · dark teal #3F7F79 · cream #F6F2EA · muted on dark #9AA6BF
+    secondary on dark #C9D2E6 · muted on light #5B667F · navy-on-duck-egg #2E3F5C
+    Legion red #D52B1E (donate only) · status green #41C98A · amber #F0B64A
 */
 
 :root {
-  /* ---- Colour ---------------------------------------------------------- */
-  --color-bg: #f7f6f3;
-  --color-bg-raised: #ffffff;
-  --color-bg-sunken: #edebe6;
-  --color-fg: #1d1c1a;
-  --color-fg-muted: #5f5c56;
-  --color-fg-faint: #908c84;
-  --color-border: #d9d6cf;
-  --color-border-strong: #b9b5ac;
+  /* ---- Brand ----------------------------------------------------------- */
+  --navy: #14213d;
+  --navy-deep: #0d1526;
+  --panel: #141f36;
+  --duck-egg: #b9dad6;
+  --duck-egg-deep: #6aa39d;
+  --teal: #3f7f79;
+  --teal-hover: #2e605b;
+  --cream: #f6f2ea;
+  --cream-ink: #f2efe8;
+  --sand: #ede7db;
+  --muted-dark: #9aa6bf;
+  --secondary-dark: #c9d2e6;
+  --muted-light: #5b667f;
+  --ink-light: #46516a;
+  --navy-on-egg: #2e3f5c;
+  --legion-red: #d52b1e;
+  --green: #41c98a;
+  --amber-brand: #f0b64a;
+  --white: #ffffff;
 
-  --color-accent: #8a2b2b; /* poppy-ish placeholder; Gary's call */
-  --color-accent-fg: #ffffff;
-  --color-accent-soft: #f3e3e3;
-  --color-link: #5a3a8a;
+  --border-on-dark: rgba(255, 255, 255, 0.09);
+  --border-on-dark-strong: rgba(255, 255, 255, 0.14);
+  --border-on-light: rgba(20, 33, 61, 0.1);
+  --border-on-light-strong: rgba(20, 33, 61, 0.3);
+  --chip-on-dark: rgba(255, 255, 255, 0.08);
+  --overlay-dark: rgba(13, 21, 38, 0.88);
+  --amber-soft-dark: rgba(240, 182, 74, 0.14);
+  --green-soft-dark: rgba(65, 201, 138, 0.14);
+  --red-soft-dark: rgba(213, 43, 30, 0.16);
+  --egg-border: rgba(185, 218, 214, 0.4);
+  --egg-wash: rgba(20, 33, 61, 0.08);
 
-  /* Status + stale — these carry meaning on the board; keep them distinct */
-  --color-ok: #2f6f4e;
-  --color-ok-soft: #e1efe7;
-  --color-amber: #a86a00;
-  --color-amber-soft: #fbeccb;
-  --color-red: #b3261e;
-  --color-red-soft: #f9dcda;
-  --color-blocked: #7a4a9c;
-  --color-blocked-soft: #ebe1f5;
-  --color-progress: #1f5f8b;
-  --color-progress-soft: #dcebf5;
+  /* ---- Semantic colour (light / public = cream) ---------------------- */
+  --color-bg: var(--cream);
+  --color-bg-raised: var(--white);
+  --color-bg-sunken: var(--sand);
+  --color-bg-band: var(--duck-egg);
+  --color-fg: var(--navy);
+  --color-fg-muted: var(--muted-light);
+  --color-fg-faint: var(--muted-light);
+  --color-fg-on-band: var(--navy-on-egg);
+  --color-border: var(--border-on-light);
+  --color-border-strong: var(--border-on-light-strong);
 
-  --color-focus: #2b6fd6;
+  --color-accent: var(--navy);
+  --color-accent-fg: var(--cream);
+  --color-accent-soft: var(--duck-egg);
+  --color-brand: var(--duck-egg-deep);
+  --color-link: var(--teal);
+  --color-link-hover: var(--teal-hover);
+  --color-donate: var(--legion-red);
+  --color-donate-fg: var(--white);
+
+  /* Status + stale — these carry meaning on the board */
+  --color-ok: var(--teal);
+  --color-ok-soft: rgba(106, 163, 157, 0.18);
+  --color-amber: #9a6a00;
+  --color-amber-soft: rgba(240, 182, 74, 0.22);
+  --color-red: var(--legion-red);
+  --color-red-soft: rgba(213, 43, 30, 0.12);
+  --color-blocked: var(--navy-on-egg);
+  --color-blocked-soft: rgba(20, 33, 61, 0.1);
+  --color-progress: var(--teal);
+  --color-progress-soft: rgba(185, 218, 214, 0.45);
+  --color-live: var(--green);
+
+  --color-focus: var(--duck-egg-deep);
 
   /* ---- Type ------------------------------------------------------------ */
-  --font-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-  --font-serif: ui-serif, Georgia, "Times New Roman", serif;
-  --font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  --font-sans: "Figtree", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-serif: "Literata", Georgia, serif;
+  --font-mono: "JetBrains Mono", ui-monospace, Menlo, monospace;
 
   --font-body: var(--font-sans);
   --font-display: var(--font-serif);
 
-  --text-xs: 0.75rem;
-  --text-sm: 0.875rem;
-  --text-md: 1rem;
-  --text-lg: 1.125rem;
-  --text-xl: 1.375rem;
-  --text-2xl: 1.75rem;
-  --text-3xl: 2.25rem;
-  --text-4xl: 3rem;
+  --text-xs: 0.6875rem; /* 11px — mono labels */
+  --text-sm: 0.8125rem; /* 13px */
+  --text-md: 0.9375rem; /* 15px */
+  --text-lg: 1.0625rem; /* 17px */
+  --text-xl: 1.25rem; /* 20px */
+  --text-2xl: 1.625rem; /* 26px — screen titles */
+  --text-3xl: 2.25rem; /* 36px */
+  --text-4xl: 2.75rem; /* 44px — hero */
   --text-tv: 4.5rem;
 
-  --leading-tight: 1.15;
+  --leading-tight: 1.1;
   --leading-normal: 1.5;
-  --leading-loose: 1.7;
+  --leading-loose: 1.55;
 
   --weight-normal: 400;
   --weight-medium: 500;
-  --weight-bold: 700;
+  --weight-bold: 600;
+  --weight-black: 800;
+
+  --tracking-label: 0.08em;
+  --tracking-lockup: 0.2em;
+  --tracking-tight: -0.02em;
 
   /* ---- Space ----------------------------------------------------------- */
   --space-1: 0.25rem;
@@ -76,19 +123,22 @@
   --space-7: 3rem;
   --space-8: 4rem;
 
-  --gutter: 1rem;
-  --measure: 42rem; /* max text width */
-  --page-max: 64rem;
-  --tap: 44px; /* minimum tap target */
+  --gutter: 1.5rem;
+  --measure: 52ch;
+  --page-max: 70rem; /* 1120px */
+  --tap: 44px;
+  --rail-width: 232px;
+  --tabbar-height: 54px;
 
   /* ---- Shape ----------------------------------------------------------- */
-  --radius-sm: 4px;
-  --radius-md: 8px;
+  --radius-sm: 7px;
+  --radius-md: 10px;
   --radius-lg: 14px;
+  --radius-xl: 18px;
   --radius-pill: 999px;
 
-  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.06);
-  --shadow-md: 0 4px 14px rgba(0, 0, 0, 0.08);
+  --shadow-sm: 0 1px 2px rgba(20, 33, 61, 0.06);
+  --shadow-md: 0 6px 14px rgba(20, 33, 61, 0.3);
 
   /* ---- Motion ---------------------------------------------------------- */
   --ease: cubic-bezier(0.2, 0.7, 0.2, 1);
@@ -96,44 +146,40 @@
   --dur-normal: 220ms;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --color-bg: #15140f;
-    --color-bg-raised: #1f1e18;
-    --color-bg-sunken: #0f0e0b;
-    --color-fg: #efece4;
-    --color-fg-muted: #b5b0a4;
-    --color-fg-faint: #7d786d;
-    --color-border: #33312a;
-    --color-border-strong: #4a473e;
-    --color-accent: #d25858;
-    --color-accent-fg: #15140f;
-    --color-accent-soft: #3a1f1f;
-    --color-link: #b89bdf;
-    --color-ok: #7cc49a;
-    --color-ok-soft: #1c3127;
-    --color-amber: #e8b04a;
-    --color-amber-soft: #3a2c10;
-    --color-red: #f07a72;
-    --color-red-soft: #3f1a18;
-    --color-blocked: #c39ae0;
-    --color-blocked-soft: #2d1f3a;
-    --color-progress: #7fb8e6;
-    --color-progress-soft: #16293a;
-    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
-    --shadow-md: 0 4px 14px rgba(0, 0, 0, 0.5);
-  }
-}
+/* The crew app and the TV are dark so they read in the van after four. */
+[data-shell="crew"],
+[data-shell="tv"],
+[data-shell="dark"] {
+  --color-bg: var(--navy-deep);
+  --color-bg-raised: var(--panel);
+  --color-bg-sunken: var(--navy-deep);
+  --color-bg-band: var(--panel);
+  --color-fg: var(--cream-ink);
+  --color-fg-muted: var(--muted-dark);
+  --color-fg-faint: var(--muted-dark);
+  --color-fg-on-band: var(--secondary-dark);
+  --color-border: var(--border-on-dark);
+  --color-border-strong: var(--border-on-dark-strong);
 
-/* The TV page is designed for a room: dark, large, high contrast — regardless
-   of the viewer's preference. */
-[data-shell="tv"] {
-  --color-bg: #000000;
-  --color-bg-raised: #111111;
-  --color-bg-sunken: #000000;
-  --color-fg: #ffffff;
-  --color-fg-muted: #c9c9c9;
-  --color-fg-faint: #8a8a8a;
-  --color-border: #333333;
-  --color-border-strong: #555555;
+  --color-accent: var(--duck-egg);
+  --color-accent-fg: var(--navy);
+  --color-accent-soft: var(--chip-on-dark);
+  --color-brand: var(--duck-egg);
+  --color-link: var(--duck-egg);
+  --color-link-hover: #d6e9e6;
+
+  --color-ok: var(--green);
+  --color-ok-soft: var(--green-soft-dark);
+  --color-amber: var(--amber-brand);
+  --color-amber-soft: var(--amber-soft-dark);
+  --color-red: #ff6f63;
+  --color-red-soft: var(--red-soft-dark);
+  --color-blocked: var(--secondary-dark);
+  --color-blocked-soft: var(--chip-on-dark);
+  --color-progress: var(--duck-egg);
+  --color-progress-soft: rgba(185, 218, 214, 0.16);
+
+  --color-focus: var(--duck-egg);
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.35);
+  --shadow-md: 0 4px 14px rgba(0, 0, 0, 0.5);
 }

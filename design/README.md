@@ -1,12 +1,12 @@
-# Where the design drops in
+# Where the design lives
 
-The site is built on a neutral placeholder theme. Gary's Claude Design export replaces it in the places below and nowhere else. Behaviour, data, routing, auth, the import and the read door are unaffected by when the design lands.
+The JCMR identity from the design handoff (12 Oct 2026 — navy / duck egg / cream, Literata + Figtree + JetBrains Mono, the wheel badge) is applied. The handoff prototypes are kept in `JCMR/site/design_handoff_jcmr/` on the Drive, not in the repo. This file lists where each part of the design lives so a change lands in one place.
 
 ## 1. Tokens — `design/tokens.css`
 
 Every colour, font family, type-scale step, spacing step, radius and shadow is a CSS custom property on `:root`, with a dark-mode block and a `[data-shell="tv"]` block. Components consume tokens only. `npm run lint:tokens` (run as part of `npm run build`) fails if a colour or `font-family` literal appears anywhere under `src/`.
 
-Keep every property name; change the values. Add new ones freely — then use them in `src/app/globals.css`.
+Keep every property name; change the values. Brand values are the `--navy`, `--duck-egg`… properties at the top; the `--color-*` semantic layer maps them for light (public) and dark (crew, TV) shells. Add new ones freely — then use them in `src/app/globals.css`.
 
 Fonts: if the design wants web fonts, either add `@font-face` rules to `tokens.css` pointing at files in `public/fonts/` (self-hosted, no third-party script), or load them with `next/font` in `src/app/layout.tsx` and point `--font-body` / `--font-display` at the generated variables.
 
@@ -28,6 +28,10 @@ One stylesheet, organised by section. Classes the templates use:
 | Public | `.hero`, `.live-strip`, `.dates`, `.mum-photo`, `.rider-cards`, `.rider-photo`, `.day-block`, `.day-stats`, `.map`, `.total`, `.holding` |
 | Live (phone) | `.live-top`, `.live-day`, `.live-status`, `.live-frame`, `.age[data-level]` |
 | TV | `.tv`, `.tv-head`, `.tv-status`, `.tv-sub`, `.tv-frame`, `.tv-foot`, `.tv-age[data-level]` |
+
+## 2b. Identity — `src/components/logo.tsx`
+
+`Wheel` (8/4/0 spokes for 96/48/24px), `Lockup` (wheel + JCMR + name), `Badge` (the roundel). Favicon: `src/app/icon.svg`. Photos: `public/photos/janet-*.jpg`.
 
 ## 3. The three shells — `src/components/shells.tsx`
 

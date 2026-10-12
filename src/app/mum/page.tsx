@@ -19,14 +19,19 @@ export default async function MumPage({ searchParams }: { searchParams: Promise<
   return (
     <PublicShell preview={g.preview} liveActive={g.liveActive}>
       <article className="stack">
-        <header className="hero" style={{ paddingBottom: 0 }}>
-          <h1>Janet Channon</h1>
-          <p className="dates">25 July 1945 – 15 November 2024</p>
+        <header className="section">
+          <div className="dates">25 July 1945 – 15 November 2024</div>
+          <h1 className="page-title">Janet Channon</h1>
         </header>
         {photo?.path && <img className="mum-photo" src={photo.path} alt="Janet Channon" />}
         <div className="prose" dangerouslySetInnerHTML={{ __html: renderMarkdown(story) }} />
+        <div className="photo-grid" style={{ maxWidth: "48rem" }}>
+          <img src="/photos/janet-beach.jpg" alt="Janet laughing by the sea" />
+          <img src="/photos/janet-garden.jpg" alt="Janet in the garden" style={{ objectPosition: "50% 25%" }} />
+          <img src="/photos/janet-wine.jpg" alt="Janet raising a glass" style={{ objectPosition: "50% 20%" }} />
+        </div>
         <p>
-          <a className="btn btn-primary" href={JUSTGIVING_URL} target="_blank" rel="noopener">
+          <a className="btn-donate btn-donate-big" href={JUSTGIVING_URL} target="_blank" rel="noopener">
             Give in her memory on JustGiving
           </a>
         </p>
