@@ -13,7 +13,7 @@ const PEOPLE: { name: string; shortName: string; role: "admin" | "crew"; sort: n
   { name: "Fiona", shortName: "Fiona", role: "admin", sort: 2 },
   { name: "Simon Channon", shortName: "Simon", role: "crew", sort: 10 },
   { name: "Nathan Channon", shortName: "Nathan", role: "crew", sort: 11 },
-  { name: "Steve Whitehouse (Brooky)", shortName: "Steve", role: "crew", sort: 12 },
+  { name: "Steve Brook (Brooky)", shortName: "Steve", role: "crew", sort: 12 },
   { name: "Yasmin", shortName: "Yasmin", role: "crew", sort: 20 },
   { name: "Ewan", shortName: "Ewan", role: "crew", sort: 30 },
   { name: "Sedef", shortName: "Sedef", role: "crew", sort: 31 },
@@ -32,7 +32,7 @@ const RIDERS = [
   { short: "Gary", display: "Gary Channon", sort: 1 },
   { short: "Simon", display: "Simon Channon", sort: 2 },
   { short: "Nathan", display: "Nathan Channon", sort: 3 },
-  { short: "Steve", display: "Steve Whitehouse", sort: 4 },
+  { short: "Steve", display: "Steve Brook", sort: 4 },
 ];
 
 const DAYS = [
@@ -78,8 +78,10 @@ export async function seedAll(withItems: boolean, log: (s: string) => void = con
 
   for (const r of RIDERS) {
     const person = await db.select().from(schema.people).where(eq(schema.people.shortName, r.short)).get();
-    const ex = await db.select().from(schema.riders).where(eq(schema.riders.displayName, r.display)).get();
-    if (ex) await db.update(schema.riders).set({ personId: person?.id, sortOrder: r.sort }).where(eq(schema.riders.id, ex.id));
+    const ex =
+      (person ? await db.select().from(schema.riders).where(eq(schema.riders.personId, person.id)).get() : undefined) ??
+      (await db.select().from(schema.riders).where(eq(schema.riders.displayName, r.display)).get());
+    if (ex) await db.update(schema.riders).set({ personId: person?.id, displayName: r.display, sortOrder: r.sort }).where(eq(schema.riders.id, ex.id));
     else await db.insert(schema.riders).values({ personId: person?.id, displayName: r.display, sortOrder: r.sort, bioMd: "" });
   }
   say(`riders: ${RIDERS.length}`);
