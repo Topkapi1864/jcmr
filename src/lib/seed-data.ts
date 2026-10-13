@@ -62,7 +62,10 @@ const LINKS = [
 
 const CONTENT: Record<string, string> = {
   home_intro_md: "On 15 November 2024 we lost our Mum, Janet. Two years on, four of us are cycling 240 miles from the house in Barnes where she died to Yeadon in West Yorkshire, where she came from and where she is buried. We are raising money for the Royal British Legion.",
-  mum_story_md: "_Simon's \"our story\" piece goes here — the same text as the JustGiving page. Admin → Content._",
+  mum_story_md: fs.existsSync(path.join(process.cwd(), "content", "seed", "mum-story.md"))
+    ? fs.readFileSync(path.join(process.cwd(), "content", "seed", "mum-story.md"), "utf8")
+    : "_Simon's \"our story\" piece — Admin → Content._",
+  family_words_md: "This ride is for Janet. Our Mum. Their Nan. A much-loved Sister. *[Read Simon’s words about Mum →](/mum)*",
 };
 
 export async function seedAll(withItems: boolean, log: (s: string) => void = console.log): Promise<string[]> {
@@ -126,6 +129,8 @@ export async function seedAll(withItems: boolean, log: (s: string) => void = con
   // The placeholder strapline and intro from the first build give way to the handoff copy.
   const strap = await db.select().from(schema.settings).where(eq(schema.settings.key, "site.strapline")).get();
   if (strap?.value?.startsWith("Four of us, 240 miles")) await db.update(schema.settings).set({ value: SETTING_DEFAULTS["site.strapline"] }).where(eq(schema.settings.key, "site.strapline"));
+  const story = await db.select().from(schema.content).where(eq(schema.content.key, "mum_story_md")).get();
+  if (story?.md?.startsWith("_Simon's")) await db.update(schema.content).set({ md: CONTENT.mum_story_md }).where(eq(schema.content.key, "mum_story_md"));
   const intro = await db.select().from(schema.content).where(eq(schema.content.key, "home_intro_md")).get();
   if (intro?.md?.startsWith("On 14–15 November 2026 four of us")) await db.update(schema.content).set({ md: CONTENT.home_intro_md }).where(eq(schema.content.key, "home_intro_md"));
   // The embed verdict is a fact of the first build (12 Oct 2026).
