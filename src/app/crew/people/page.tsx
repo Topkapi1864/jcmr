@@ -15,8 +15,9 @@ export default async function PeopleRoster() {
   const s = await requireCrew();
   const admin = s.role === "admin";
   const crew = await crewMembers();
-  const inCount = crew.filter((p) => p.d.agreed === "yes").length;
-  const briefed = crew.filter((p) => p.d.briefed).length;
+  const support = crew.filter((p) => !p.isRider);
+  const inCount = support.filter((p) => p.d.agreed === "yes").length;
+  const briefed = support.filter((p) => p.d.briefed).length;
   const noMobile = crew.filter((p) => !p.d.mobile).length;
 
   return (
@@ -33,12 +34,15 @@ export default async function PeopleRoster() {
         </div>
       </div>
       <p className="muted small">
-        Everyone on the ride and what they are doing. Tap a name for the full details — mobile, email, date of birth, skills, first aid, emergency contact. You
+        The four riders and everyone supporting them. Riders aren&rsquo;t crew, so the crew questions don&rsquo;t apply to them. Tap a name for the full details — mobile, email, date of birth, skills, first aid, emergency contact. You
         can edit your own; admins can edit anyone&rsquo;s. Everything here is one record per person, so a change shows everywhere.
       </p>
       <div className="counts">
         <span>
-          <b>{inCount}</b> of {crew.length} confirmed
+          <b>{crew.length - support.length}</b> riders
+        </span>
+        <span>
+          <b>{inCount}</b> of {support.length} crew confirmed
         </span>
         <span>
           <b>{briefed}</b> briefed
@@ -71,10 +75,10 @@ export default async function PeopleRoster() {
                   </Link>
                   {p.d.availability && <div className="xs muted">{p.d.availability}</div>}
                 </td>
-                <td>{p.d.crewRole || <span className="muted">—</span>}</td>
+                <td>{p.isRider ? <span className="badge">Rider</span> : p.d.crewRole || <span className="muted">—</span>}</td>
                 <td>
-                  {agreedBadge(p.d.agreed)}
-                  {admin && p.d.agreed !== "yes" && (
+                  {p.isRider ? <span className="muted">n/a</span> : agreedBadge(p.d.agreed)}
+                  {admin && !p.isRider && p.d.agreed !== "yes" && (
                     <form action={quickCrewFlag} style={{ display: "inline", marginLeft: 6 }}>
                       <input type="hidden" name="personId" value={p.id} />
                       <input type="hidden" name="field" value="agreed" />
@@ -87,8 +91,8 @@ export default async function PeopleRoster() {
                   )}
                 </td>
                 <td>
-                  {p.d.briefed ? <span className="badge badge-done">Briefed</span> : <span className="muted">not yet</span>}
-                  {admin && (
+                  {p.isRider ? <span className="muted">n/a</span> : p.d.briefed ? <span className="badge badge-done">Briefed</span> : <span className="muted">not yet</span>}
+                  {admin && !p.isRider && (
                     <form action={quickCrewFlag} style={{ display: "inline", marginLeft: 6 }}>
                       <input type="hidden" name="personId" value={p.id} />
                       <input type="hidden" name="field" value="briefed" />

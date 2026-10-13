@@ -4,7 +4,7 @@ import { AGREED, type Agreed, type CrewDetails, type Person } from "@/db/schema"
 import { nowIso } from "./time";
 import type { Actor } from "./kit";
 
-export type CrewMember = Person & { d: CrewDetails };
+export type CrewMember = Person & { d: CrewDetails; isRider: boolean };
 
 const EMPTY: Omit<CrewDetails, "personId"> = {
   crewRole: "",
@@ -38,8 +38,14 @@ export async function crewMembers(): Promise<CrewMember[]> {
     .filter((p) => p.shortName !== "Fiona")
     .map((p) => {
       const d = byId.get(p.id) ?? { personId: p.id, ...EMPTY };
-      if (!d.crewRole && riderPids.has(p.id)) d.crewRole = "Rider";
-      return { ...p, d };
+      const isRider = riderPids.has(p.id);
+      // Riders ride; they are not crew, so their role is fixed and the crew questions don't apply.
+      if (isRider) {
+        d.crewRole = "Rider";
+        d.agreed = "yes";
+        d.briefed = false;
+      }
+      return { ...p, d, isRider };
     });
 }
 
