@@ -65,7 +65,8 @@ export default async function SleepingPage({ searchParams }: { searchParams: Pro
   }
   const allPlaces = await places(true);
   const placeById = new Map(allPlaces.map((p) => [p.id, p]));
-  const people = await activePeople();
+  // Fiona is an AI and does not need a bed.
+  const people = (await activePeople()).filter((p) => p.shortName !== "Fiona");
   const rows = await allSleeping();
   const byPerson = new Map<number, Record<Night, SleepingRow | undefined>>();
   for (const p of people) byPerson.set(p.id, { thu: undefined, fri: undefined, sat: undefined, sun: undefined });
