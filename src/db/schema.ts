@@ -1,4 +1,4 @@
-import { sqliteTable, text, integer, real, index } from "drizzle-orm/sqlite-core";
+import { sqliteTable, text, integer, real, index, uniqueIndex } from "drizzle-orm/sqlite-core";
 
 // ---- Enumerations (spec §5.3, §6) --------------------------------------
 
@@ -263,6 +263,45 @@ export const kitItems = sqliteTable(
 
 export type KitCatalogueRow = typeof kitCatalogue.$inferSelect;
 export type KitItem = typeof kitItems.$inferSelect;
+
+// ---- Sleeping arrangements -----------------------------------------------
+
+export const NIGHTS = ["thu", "fri", "sat", "sun"] as const;
+export type Night = (typeof NIGHTS)[number];
+export const NIGHT_LABELS: Record<Night, string> = { thu: "Thursday", fri: "Friday", sat: "Saturday", sun: "Sunday" };
+export const NIGHT_DATES: Record<Night, string> = { thu: "12 Nov", fri: "13 Nov", sat: "14 Nov", sun: "15 Nov" };
+export const NIGHT_WHERE: Record<Night, string> = { thu: "London", fri: "London", sat: "Loughborough", sun: "Yeadon" };
+
+/** A place someone can sleep: a house, a hotel, Robyn, an Airbnb. Admins keep the list. */
+export const sleepingPlaces = sqliteTable("sleeping_places", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
+  name: text("name").notNull(),
+  town: text("town").notNull().default(""),
+  beds: integer("beds"), // rough capacity, if known
+  notes: text("notes").notNull().default(""),
+  sortOrder: integer("sort_order").notNull().default(100),
+  active: integer("active", { mode: "boolean" }).notNull().default(true),
+});
+
+/** One row per person per night. No row = not decided yet. place_id null + note = free text ("own home", "not there"). */
+export const sleeping = sqliteTable(
+  "sleeping",
+  {
+    id: integer("id").primaryKey({ autoIncrement: true }),
+    personId: integer("person_id")
+      .notNull()
+      .references(() => people.id),
+    night: text("night", { enum: NIGHTS }).notNull(),
+    placeId: integer("place_id").references(() => sleepingPlaces.id),
+    note: text("note").notNull().default(""),
+    updatedBy: text("updated_by").notNull(),
+    updatedAt: text("updated_at").notNull(),
+  },
+  (t) => [uniqueIndex("sleeping_person_night").on(t.personId, t.night)],
+);
+
+export type SleepingPlace = typeof sleepingPlaces.$inferSelect;
+export type SleepingRow = typeof sleeping.$inferSelect;
 
 export const audit = sqliteTable("audit", {
   id: integer("id").primaryKey({ autoIncrement: true }),

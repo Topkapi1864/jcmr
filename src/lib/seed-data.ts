@@ -149,6 +149,12 @@ export async function seedAll(withItems: boolean, log: (s: string) => void = con
     }
   }
 
+  {
+    const { seedPlaces } = await import("./sleeping");
+    const n = await seedPlaces();
+    say(`sleeping places: ${n} added`);
+  }
+
   if (withItems) {
     const { importItemsCsv } = await import("./import");
     const csvPath = path.join(process.cwd(), "content", "seed", "items.csv");

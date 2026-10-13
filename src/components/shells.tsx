@@ -76,8 +76,10 @@ const CREW_NAV = [
   { href: "/crew/owner", label: "By owner" },
   { href: "/crew/due", label: "By due" },
   { href: "/crew/kit", label: "Kit" },
+  { href: "/crew/sleeping", label: "Sleeping" },
   { href: "/crew/live", label: "Live" },
 ];
+const SECTION_ROOTS = ["/crew/admin", "/crew/kit", "/crew/sleeping"];
 
 export function CrewShell({
   children,
@@ -98,7 +100,7 @@ export function CrewShell({
         </div>
         <div className="rail-nav">
           {nav.map((n) => (
-            <NavLink key={n.href} href={n.href} exact={!["/crew/admin", "/crew/kit"].includes(n.href)}>
+            <NavLink key={n.href} href={n.href} exact={!SECTION_ROOTS.includes(n.href)}>
               {n.label}
             </NavLink>
           ))}
@@ -127,8 +129,8 @@ export function CrewShell({
         <main className="crew-body">{children}</main>
       </div>
       <nav className="tabbar" aria-label="Crew">
-        {[CREW_NAV[0], CREW_NAV[1], CREW_NAV[2], CREW_NAV[5], CREW_NAV[6]].map((n) => (
-          <NavLink key={n.href} href={n.href} exact={!["/crew/admin", "/crew/kit"].includes(n.href)}>
+        {[CREW_NAV[0], CREW_NAV[1], CREW_NAV[5], CREW_NAV[6], CREW_NAV[7]].map((n) => (
+          <NavLink key={n.href} href={n.href} exact={!SECTION_ROOTS.includes(n.href)}>
             {n.label}
           </NavLink>
         ))}
