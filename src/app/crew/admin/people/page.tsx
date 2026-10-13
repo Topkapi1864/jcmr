@@ -20,10 +20,10 @@ function PersonForm({ p }: { p?: Person }) {
       </div>
       <div className="form-inline">
         <label className="field">
-          <span>Role</span>
+          <span>Site access (not their role on the ride)</span>
           <select name="role" defaultValue={p?.role ?? "crew"}>
-            <option value="crew">crew</option>
-            <option value="admin">admin</option>
+            <option value="crew">member — sign in, board, own details</option>
+            <option value="admin">admin — settings, everyone&rsquo;s details</option>
           </select>
         </label>
         <label className="field">
@@ -55,6 +55,10 @@ export default async function PeoplePage() {
         ← Admin
       </Link>
       <h1>People</h1>
+      <p className="muted small">
+        Who can sign in and what they can change. Admins: {people.filter((p) => p.role === "admin").map((p) => p.shortName).join(", ")}. Everyone else is a member.
+        Roles on the ride (rider, driver, first aider…) live in <Link href="/crew/people">Crew</Link>, not here.
+      </p>
       {people.map((p) => (
         <PersonForm key={p.id} p={p} />
       ))}
