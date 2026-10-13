@@ -137,6 +137,24 @@ export const MIGRATIONS: string[] = [
      updated_at TEXT NOT NULL
    )`,
   `CREATE INDEX IF NOT EXISTS kit_items_rider_idx ON kit_items(rider_id)`,
+  `CREATE TABLE IF NOT EXISTS crew_details (
+     person_id INTEGER PRIMARY KEY REFERENCES people(id),
+     crew_role TEXT NOT NULL DEFAULT '',
+     agreed TEXT NOT NULL DEFAULT 'unknown',
+     briefed INTEGER NOT NULL DEFAULT 0,
+     mobile TEXT NOT NULL DEFAULT '',
+     dob TEXT NOT NULL DEFAULT '',
+     skills TEXT NOT NULL DEFAULT '',
+     first_aid TEXT NOT NULL DEFAULT '',
+     vehicle TEXT NOT NULL DEFAULT '',
+     dietary TEXT NOT NULL DEFAULT '',
+     emergency_name TEXT NOT NULL DEFAULT '',
+     emergency_phone TEXT NOT NULL DEFAULT '',
+     availability TEXT NOT NULL DEFAULT '',
+     notes TEXT NOT NULL DEFAULT '',
+     updated_by TEXT NOT NULL DEFAULT '',
+     updated_at TEXT NOT NULL DEFAULT ''
+   )`,
   `CREATE TABLE IF NOT EXISTS sleeping_places (
      id INTEGER PRIMARY KEY AUTOINCREMENT,
      name TEXT NOT NULL,

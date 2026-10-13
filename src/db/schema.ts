@@ -264,6 +264,44 @@ export const kitItems = sqliteTable(
 export type KitCatalogueRow = typeof kitCatalogue.$inferSelect;
 export type KitItem = typeof kitItems.$inferSelect;
 
+// ---- Crew details (one row per person, joined to people) -------------------
+
+export const AGREED = ["unknown", "asked", "yes", "no"] as const;
+export type Agreed = (typeof AGREED)[number];
+export const AGREED_LABELS: Record<Agreed, string> = { unknown: "Not asked yet", asked: "Asked, waiting", yes: "Yes — in", no: "Can't make it" };
+export const CREW_ROLE_SUGGESTIONS = [
+  "Rider",
+  "Leapfrog car driver",
+  "Robyn (camper) driver",
+  "Support / feed stops",
+  "First aider",
+  "Photos & social",
+  "Finish in Yeadon",
+  "Family support",
+];
+
+export const crewDetails = sqliteTable("crew_details", {
+  personId: integer("person_id")
+    .primaryKey()
+    .references(() => people.id),
+  crewRole: text("crew_role").notNull().default(""),
+  agreed: text("agreed", { enum: AGREED }).notNull().default("unknown"),
+  briefed: integer("briefed", { mode: "boolean" }).notNull().default(false),
+  mobile: text("mobile").notNull().default(""),
+  dob: text("dob").notNull().default(""), // YYYY-MM-DD
+  skills: text("skills").notNull().default(""),
+  firstAid: text("first_aid").notNull().default(""), // e.g. "EFAW, expires Mar 2027"
+  vehicle: text("vehicle").notNull().default(""),
+  dietary: text("dietary").notNull().default(""),
+  emergencyName: text("emergency_name").notNull().default(""),
+  emergencyPhone: text("emergency_phone").notNull().default(""),
+  availability: text("availability").notNull().default(""), // which days they are with us
+  notes: text("notes").notNull().default(""),
+  updatedBy: text("updated_by").notNull().default(""),
+  updatedAt: text("updated_at").notNull().default(""),
+});
+export type CrewDetails = typeof crewDetails.$inferSelect;
+
 // ---- Sleeping arrangements -----------------------------------------------
 
 export const NIGHTS = ["thu", "fri", "sat", "sun"] as const;
