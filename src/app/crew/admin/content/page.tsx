@@ -33,6 +33,10 @@ export default async function ContentPage({ searchParams }: { searchParams: Prom
           <span>Mum — Simon&rsquo;s &ldquo;our story&rdquo; (the JustGiving text, as written)</span>
           <textarea name="mum_story_md" rows={14} defaultValue={content.mum_story_md ?? ""} />
         </label>
+        <label className="field">
+          <span>Home — the family&rsquo;s words about Mum (a few lines, shown beside her photos)</span>
+          <textarea name="family_words_md" rows={4} defaultValue={content.family_words_md ?? ""} placeholder="A few lines about Mum from Gary and Simon, in your own words." />
+        </label>
         <button className="btn btn-primary" type="submit">
           Save words
         </button>

@@ -1261,3 +1261,129 @@ details.done-group summary {
   color: var(--color-accent-fg);
   border-color: var(--color-accent);
 }
+
+/* ---- Follow the Ride (home live card, design handoff) ----------------- */
+.live-miles {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  margin-top: 8px;
+}
+.live-miles .big {
+  font-family: var(--font-mono);
+  font-weight: var(--weight-bold);
+  font-size: 44px;
+  line-height: 1;
+}
+.live-miles .of {
+  font-size: 15px;
+  color: var(--color-fg-muted);
+}
+.live-where {
+  font-size: 15px;
+  margin-top: 8px;
+  text-wrap: pretty;
+}
+.live-progress {
+  padding: 0 22px 18px;
+}
+.live-progress .bar {
+  position: relative;
+  height: 10px;
+  border-radius: 5px;
+  background: var(--color-border);
+}
+.live-progress .fill {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  border-radius: 5px;
+  background: var(--duck-egg-deep);
+}
+.live-progress .tick {
+  position: absolute;
+  top: -4px;
+  bottom: -4px;
+  width: 2px;
+  background: var(--navy);
+  opacity: 0.5;
+}
+.live-progress .marks {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  font-size: 12px;
+  color: var(--color-fg-muted);
+  margin-top: 6px;
+}
+.live-progress .marks span:nth-child(2) {
+  text-align: center;
+}
+.live-progress .marks span:last-child {
+  text-align: right;
+}
+.live-map {
+  position: relative;
+}
+.live-map .map {
+  height: 100%;
+  min-height: 0;
+  border: 0;
+  border-radius: 0;
+}
+.live-map-empty {
+  height: 240px;
+  display: grid;
+  place-items: center;
+  text-align: center;
+  padding: 24px;
+  color: var(--color-fg-muted);
+  background-image: radial-gradient(var(--color-border) 1px, transparent 1px);
+  background-size: 18px 18px;
+}
+.live-map-empty > div {
+  max-width: 34ch;
+}
+.update {
+  display: grid;
+  grid-template-columns: 62px minmax(0, 1fr);
+  gap: 14px;
+  padding: 14px 0;
+  border-top: 1px solid var(--color-border);
+}
+.update .time {
+  font-weight: var(--weight-bold);
+  font-size: 14px;
+}
+.update .text {
+  font-size: 15.5px;
+  line-height: 1.5;
+  text-wrap: pretty;
+}
+.family-words {
+  border: 1px dashed var(--color-border-strong);
+  border-radius: var(--radius-lg);
+  padding: 18px;
+  min-height: 160px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.family-words .words {
+  font-family: var(--font-display);
+  font-size: 17px;
+  line-height: 1.5;
+  margin-top: 8px;
+}
+.family-words .words p:last-child {
+  margin-bottom: 0;
+}
+@media (max-width: 640px) {
+  .live-next {
+    text-align: left;
+  }
+  .live-miles .big {
+    font-size: 36px;
+  }
+}

@@ -9,6 +9,7 @@ import { requireCrew } from "@/lib/auth";
 import { nowIso } from "@/lib/time";
 
 function bump() {
+  revalidatePath("/");
   revalidatePath("/live");
   revalidatePath("/live/tv");
   revalidatePath("/crew/live");
@@ -19,7 +20,9 @@ export async function postStatus(form: FormData) {
   const text = String(form.get("text") ?? "").trim().slice(0, 200);
   if (!text) return;
   await ready();
-  await db.insert(schema.liveStatus).values({ text, place: String(form.get("place") ?? "").trim().slice(0, 80), postedAt: nowIso(), postedBy: s.name });
+  const mileRaw = String(form.get("mile") ?? "").trim();
+  const mile = mileRaw === "" ? null : Math.max(0, Number(mileRaw) || 0);
+  await db.insert(schema.liveStatus).values({ text, place: String(form.get("place") ?? "").trim().slice(0, 80), mile, postedAt: nowIso(), postedBy: s.name });
   bump();
   redirect("/crew/live?posted=1");
 }

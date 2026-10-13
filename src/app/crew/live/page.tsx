@@ -35,10 +35,17 @@ export default async function CrewLivePage({ searchParams }: { searchParams: Pro
             <span>What&rsquo;s happening (one line)</span>
             <input type="text" name="text" required autoFocus placeholder="All four together, lunch, leaving 14:50" maxLength={200} />
           </label>
-          <label className="field">
-            <span>Where (optional)</span>
-            <input type="text" name="place" placeholder="Market Harborough" maxLength={80} />
-          </label>
+          <div className="form-inline">
+            <label className="field" style={{ flex: "2 1 10rem" }}>
+              <span>Where (optional)</span>
+              <input type="text" name="place" placeholder="Market Harborough" maxLength={80} />
+            </label>
+            <label className="field" style={{ flex: "0 1 8rem" }}>
+              <span>Miles done (approx)</span>
+              <input type="number" name="mile" min={0} max={400} step={0.5} inputMode="decimal" placeholder={statuses[0]?.mile != null ? String(statuses[0].mile) : "0"} />
+            </label>
+          </div>
+          <p className="xs muted" style={{ margin: 0 }}>The miles figure drives the progress bar on the public page — the stop&rsquo;s mile from the route plan is close enough.</p>
           <button className="btn btn-primary" type="submit" style={{ width: "100%" }}>
             Post as {s.name}
           </button>
@@ -47,7 +54,7 @@ export default async function CrewLivePage({ searchParams }: { searchParams: Pro
           <ul className="list small muted">
             {statuses.map((st) => (
               <li key={st.id}>
-                {fmtWhen(st.postedAt)} · {st.postedBy} · {st.place ? `${st.place} — ` : ""}
+                {fmtWhen(st.postedAt)} · {st.postedBy} · {st.mile != null ? `${st.mile} mi · ` : ""}{st.place ? `${st.place} — ` : ""}
                 {st.text}
               </li>
             ))}

@@ -4,6 +4,7 @@ import { frameable, getDonateTotal } from "./donate";
 import { getAllSettings } from "./settings";
 import { RIDE_DAYS } from "./public";
 import { londonDate } from "./time";
+import { gpxExists } from "./gpx";
 
 export type LivePayload = {
   now: string;
@@ -13,7 +14,19 @@ export type LivePayload = {
   nextStop: { name: string; plannedTime: string | null; kind: string } | null;
   links: { id: number; rider: string | null; provider: string; url: string; label: string; primary: boolean; frameable: boolean }[];
   total: { amount: number | null; target: number | null; fetchedAt: string | null };
+  // Follow-the-Ride card (design handoff): progress and the feed.
+  phase: "pre" | "riding" | "overnight" | "finished";
+  mile: number; // approx miles done, from the latest status that gave one
+  totalMiles: number;
+  overnightMile: number;
+  labels: { start: string; overnight: string; finish: string };
+  daysToGo: number;
+  hasRoute: boolean;
+  updates: { id: number; text: string; place: string; mile: number | null; postedAt: string; postedBy: string }[];
+  riders: { id: number; name: string; bio: string; link: string | null }[];
 };
+
+const RIDE_MILES = 240;
 
 export async function livePayload(): Promise<LivePayload> {
   await ready();
@@ -58,7 +71,36 @@ export async function livePayload(): Promise<LivePayload> {
   }
 
   const total = await getDonateTotal();
+
+  // Progress. Miles come from the crew's posts; the overnight tick from the day-1 length.
+  const days = await db.select().from(schema.routeDays).orderBy(schema.routeDays.day).all();
+  const d1 = days.find((d) => d.day === 1);
+  const d2 = days.find((d) => d.day === 2);
+  const totalMiles = Math.round((d1?.miles ?? 0) + (d2?.miles ?? 0)) || RIDE_MILES;
+  const overnightMile = d1?.miles ?? Math.round(totalMiles / 2);
+  const recent = await db.select().from(schema.liveStatus).orderBy(desc(schema.liveStatus.id)).limit(20).all();
+  const withMile = recent.find((r) => r.mile != null);
+  const mile = Math.min(totalMiles, Math.max(0, withMile?.mile ?? 0));
+  const msPerDay = 86_400_000;
+  const daysToGo = Math.max(0, Math.ceil((Date.parse(RIDE_DAYS[0] + "T07:00:00Z") - Date.now()) / msPerDay));
+  const phase: LivePayload["phase"] = today < RIDE_DAYS[0] ? "pre" : today > RIDE_DAYS[1] || mile >= totalMiles ? "finished" : day === 1 && mile >= overnightMile && recent[0]?.text ? "overnight" : "riding";
+  const riderRows = await db.select().from(schema.riders).orderBy(schema.riders.sortOrder).all();
+  const linkFor = (id: number) => links.find((l) => rows.find((r) => r.link.id === l.id)?.link.riderId === id)?.url ?? null;
+
   return {
+    phase,
+    mile,
+    totalMiles,
+    overnightMile,
+    labels: {
+      start: d1 ? `${d1.startLabel}, Sat 07:00` : "Barnes, Sat 07:00",
+      overnight: d1 ? `${d1.endLabel}, overnight` : "Overnight",
+      finish: d2 ? `${d2.endLabel}, Sun` : "Yeadon Cemetery, Sun",
+    },
+    daysToGo,
+    hasRoute: gpxExists(1) || gpxExists(2),
+    updates: recent.map((r) => ({ id: r.id, text: r.text, place: r.place, mile: r.mile ?? null, postedAt: r.postedAt, postedBy: r.postedBy })),
+    riders: riderRows.map((r) => ({ id: r.id, name: r.displayName, bio: r.bioMd.split(/\n/)[0].replace(/[*_#]/g, "").slice(0, 90), link: linkFor(r.id) })),
     now: new Date().toISOString(),
     day,
     mode: s["tracker.mode"] === "all" ? "all" : "single",

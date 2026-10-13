@@ -181,3 +181,6 @@ export const MIGRATIONS: string[] = [
      action TEXT NOT NULL
    )`,
 ];
+
+// Columns added after first release. Each is tried once; "duplicate column" is fine.
+export const ALTERS: string[] = [`ALTER TABLE live_status ADD COLUMN mile REAL`];

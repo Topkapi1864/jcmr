@@ -143,7 +143,7 @@ export async function importCsv(_prev: ImportReport | { error: string } | undefi
 export async function saveContent(form: FormData) {
   const s = await requireAdmin();
   await ready();
-  for (const key of ["mum_story_md", "home_intro_md"]) {
+  for (const key of ["mum_story_md", "home_intro_md", "family_words_md"]) {
     const v = form.get(key);
     if (v === null) continue;
     await db.insert(schema.content).values({ key, md: String(v) }).onConflictDoUpdate({ target: schema.content.key, set: { md: String(v) } });

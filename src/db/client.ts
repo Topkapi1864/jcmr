@@ -1,7 +1,7 @@
 import { createClient, type Client } from "@libsql/client";
 import { drizzle } from "drizzle-orm/libsql";
 import * as schema from "./schema";
-import { MIGRATIONS } from "./migrations";
+import { ALTERS, MIGRATIONS } from "./migrations";
 import fs from "node:fs";
 import path from "node:path";
 
@@ -35,6 +35,13 @@ export function ready(): Promise<void> {
   if (!globalForDb.__jcmrReady) {
     globalForDb.__jcmrReady = (async () => {
       for (const sql of MIGRATIONS) await client.execute(sql);
+      for (const sql of ALTERS) {
+        try {
+          await client.execute(sql);
+        } catch (e) {
+          if (!/duplicate column/i.test(String(e))) throw e;
+        }
+      }
     })().catch((e) => {
       globalForDb.__jcmrReady = undefined;
       throw e;

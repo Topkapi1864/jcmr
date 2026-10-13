@@ -135,6 +135,7 @@ export const liveStatus = sqliteTable("live_status", {
   id: integer("id").primaryKey({ autoIncrement: true }),
   text: text("text").notNull(),
   place: text("place").notNull().default(""),
+  mile: real("mile"), // approx miles done when posted (drives the progress bar)
   postedAt: text("posted_at").notNull(),
   postedBy: text("posted_by").notNull(),
 });
