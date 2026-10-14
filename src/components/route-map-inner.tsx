@@ -14,19 +14,22 @@ export default function RouteMapInner({ src }: { src: string }) {
       attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
     }).addTo(map);
     map.setView([52.8, -1.4], 7);
-    const accent = getComputedStyle(document.documentElement).getPropertyValue("--color-accent").trim() || undefined;
-    fetch(src)
+    const css = (n: string) => getComputedStyle(document.documentElement).getPropertyValue(n).trim() || undefined;
+    const accent = css("--color-accent");
+    const colours: Record<number, string | undefined> = { 1: accent, 2: css("--color-amber") };
+    fetch(`${src}${src.includes("?") ? "&" : "?"}v=${Date.now()}`)
       .then((r) => r.json())
       .then((geo: GeoJSON.FeatureCollection) => {
         if (!geo.features.length) return;
-        const layer = L.geoJSON(geo, { style: { color: accent, weight: 4, opacity: 0.9 } }).addTo(map);
+        const layer = L.geoJSON(geo, { style: (f) => ({ color: colours[Number(f?.properties?.day)] ?? accent, weight: 4, opacity: 0.9 }) }).addTo(map);
         for (const f of geo.features) {
           const c = (f.geometry as GeoJSON.LineString).coordinates;
           if (!c.length) continue;
           const first = c[0];
           const last = c[c.length - 1];
-          L.circleMarker([first[1], first[0]], { radius: 6, color: accent, fillOpacity: 1 }).bindTooltip(`Day ${f.properties?.day} start`).addTo(map);
-          L.circleMarker([last[1], last[0]], { radius: 6, color: accent, fillOpacity: 1 }).bindTooltip(`Day ${f.properties?.day} end`).addTo(map);
+          const col = colours[Number(f.properties?.day)] ?? accent;
+          L.circleMarker([first[1], first[0]], { radius: 6, color: col, fillOpacity: 1 }).bindTooltip(`Day ${f.properties?.day} start`).addTo(map);
+          L.circleMarker([last[1], last[0]], { radius: 6, color: col, fillOpacity: 1 }).bindTooltip(`Day ${f.properties?.day} end`).addTo(map);
         }
         map.fitBounds(layer.getBounds(), { padding: [20, 20] });
       })

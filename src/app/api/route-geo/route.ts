@@ -20,11 +20,11 @@ export async function GET(req: Request) {
   if (url.searchParams.get("format") === "profile") {
     // Everything the planner and the crew map need: points with miles and
     // elevation, Simon's waypoints, the towns the line passes.
-    return Response.json(loadProfiles(), { headers: { "cache-control": "private, max-age=600" } });
+    return Response.json(loadProfiles(), { headers: { "cache-control": "private, no-store" } });
   }
   const days = [loadDay(1), loadDay(2)];
   return Response.json(
     { type: "FeatureCollection", features: days.filter((d) => d.feature).map((d) => ({ ...d.feature!, properties: { day: d.day } })) },
-    { headers: { "cache-control": "public, max-age=3600" } },
+    { headers: { "cache-control": "private, no-store" } },
   );
 }
