@@ -90,7 +90,81 @@ export async function addFromCatalogue(actor: Actor, riderId: number, catalogueI
   if (!c) throw new Error("Not on the suggested list");
   const existing = await db.select().from(schema.kitItems).where(and(eq(schema.kitItems.riderId, riderId), eq(schema.kitItems.name, c.name))).get();
   if (existing) return existing.id;
-  return upsertItem(actor, riderId, { name: c.name, category: c.category, qty: c.suggestedQty, status: "need", storage: c.carriedIn, notes: "", link: "", catalogueId: c.id });
+  const firstLink = c.link.split(/\s+/).find(Boolean) ?? "";
+  return upsertItem(actor, riderId, { name: c.name, category: c.category, qty: c.suggestedQty, status: "need", storage: c.carriedIn, notes: "", link: firstLink, catalogueId: c.id });
+}
+
+// ---- Links -----------------------------------------------------------------
+
+/** Keep only http(s) URLs, one per line (a suggested item can carry several). */
+export function cleanLinks(v: string) {
+  return v
+    .split(/[\s,]+/)
+    .map((x) => x.trim())
+    .filter((x) => /^https?:\/\//i.test(x))
+    .slice(0, 8)
+    .join("\n");
+}
+
+export type PostedLink = { url: string; host: string; by: string };
+
+export function hostOf(url: string) {
+  try {
+    return new URL(url).hostname.replace(/^www\./, "");
+  } catch {
+    return url;
+  }
+}
+
+/**
+ * Every link attached to a suggested item: the ones on the suggested row itself,
+ * plus any a rider posted against the same item on their own list. Keyed by catalogue id.
+ */
+export async function linksForCatalogue(rows: KitCatalogueRow[]): Promise<Map<number, PostedLink[]>> {
+  await ready();
+  const items = await db.select({ i: schema.kitItems, r: schema.riders }).from(schema.kitItems).leftJoin(schema.riders, eq(schema.kitItems.riderId, schema.riders.id)).all();
+  const byName = new Map(rows.map((r) => [r.name.toLowerCase(), r.id]));
+  const out = new Map<number, PostedLink[]>();
+  const push = (cid: number, url: string, by: string) => {
+    const list = out.get(cid) ?? [];
+    if (!list.some((l) => l.url === url)) list.push({ url, host: hostOf(url), by });
+    out.set(cid, list);
+  };
+  for (const r of rows) for (const u of r.link.split(/\s+/).filter(Boolean)) push(r.id, u, r.source && r.source !== "sheet" ? r.source : "");
+  for (const { i, r } of items) {
+    if (!i.link) continue;
+    const cid = i.catalogueId ?? byName.get(i.name.toLowerCase());
+    if (cid && rows.some((x) => x.id === cid)) push(cid, i.link, r?.displayName.split(" ")[0] ?? "");
+  }
+  return out;
+}
+
+export type RiderSuggestion = { itemId: number; name: string; category: KitCategory; qty: number; storage: KitItem["storage"]; notes: string; link: string; by: string };
+
+/** Items riders put on their own lists that the suggested list doesn't have yet — one per name. */
+export async function riderOnlySuggestions(rows: KitCatalogueRow[]): Promise<RiderSuggestion[]> {
+  await ready();
+  const known = new Set(rows.map((r) => r.name.toLowerCase()));
+  const items = await db.select({ i: schema.kitItems, r: schema.riders }).from(schema.kitItems).leftJoin(schema.riders, eq(schema.kitItems.riderId, schema.riders.id)).all();
+  const seen = new Map<string, RiderSuggestion>();
+  for (const { i, r } of items) {
+    const k = i.name.toLowerCase();
+    if (known.has(k) || i.catalogueId) continue;
+    const prev = seen.get(k);
+    if (prev && (prev.link || !i.link)) continue;
+    seen.set(k, { itemId: i.id, name: i.name, category: i.category, qty: i.qty, storage: i.storage, notes: i.notes, link: i.link, by: r?.displayName.split(" ")[0] ?? "" });
+  }
+  return [...seen.values()].sort((a, b) => a.name.localeCompare(b.name));
+}
+
+/** Copy another rider's item onto a list, as Need. */
+export async function addFromRiderItem(actor: Actor, riderId: number, itemId: number) {
+  await ready();
+  const src = await db.select().from(schema.kitItems).where(eq(schema.kitItems.id, itemId)).get();
+  if (!src) throw new Error("That item has gone");
+  const existing = await db.select().from(schema.kitItems).where(and(eq(schema.kitItems.riderId, riderId), eq(schema.kitItems.name, src.name))).get();
+  if (existing) return existing.id;
+  return upsertItem(actor, riderId, { name: src.name, category: src.category, qty: src.qty, status: "need", storage: src.storage, notes: "", link: src.link });
 }
 
 // ---- Catalogue -------------------------------------------------------------
@@ -101,7 +175,7 @@ export async function catalogue(includeInactive = false): Promise<KitCatalogueRo
   return includeInactive ? rows : rows.filter((r) => r.active);
 }
 
-export async function saveCatalogueRow(input: { id?: number; name: string; category: string; qty: number; carriedIn: string; notes: string; source: string; active: boolean }) {
+export async function saveCatalogueRow(input: { id?: number; name: string; category: string; qty: number; carriedIn: string; notes: string; source: string; link?: string; active: boolean }) {
   await ready();
   const vals = {
     name: input.name.trim().slice(0, 120),
@@ -110,6 +184,7 @@ export async function saveCatalogueRow(input: { id?: number; name: string; categ
     carriedIn: asStorage(input.carriedIn),
     notes: input.notes.trim().slice(0, 300),
     source: input.source.trim().slice(0, 120),
+    link: cleanLinks(input.link ?? ""),
     active: input.active,
   };
   if (!vals.name) throw new Error("A suggested item needs a name");
@@ -123,7 +198,7 @@ export async function saveCatalogueRow(input: { id?: number; name: string; categ
 
 export type KitImportReport = { imported: number; updated: number; rejected: { row: number; reason: string; name: string }[] };
 
-/** CSV: name,category,qty,carried_in,notes,source — idempotent on name (case-insensitive). */
+/** CSV: name,category,qty,carried_in,notes,source,link — idempotent on name (case-insensitive). */
 export async function importCatalogueCsv(csv: string): Promise<KitImportReport> {
   await ready();
   const rows = csvToObjects(csv);
@@ -151,6 +226,7 @@ export async function importCatalogueCsv(csv: string): Promise<KitImportReport> 
       carriedIn: asStorage((r.carried_in ?? prev?.carriedIn ?? "").trim().toLowerCase()),
       notes: (r.notes ?? prev?.notes ?? "").trim(),
       source: (r.source ?? prev?.source ?? "").trim(),
+      link: cleanLinks(r.link ?? prev?.link ?? ""),
       sortOrder: prev?.sortOrder ?? order++,
       active: true,
     };

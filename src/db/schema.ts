@@ -237,6 +237,7 @@ export const kitCatalogue = sqliteTable("kit_catalogue", {
   carriedIn: text("carried_in", { enum: KIT_STORAGE }).notNull().default(""),
   notes: text("notes").notNull().default(""),
   source: text("source").notNull().default(""),
+  link: text("link").notNull().default(""),
   sortOrder: integer("sort_order").notNull().default(100),
   active: integer("active", { mode: "boolean" }).notNull().default(true),
 });
