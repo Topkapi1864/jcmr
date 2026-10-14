@@ -1,5 +1,6 @@
 import fs from "node:fs";
 import { gpxExists, gpxPathFor, loadDay } from "@/lib/gpx";
+import { loadProfiles } from "@/lib/route";
 import { isPublicLive } from "@/lib/settings";
 import { getSession } from "@/lib/auth";
 
@@ -15,6 +16,11 @@ export async function GET(req: Request) {
     return new Response(fs.readFileSync(gpxPathFor(day)), {
       headers: { "content-type": "application/gpx+xml", "content-disposition": `attachment; filename="jcmr-day${day}.gpx"` },
     });
+  }
+  if (url.searchParams.get("format") === "profile") {
+    // Everything the planner and the crew map need: points with miles and
+    // elevation, Simon's waypoints, the towns the line passes.
+    return Response.json(loadProfiles(), { headers: { "cache-control": "private, max-age=600" } });
   }
   const days = [loadDay(1), loadDay(2)];
   return Response.json(

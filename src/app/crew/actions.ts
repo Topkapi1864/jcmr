@@ -5,9 +5,11 @@ import { redirect } from "next/navigation";
 import { eq } from "drizzle-orm";
 import { db, ready, schema } from "@/db/client";
 import { AREAS, STATUSES, type Area, type Status } from "@/db/schema";
-import { requireCrew } from "@/lib/auth";
+import { journal, requireCrew } from "@/lib/auth";
+import { normalisePlan } from "@/lib/plan";
+import { setSetting } from "@/lib/settings";
 import { addNote, canEditFields, createItem, softDelete, statusBeforeDone, updateItem } from "@/lib/items";
-import { isValidYmd } from "@/lib/time";
+import { isValidYmd, nowIso } from "@/lib/time";
 
 function bump() {
   revalidatePath("/crew", "layout");
@@ -125,4 +127,41 @@ export async function deleteItemAction(form: FormData) {
   await softDelete(s, id);
   bump();
   redirect("/crew");
+}
+
+// ---- Route planner --------------------------------------------------------
+
+/** Save the crew's working plan; the planned times for named stops go onto the
+ *  route_stops rows so the public route page shows them. */
+export async function savePlanAction(planJson: string, times: { key: string; time: string }[]): Promise<{ savedBy: string; savedAt: string }> {
+  const s = await requireCrew();
+  const plan = normalisePlan(JSON.parse(planJson));
+  const savedAt = nowIso();
+  await setSetting("route.plan", JSON.stringify({ plan, savedBy: s.name, savedAt }));
+  await ready();
+  const days = await db.select().from(schema.routeDays).all();
+  const rows = await db.select().from(schema.routeStops).all();
+  for (const t of times) {
+    // "end:<day>" / "start:<day>": the day's overnight/finish and start rows.
+    const end = /^(end|start):(\d)$/.exec(t.key);
+    if (end) {
+      const d = days.find((x) => x.day === Number(end[2]));
+      if (!d) continue;
+      const isEnd = end[1] === "end";
+      for (const r of rows.filter((x) => x.dayId === d.id && (isEnd ? (x.kind === "overnight" || x.kind === "finish") && x.approxMile != null : x.approxMile === 0))) {
+        await db.update(schema.routeStops).set({ plannedTime: t.time }).where(eq(schema.routeStops.id, r.id));
+      }
+      continue;
+    }
+    const m = /^db:(\d+)$/.exec(t.key);
+    if (!m) continue;
+    await db
+      .update(schema.routeStops)
+      .set({ plannedTime: /^\d{2}:\d{2}$/.test(t.time) ? t.time : null })
+      .where(eq(schema.routeStops.id, Number(m[1])));
+  }
+  await journal(s.name, `route plan saved: ${plan.speedMph} mph, D1 ${plan.days[1]?.start}, D2 ${plan.days[2]?.start}`);
+  bump();
+  revalidatePath("/route");
+  return { savedBy: s.name, savedAt };
 }

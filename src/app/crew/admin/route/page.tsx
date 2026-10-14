@@ -3,7 +3,7 @@ import { db, ready, schema } from "@/db/client";
 import { STOP_KINDS } from "@/db/schema";
 import { requireAdmin } from "@/lib/auth";
 import { gpxExists } from "@/lib/gpx";
-import { deleteStop, saveRouteDay, saveStop } from "../actions";
+import { deleteStop, importRoadbookStops, saveRouteDay, saveStop } from "../actions";
 
 export default async function RouteAdminPage({ searchParams }: { searchParams: Promise<Record<string, string | undefined>> }) {
   await requireAdmin();
@@ -18,7 +18,18 @@ export default async function RouteAdminPage({ searchParams }: { searchParams: P
         ← Admin
       </Link>
       <h1>Route</h1>
-      {sp.saved && <p className="notice">Saved.</p>}
+      {sp.saved && <p className="notice">Saved.{sp.imported != null && ` ${sp.imported} stop${sp.imported === "1" ? "" : "s"} added from the roadbook.`}</p>}
+      <form action={importRoadbookStops} className="card row-between" style={{ alignItems: "center", gap: "var(--space-3)" }}>
+        <span className="small">
+          <b>Import Simon&rsquo;s roadbook stops</b> — the six rendezvous points (miles 38 / 76 / 111 and 37 / 73 / 96) and each day&rsquo;s distance and climbing from the GPX. Safe to run again; existing stops are kept.
+        </span>
+        <button className="btn btn-sm btn-primary" type="submit">
+          Import
+        </button>
+      </form>
+      <p className="small">
+        Timings live in <Link href="/crew/route">Crew → Route</Link>; saving a plan there fills the planned times below.
+      </p>
       <p className="muted small">
         The GPX files live in the repo at <code>content/route/day1.gpx</code> and <code>day2.gpx</code> (Simon&rsquo;s 5 Oct version). Planned times are optional; the
         public page hides the time column until any stop has one.

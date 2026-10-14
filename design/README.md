@@ -47,6 +47,7 @@ One stylesheet, organised by section. Classes the templates use:
 | Mum | `src/app/mum/page.tsx` |
 | The riders | `src/app/riders/page.tsx` |
 | The route (incl. map) | `src/app/route/page.tsx`, `src/components/route-map-inner.tsx` |
+| Crew → Route planner | `src/components/route-planner.tsx`, `route-plan-map.tsx`, `elevation.tsx`; styles under “Route planner” in `globals.css` |
 | Give | `src/app/donate/page.tsx` |
 | Live — phone and TV forms | `src/components/live-view.tsx` (one component, `tv` prop) |
 
