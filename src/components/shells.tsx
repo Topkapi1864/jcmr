@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { NavLink } from "./nav-link";
 import { Lockup } from "./logo";
+import { TabMore } from "./tab-more";
 import { JUSTGIVING_URL } from "@/lib/constants";
 
 // The three shells (spec §3.4), in the JCMR identity (design handoff v1).
@@ -81,6 +82,8 @@ const CREW_NAV = [
   { href: "/crew/route", label: "Route" },
   { href: "/crew/live", label: "Live" },
 ];
+// Phone tab bar: four fixed tabs, then "More" for every section.
+const TAB_FEATURED = ["/crew", "/crew/kit", "/crew/people", "/crew/route"];
 const SECTION_ROOTS = ["/crew/admin", "/crew/people", "/crew/kit", "/crew/sleeping", "/crew/route"];
 
 export function CrewShell({
@@ -131,11 +134,12 @@ export function CrewShell({
         <main className="crew-body">{children}</main>
       </div>
       <nav className="tabbar" aria-label="Crew">
-        {[CREW_NAV[0], CREW_NAV[1], CREW_NAV[5], CREW_NAV[8], CREW_NAV[9]].map((n) => (
+        {TAB_FEATURED.map((h) => CREW_NAV.find((n) => n.href === h)!).map((n) => (
           <NavLink key={n.href} href={n.href} exact={!SECTION_ROOTS.includes(n.href)}>
             {n.label}
           </NavLink>
         ))}
+        <TabMore items={nav} featured={TAB_FEATURED} />
       </nav>
     </div>
   );

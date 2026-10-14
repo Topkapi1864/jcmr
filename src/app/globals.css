@@ -925,7 +925,7 @@ input[type="checkbox"] {
   background: var(--panel);
   border-top: 1px solid var(--color-border);
   display: flex;
-  z-index: 20;
+  z-index: 25; /* above the + Add button so the More sheet covers it */
 }
 .tabbar a {
   flex: 1;
@@ -941,6 +941,62 @@ input[type="checkbox"] {
 .tabbar a[aria-current="page"] {
   color: var(--color-fg);
   border-top-color: var(--duck-egg);
+}
+.tab-more-btn {
+  flex: 1;
+  appearance: none;
+  border: 0;
+  border-top: 2px solid transparent;
+  background: none;
+  color: var(--color-fg-muted);
+  font: inherit;
+  font-size: 12px;
+  font-weight: var(--weight-medium);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  cursor: pointer;
+}
+.tab-more-btn[aria-expanded="true"],
+.tab-more-btn[aria-current="page"] {
+  color: var(--color-fg);
+  border-top-color: var(--duck-egg);
+}
+.tab-more-scrim {
+  position: fixed;
+  inset: 0;
+  bottom: calc(var(--tabbar-height) + env(safe-area-inset-bottom));
+  background: var(--overlay-dark);
+  z-index: 19;
+}
+.tab-more-sheet {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: calc(var(--tabbar-height) + env(safe-area-inset-bottom));
+  z-index: 21;
+  background: var(--panel);
+  border-top: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+  padding: var(--space-4) var(--space-4) var(--space-3);
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-2);
+}
+.tabbar .tab-more-sheet a {
+  flex: none;
+  justify-content: flex-start;
+  min-height: var(--tap);
+  padding: 0 var(--space-4);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  font-size: var(--text-md);
+  color: var(--color-fg);
+}
+.tabbar .tab-more-sheet a[aria-current="page"] {
+  background: var(--color-accent-soft);
+  border-color: var(--duck-egg);
 }
 @media (min-width: 900px) {
   .rail {
