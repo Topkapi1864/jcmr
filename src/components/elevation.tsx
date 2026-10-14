@@ -24,7 +24,7 @@ export function Elevation({ profile, result, onHover, onPick }: Props) {
 
   const { path, area, minE, maxE, y } = useMemo(() => {
     const eles = profile.points.map((p) => p[2]);
-    const minE = Math.floor((Math.min(...eles) - 10) / 50) * 50;
+    const minE = Math.max(Math.min(...eles) >= 0 ? 0 : -Infinity, Math.floor((Math.min(...eles) - 10) / 50) * 50);
     const maxE = Math.ceil((Math.max(...eles) + 20) / 50) * 50;
     const y = (e: number) => PAD.t + (1 - (e - minE) / Math.max(1, maxE - minE)) * (H - PAD.t - PAD.b);
     const pts = profile.points.map((p) => `${x(p[3]).toFixed(1)},${y(p[2]).toFixed(1)}`);

@@ -227,7 +227,7 @@ export function planDay(plan: Plan, profile: RouteProfile): DayResult {
   events.push({
     kind: "start",
     day,
-    name: profile.waypoints.find((w) => /^start/i.test(w.name))?.name.replace(/^START\s*-\s*/i, "") || (day === 1 ? "Castelnau, Barnes" : "The Link Hotel"),
+    name: tidy(profile.waypoints.find((w) => /^start/i.test(w.name))?.name.replace(/^START\s*-\s*/i, "")) || (day === 1 ? "Castelnau, Barnes" : "The Link Hotel"),
     mile: 0,
     arrive: t,
     depart: t,
@@ -263,7 +263,7 @@ export function planDay(plan: Plan, profile: RouteProfile): DayResult {
     const next = candidates[0];
 
     if (next.kind === "finish") {
-      push("finish", profile.waypoints.find((w) => /^(finish|overnight)/i.test(w.name))?.name.replace(/^(FINISH|OVERNIGHT)\s*-\s*/i, "") || (day === 1 ? "The Link Hotel" : "Yeadon"), total, 0);
+      push("finish", tidy(profile.waypoints.find((w) => /^(finish|overnight)/i.test(w.name))?.name.replace(/^(FINISH|OVERNIGHT)\s*-\s*/i, "")) || (day === 1 ? "The Link Hotel" : "Yeadon"), total, 0);
       break;
     }
     if (next.kind === "named" && nextNamed) {
@@ -331,6 +331,13 @@ export function planDay(plan: Plan, profile: RouteProfile): DayResult {
     events,
     towns,
   };
+}
+
+/** GPX pins are shouted ("THE LINK HOTEL"); say them normally. */
+function tidy(s: string | undefined): string {
+  if (!s) return "";
+  if (s !== s.toUpperCase()) return s;
+  return s.toLowerCase().replace(/(^|[\s(-])(\w)/g, (m, a, b) => a + b.toUpperCase());
 }
 
 function order(k: EventKind): number {

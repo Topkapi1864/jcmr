@@ -1562,7 +1562,7 @@ details.done-group summary {
 }
 .stop-pin-inner[data-day="2"] {
   background: var(--color-amber);
-  color: var(--navy);
+  color: var(--cream);
 }
 .stop-pin-inner[data-kind="start"],
 .stop-pin-inner[data-kind="finish"] {
@@ -1828,4 +1828,12 @@ details.done-group summary {
   .timetable td:nth-child(7) {
     display: none;
   }
+}
+/* Public route page */
+.pub-map {
+  height: 70vh;
+  min-height: 420px;
+}
+.pub-route .elev-area {
+  fill: var(--color-progress-soft);
 }
