@@ -1,0 +1,46 @@
+
+> jcmr@0.1.0 dev
+> next dev -p 3077
+
+▲ Next.js 16.4.0 (Turbopack)
+- Local:         http://localhost:3077
+- Network:       http://192.0.2.2:3077
+- Environments: .env.local
+✓ Ready in 2.2s
+✓ Running next.config.ts took 3.8s
+
+ GET /crew/signin 200 in 3.6s (next.js: 2.3s, proxy.ts: 771ms, application-code: 467ms)
+ GET /crew/signin/who?next=%2Fcrew 200 in 145ms (next.js: 68ms, proxy.ts: 8ms, application-code: 69ms)
+ POST /crew/signin 200 in 204ms (next.js: 4ms, proxy.ts: 11ms, application-code: 189ms)
+  └─ ƒ submitPassword(undefined, {}) in 9ms src/app/crew/signin/actions.ts
+ GET /crew 200 in 566ms (next.js: 403ms, proxy.ts: 8ms, application-code: 155ms)
+ POST /crew/signin/who?next=%2Fcrew 200 in 616ms (next.js: 5ms, proxy.ts: 6ms, application-code: 606ms)
+  └─ ƒ pickPerson({}) in 25ms src/app/crew/signin/actions.ts
+ GET /crew/admin/route 200 in 345ms (next.js: 80ms, proxy.ts: 7ms, application-code: 258ms)
+ GET /crew/admin/route?saved=1&imported=6 200 in 119ms (next.js: 3ms, proxy.ts: 5ms, application-code: 111ms)
+ POST /crew/admin/route 200 in 219ms (next.js: 4ms, proxy.ts: 11ms, application-code: 205ms)
+  └─ ƒ importRoadbookStops() in 70ms src/app/crew/admin/actions.ts
+ GET /crew/route 200 in 451ms (next.js: 147ms, proxy.ts: 7ms, application-code: 297ms)
+ POST /crew/route 200 in 186ms (next.js: 68ms, proxy.ts: 32ms, application-code: 86ms)
+  └─ ƒ savePlanAction("{\"version\":1,\"speedMph\":13.5,\"days\":{\"1\":{\"start\":\"07:00\",\"speedMph\":null},\"2\":{\"start\":\"07:00\",\"speedMph\":null}},\"shortStop\":{\"enabled\":true,\"everyMin\":60,\"durMin\":5},\"longStop\":{\"enabled\":true,\"everyMin\":180,\"durMin\":15},\"halfway\":{\"enabled\":false,\"durMin\":30},\"namedResetsClock\":true,\"mergeWithinMin\":20,\"namedStops\":[{\"key\":\"db:12\",\"day\":1,\"name\":\"Stop 1 — Dunstable area\",\"mile\":40,\"durMin\":25,\"enabled\":true,\"optional\":false,\"kind\":\"long\",\"notes\":\"Rendezvous area, not yet a confirmed parking bay. 20–25 min.\"},{\"key\":\"db:13\",\"day\":1,\"name\":\"Stop 2 — west of Northampton\",\"mile\":79,\"durMin\":30,\"enabled\":true,\"optional\":false,\"kind\":\"lunch\",\"notes\":\"Rendezvous area, not yet a confirmed parking bay. 25–30 min.\"},{\"key\":\"db:14\",\"day\":1,\"name\":\"Stop 3 — Countesthorpe / south Leicester\",\"mile\":108,\"durMin\":25,\"enabled\":true,\"optional\":false,\"kind\":\"long\",\"notes\":\"Rendezvous area, not yet a confirmed parking bay. 20–25 min. Dark by now.\"},{\"key\":\"wp:1:122.7\",\"day\":1,\"name\":\"OVERNIGHT - THE LINK HOTEL\",\"mile\":122.7,\"durMin\":25,\"enabled\":true,\"optional\":false,\"kind\":\"long\",\"notes\":\"The Link Hotel, Ashby Road, Loughborough, LE11 4EX.\"},{\"key\":\"db:15\",\"day\":2,\"name\":\"Stop 1 — Bakewell area\",\"mile\":37,\"durMin\":25,\"enabled\":true,\"optional\":false,\"kind\":\"long\",\"notes\":\"Preferred large-vehicle rendezvous: Agricultural Business Centre, DE45 1AQ — verify route-side access. 25–30 min.\"},{\"key\":\"db:16\",\"day\":2,\"name\":\"Stop 2 — Silkstone / Barnsley corridor\",\"mile\":73,\"durMin\":30,\"enabled\":true,\"optional\":false,\"kind\":\"lunch\",\"notes\":\"Proper hot meal, clothing and lighting check; exact lay-by / car park needs a recce. 25–30 min.\"},{\"key\":\"db:17\",\"day\":2,\"name\":\"Optional stop — Leeds corridor\",\"mile\":96,\"durMin\":10,\"enabled\":false,\"optional\":true,\"kind\":\"short\",\"notes\":\"Only if weather, fatigue or mechanical state requires it. 10 min.\"}]}", [{"key":"db:12","time":"10:08"},{"key":"db:13","time":"13:36"},{"key":"db:14","time":"16:20"},"... 7 items not stringified"]) in 27ms src/app/crew/actions.ts
+ GET /crew/route 200 in 132ms (next.js: 4ms, proxy.ts: 4ms, application-code: 123ms)
+ GET /route?preview=1 200 in 171ms (next.js: 31ms, application-code: 140ms)
+ GET /api/route-geo 200 in 230ms (next.js: 171ms, application-code: 59ms)
+✓ Compiled in 55ms
+ GET /crew/signin 200 in 93ms (next.js: 36ms, proxy.ts: 9ms, application-code: 48ms)
+ GET /crew/signin/who?next=%2Fcrew 200 in 83ms (next.js: 28ms, proxy.ts: 3ms, application-code: 52ms)
+ POST /crew/signin 200 in 110ms (next.js: 5ms, proxy.ts: 5ms, application-code: 101ms)
+  └─ ƒ submitPassword(undefined, {}) in 4ms src/app/crew/signin/actions.ts
+ GET /crew 200 in 139ms (next.js: 33ms, proxy.ts: 4ms, application-code: 102ms)
+ POST /crew/signin/who?next=%2Fcrew 200 in 168ms (next.js: 4ms, proxy.ts: 7ms, application-code: 157ms)
+  └─ ƒ pickPerson({}) in 7ms src/app/crew/signin/actions.ts
+ GET /crew/admin/route 200 in 429ms (next.js: 33ms, proxy.ts: 64ms, application-code: 332ms)
+ GET /crew/admin/route?saved=1&imported=0 200 in 129ms (next.js: 5ms, proxy.ts: 5ms, application-code: 120ms)
+ POST /crew/admin/route 200 in 168ms (next.js: 8ms, proxy.ts: 10ms, application-code: 150ms)
+  └─ ƒ importRoadbookStops() in 9ms src/app/crew/admin/actions.ts
+ GET /crew/route 200 in 202ms (next.js: 22ms, proxy.ts: 8ms, application-code: 172ms)
+ POST /crew/route 200 in 91ms (next.js: 4ms, proxy.ts: 4ms, application-code: 83ms)
+  └─ ƒ savePlanAction("{\"version\":1,\"speedMph\":13.5,\"days\":{\"1\":{\"start\":\"07:00\",\"speedMph\":null},\"2\":{\"start\":\"07:00\",\"speedMph\":null}},\"shortStop\":{\"enabled\":true,\"everyMin\":60,\"durMin\":5},\"longStop\":{\"enabled\":true,\"everyMin\":180,\"durMin\":15},\"halfway\":{\"enabled\":false,\"durMin\":30},\"namedResetsClock\":true,\"mergeWithinMin\":20,\"namedStops\":[{\"key\":\"db:12\",\"day\":1,\"name\":\"Stop 1 — Dunstable area\",\"mile\":40,\"durMin\":25,\"enabled\":true,\"optional\":false,\"kind\":\"long\",\"notes\":\"Rendezvous area, not yet a confirmed parking bay. 20–25 min.\"},{\"key\":\"db:13\",\"day\":1,\"name\":\"Stop 2 — west of Northampton\",\"mile\":79,\"durMin\":30,\"enabled\":true,\"optional\":false,\"kind\":\"lunch\",\"notes\":\"Rendezvous area, not yet a confirmed parking bay. 25–30 min.\"},{\"key\":\"db:14\",\"day\":1,\"name\":\"Stop 3 — Countesthorpe / south Leicester\",\"mile\":108,\"durMin\":25,\"enabled\":true,\"optional\":false,\"kind\":\"long\",\"notes\":\"Rendezvous area, not yet a confirmed parking bay. 20–25 min. Dark by now.\"},{\"key\":\"db:15\",\"day\":2,\"name\":\"Stop 1 — Bakewell area\",\"mile\":37,\"durMin\":25,\"enabled\":true,\"optional\":false,\"kind\":\"long\",\"notes\":\"Preferred large-vehicle rendezvous: Agricultural Business Centre, DE45 1AQ — verify route-side access. 25–30 min.\"},{\"key\":\"db:16\",\"day\":2,\"name\":\"Stop 2 — Silkstone / Barnsley corridor\",\"mile\":73,\"durMin\":30,\"enabled\":true,\"optional\":false,\"kind\":\"lunch\",\"notes\":\"Proper hot meal, clothing and lighting check; exact lay-by / car park needs a recce. 25–30 min.\"},{\"key\":\"db:17\",\"day\":2,\"name\":\"Optional stop — Leeds corridor\",\"mile\":96,\"durMin\":10,\"enabled\":false,\"optional\":true,\"kind\":\"short\",\"notes\":\"Only if weather, fatigue or mechanical state requires it. 10 min.\"}]}", [{"key":"db:12","time":"10:08"},{"key":"db:13","time":"13:36"},{"key":"db:14","time":"16:20"},"... 6 items not stringified"]) in 14ms src/app/crew/actions.ts
+ GET /crew/route 200 in 135ms (next.js: 5ms, proxy.ts: 5ms, application-code: 125ms)
+ GET /route?preview=1 200 in 124ms (next.js: 0.9ms, application-code: 123ms)
+ GET /api/route-geo 200 in 19ms (next.js: 0.9ms, application-code: 19ms)

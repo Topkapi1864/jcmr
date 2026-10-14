@@ -21,7 +21,7 @@ export default async function RouteAdminPage({ searchParams }: { searchParams: P
       {sp.saved && <p className="notice">Saved.{sp.imported != null && ` ${sp.imported} stop${sp.imported === "1" ? "" : "s"} added from the roadbook.`}</p>}
       <form action={importRoadbookStops} className="card row-between" style={{ alignItems: "center", gap: "var(--space-3)" }}>
         <span className="small">
-          <b>Import Simon&rsquo;s roadbook stops</b> — the six rendezvous points (miles 38 / 76 / 111 and 37 / 73 / 96) and each day&rsquo;s distance and climbing from the GPX. Safe to run again; existing stops are kept.
+          <b>Import Simon&rsquo;s roadbook stops</b> — the six rendezvous points (miles 40 / 79 / 108 and 37 / 73 / 96) and each day&rsquo;s distance and climbing from the GPX. Safe to run again; existing stops are kept.
         </span>
         <button className="btn btn-sm btn-primary" type="submit">
           Import

@@ -16,7 +16,7 @@ function candidateStops(profiles: ReturnType<typeof loadProfiles>, rows: (typeof
     if (r.approxMile == null) continue;
     const day = dayOf(r.dayId);
     const total = profiles.find((p) => p.day === day)?.miles ?? 999;
-    if (r.approxMile <= 0.05 || r.approxMile >= total - 0.05) continue; // ends aren't stops
+    if (r.approxMile <= 0.5 || r.approxMile >= total - 0.5 || r.kind === "overnight" || r.kind === "finish") continue; // ends aren't stops
     const optional = /optional/i.test(r.name) || /optional/i.test(r.notes ?? "");
     out.push({
       key: `db:${r.id}`,
@@ -32,8 +32,8 @@ function candidateStops(profiles: ReturnType<typeof loadProfiles>, rows: (typeof
   }
   for (const p of profiles) {
     for (const w of p.waypoints) {
-      if (w.mile <= 0.05 || w.mile >= p.miles - 0.05) continue;
-      if (out.some((s) => s.day === p.day && Math.abs(s.mile - w.mile) < 2)) continue;
+      if (w.mile <= 0.5 || w.mile >= p.miles - 0.5 || /^(start|finish|overnight)/i.test(w.name)) continue;
+      if (out.some((s) => s.day === p.day && Math.abs(s.mile - w.mile) < 4)) continue;
       const optional = /optional/i.test(w.name);
       out.push({ key: `wp:${p.day}:${w.mile}`, day: p.day, name: w.name, mile: w.mile, durMin: optional ? 10 : 25, enabled: !optional, optional, kind: "long", notes: w.desc || undefined });
     }

@@ -247,9 +247,9 @@ export async function importRoadbookStops() {
   const days = await db.select().from(schema.routeDays).orderBy(schema.routeDays.day).all();
   const rows = await db.select().from(schema.routeStops).all();
   const ROADBOOK: { day: number; name: string; mile: number; kind: (typeof STOP_KINDS)[number]; notes: string }[] = [
-    { day: 1, name: "Stop 1 — Ivinghoe / Pitstone area", mile: 38, kind: "long", notes: "Rendezvous area, not yet a confirmed parking bay. 20–25 min." },
-    { day: 1, name: "Stop 2 — west Northampton", mile: 76, kind: "lunch", notes: "Rendezvous area, not yet a confirmed parking bay. 25–30 min." },
-    { day: 1, name: "Stop 3 — Countesthorpe area", mile: 111, kind: "long", notes: "Rendezvous area, not yet a confirmed parking bay. 20–25 min. Dark by now." },
+    { day: 1, name: "Stop 1 — Dunstable area", mile: 40, kind: "long", notes: "Rendezvous area, not yet a confirmed parking bay. 20–25 min." },
+    { day: 1, name: "Stop 2 — west of Northampton", mile: 79, kind: "lunch", notes: "Rendezvous area, not yet a confirmed parking bay. 25–30 min." },
+    { day: 1, name: "Stop 3 — Countesthorpe / south Leicester", mile: 108, kind: "long", notes: "Rendezvous area, not yet a confirmed parking bay. 20–25 min. Dark by now." },
     { day: 2, name: "Stop 1 — Bakewell area", mile: 37, kind: "long", notes: "Preferred large-vehicle rendezvous: Agricultural Business Centre, DE45 1AQ — verify route-side access. 25–30 min." },
     { day: 2, name: "Stop 2 — Silkstone / Barnsley corridor", mile: 73, kind: "lunch", notes: "Proper hot meal, clothing and lighting check; exact lay-by / car park needs a recce. 25–30 min." },
     { day: 2, name: "Optional stop — Leeds corridor", mile: 96, kind: "short", notes: "Only if weather, fatigue or mechanical state requires it. 10 min." },
@@ -258,7 +258,7 @@ export async function importRoadbookStops() {
   for (const r of ROADBOOK) {
     const d = days.find((x) => x.day === r.day);
     if (!d) continue;
-    const dup = rows.find((x) => x.dayId === d.id && x.approxMile != null && Math.abs(x.approxMile - r.mile) < 2);
+    const dup = rows.find((x) => x.dayId === d.id && x.approxMile != null && Math.abs(x.approxMile - r.mile) < 4);
     if (dup) continue;
     await db.insert(schema.routeStops).values({ dayId: d.id, sortOrder: Math.min(90, Math.round(r.mile)), name: r.name, approxMile: r.mile, kind: r.kind, notes: r.notes });
     added++;

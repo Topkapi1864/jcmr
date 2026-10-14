@@ -169,7 +169,7 @@ export function planDay(plan: Plan, profile: RouteProfile): DayResult {
   const total = profile.miles;
   const minPerMile = 60 / speed;
   const named = plan.namedStops
-    .filter((s) => s.day === day && s.enabled && s.mile > 0.05 && s.mile < total - 0.05)
+    .filter((s) => s.day === day && s.enabled && s.mile > 0.5 && s.mile < total - 0.5)
     .sort((a, b) => a.mile - b.mile);
 
   const startPt = pointAtMile(profile.points, 0);
@@ -227,7 +227,7 @@ export function planDay(plan: Plan, profile: RouteProfile): DayResult {
   events.push({
     kind: "start",
     day,
-    name: profile.waypoints[0]?.name?.replace(/^START\s*-\s*/i, "") || `Day ${day} start`,
+    name: profile.waypoints.find((w) => /^start/i.test(w.name))?.name.replace(/^START\s*-\s*/i, "") || (day === 1 ? "Castelnau, Barnes" : "The Link Hotel"),
     mile: 0,
     arrive: t,
     depart: t,
@@ -263,7 +263,7 @@ export function planDay(plan: Plan, profile: RouteProfile): DayResult {
     const next = candidates[0];
 
     if (next.kind === "finish") {
-      push("finish", profile.waypoints.find((w) => /finish/i.test(w.name))?.name.replace(/^FINISH\s*-\s*/i, "") || (day === 1 ? "The Link Hotel" : "Yeadon"), total, 0);
+      push("finish", profile.waypoints.find((w) => /^(finish|overnight)/i.test(w.name))?.name.replace(/^(FINISH|OVERNIGHT)\s*-\s*/i, "") || (day === 1 ? "The Link Hotel" : "Yeadon"), total, 0);
       break;
     }
     if (next.kind === "named" && nextNamed) {
