@@ -3023,3 +3023,260 @@ select.st option {
   font-size: var(--text-2xl);
   margin: 6px 0;
 }
+
+/* ---- Kit: the rider-and-bike figures ------------------------------------ */
+[data-st="none"] {
+  --st: var(--color-fg-faint);
+  --st-soft: transparent;
+}
+.figs {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-3);
+}
+@media (min-width: 760px) {
+  .figs {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+.fig {
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  background: var(--color-bg-raised);
+  padding: var(--space-3) var(--space-3) var(--space-3);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  min-width: 0;
+}
+.fig-name {
+  font-weight: var(--weight-bold);
+  font-size: var(--text-md);
+  color: var(--color-fg);
+  text-decoration: none;
+}
+.fig-num {
+  color: var(--color-ok);
+  font-size: var(--text-sm);
+}
+.fig-most {
+  color: var(--color-amber);
+}
+.fig-svg {
+  width: 100%;
+  height: auto;
+  display: block;
+  touch-action: manipulation;
+}
+.fig-draw {
+  fill: none;
+  stroke: var(--color-fg-muted);
+  stroke-width: 2.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.fig-draw .faint {
+  stroke-width: 1;
+  opacity: 0.4;
+}
+.fig-draw .far {
+  opacity: 0.4;
+}
+.fig-draw .helmet,
+.fig-draw .specs {
+  stroke: var(--color-fg);
+}
+.spot {
+  cursor: pointer;
+  outline: none;
+}
+.spot .leader {
+  stroke: var(--st);
+  stroke-width: 1.2;
+  stroke-dasharray: 3 3;
+  opacity: 0.7;
+}
+.spot .anchor {
+  fill: var(--st);
+}
+.spot .hit {
+  fill: transparent;
+}
+.spot .disc {
+  fill: var(--color-bg-raised);
+  stroke: var(--st);
+  stroke-width: 1.5;
+}
+.spot[data-st="none"] .disc {
+  stroke-dasharray: 3 3;
+}
+.spot .ico,
+.spot-chip .ico,
+.area-name .ico {
+  fill: none;
+  stroke: var(--st, currentColor);
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.area-name .ico {
+  stroke: var(--color-fg-muted);
+}
+.ring-track {
+  fill: none;
+  stroke: var(--color-border);
+  stroke-width: 4;
+}
+.ring-seg {
+  fill: none;
+  stroke: var(--st);
+  stroke-width: 4;
+}
+.spot .star {
+  fill: var(--color-amber);
+  font-size: 13px;
+}
+.spot .cnt {
+  fill: var(--color-fg-muted);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  text-anchor: middle;
+}
+.spot .bub {
+  transition: transform var(--dur-fast) var(--ease), opacity var(--dur-fast) var(--ease);
+}
+.spot[data-on="yes"] .bub {
+  transform: scale(1.22);
+}
+.spot[data-on="yes"] .disc {
+  fill: var(--st-soft);
+  stroke-width: 2.5;
+}
+.spot[data-on="dim"],
+.spot-chip[data-on="dim"] {
+  opacity: 0.28;
+}
+.spot:focus-visible .disc {
+  stroke: var(--color-focus);
+  stroke-width: 3;
+}
+.fig-off {
+  display: flex;
+  gap: var(--space-2);
+  flex-wrap: wrap;
+}
+.fig-chip {
+  appearance: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  min-height: 34px;
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--st);
+  background: var(--st-soft);
+  color: var(--color-fg);
+  font: inherit;
+  font-size: var(--text-xs);
+  cursor: pointer;
+}
+.fig-chip[data-st="none"] {
+  border-style: dashed;
+}
+.fig-chip[data-on="yes"] {
+  box-shadow: 0 0 0 2px var(--st);
+}
+.fig-detail {
+  border-top: 1px solid var(--color-border);
+  padding-top: var(--space-2);
+  min-height: 4.5em;
+}
+.fig-tag {
+  color: var(--st);
+  font-weight: var(--weight-bold);
+}
+.fig-dot {
+  display: inline-block;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--st);
+  margin-right: 6px;
+  vertical-align: middle;
+}
+.fig-dot[data-st="none"] {
+  background: transparent;
+  box-shadow: inset 0 0 0 1px var(--color-fg-faint);
+}
+.fig-key {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 6px;
+}
+.fig-key .fig-dot {
+  margin: 0 0 0 6px;
+}
+.fig-items {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  columns: 2;
+  column-gap: var(--space-4);
+}
+.fig-items li {
+  break-inside: avoid;
+  padding: 1px 0;
+}
+.fig-items a {
+  color: var(--color-fg);
+  text-decoration: none;
+}
+.fig-items a:hover {
+  text-decoration: underline;
+}
+.fig-missing {
+  margin-top: 6px;
+  padding: 6px 8px;
+  border-radius: var(--radius-sm);
+  background: var(--color-red-soft);
+}
+
+/* Area by area */
+.area-table {
+  min-width: 560px;
+}
+.area-table tbody tr {
+  cursor: pointer;
+}
+.area-table tr[data-on="yes"] td {
+  background: var(--color-accent-soft);
+}
+.area-name {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  white-space: nowrap;
+}
+.area-cell {
+  min-width: 7rem;
+}
+.area-cell[data-lead="yes"] .mono {
+  color: var(--color-amber);
+  font-weight: var(--weight-bold);
+}
+.area-bar {
+  display: flex;
+  height: 6px;
+  border-radius: var(--radius-pill);
+  background: var(--color-bg-sunken);
+  overflow: hidden;
+  margin-bottom: 3px;
+  gap: 1px;
+}
+.area-bar span {
+  background: var(--st);
+}
+.sheet.area-table .sticky-2 {
+  left: 0;
+}

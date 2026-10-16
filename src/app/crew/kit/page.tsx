@@ -3,6 +3,7 @@ import { requireCrew } from "@/lib/auth";
 import { allItems, kitCounts, riderForPerson, ridersWithPeople } from "@/lib/kit";
 import { KIT_CATEGORIES, KIT_CATEGORY_LABELS, KIT_STORAGE, KIT_STORAGE_LABELS, type KitItem } from "@/db/schema";
 import { StatusBar } from "@/components/kit-sheet";
+import { KitFigures } from "@/components/kit-figures";
 
 export const dynamic = "force-dynamic";
 
@@ -73,6 +74,15 @@ export default async function KitHome({ searchParams }: { searchParams: Promise<
           );
         })}
       </div>
+
+      <section className="stack-sm">
+        <h3 style={{ margin: 0 }}>Kitted out?</h3>
+        <KitFigures
+          riders={riders.map((r) => ({ id: r.id, name: r.displayName, first: r.displayName.split(" ")[0] }))}
+          items={items.map((i) => ({ id: i.id, riderId: i.riderId, name: i.name, category: i.category, status: i.status, qty: i.qty }))}
+          myRiderId={mine?.id ?? null}
+        />
+      </section>
 
       <section className="stack-sm">
         <div className="row-between">
