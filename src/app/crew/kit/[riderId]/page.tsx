@@ -4,8 +4,8 @@ import { eq } from "drizzle-orm";
 import { db, ready, schema } from "@/db/client";
 import { KIT_CATEGORIES, KIT_CATEGORY_LABELS, KIT_STORAGE, KIT_STORAGE_LABELS } from "@/db/schema";
 import { requireCrew } from "@/lib/auth";
-import { canEditRider, catalogue, itemsForRider, ridersWithPeople } from "@/lib/kit";
-import { KitSheet } from "@/components/kit-sheet";
+import { canEditRider, catalogue, itemsForRider, linksForCatalogue, ridersWithPeople } from "@/lib/kit";
+import { KitSheet, type KitHint } from "@/components/kit-sheet";
 
 export const dynamic = "force-dynamic";
 
@@ -21,6 +21,12 @@ export default async function RiderKitPage({ params }: { params: Promise<{ rider
   const onList = new Set(items.map((i) => i.name.toLowerCase()));
   const notYet = cat.filter((x) => !onList.has(x.name.toLowerCase())).length;
   const riders = await ridersWithPeople();
+  const catLinks = await linksForCatalogue(cat);
+  const hints: Record<string, KitHint> = {};
+  for (const c of cat) {
+    const links = catLinks.get(c.id) ?? [];
+    if (c.recommended || links.length) hints[c.name.toLowerCase()] = { recommended: c.recommended, links };
+  }
   const mine = rider.personId === s.pid;
 
   const labels = {
@@ -51,7 +57,7 @@ export default async function RiderKitPage({ params }: { params: Promise<{ rider
         )}
       </div>
       {!editable && <p className="muted small">This is {rider.displayName}&rsquo;s list — only they (or an admin) can change it.</p>}
-      <KitSheet riderId={rider.id} initial={items} editable={editable} labels={labels} />
+      <KitSheet riderId={rider.id} initial={items} editable={editable} labels={labels} hints={hints} />
     </div>
   );
 }

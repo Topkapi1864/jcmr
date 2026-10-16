@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState, useTransition } from "react";
+import { Fragment, useEffect, useMemo, useRef, useState, useTransition } from "react";
 import type { KitItem } from "@/db/schema";
 import { createKitItem, deleteKitItem, patchKitItem } from "@/app/crew/kit/actions";
 
@@ -125,7 +125,21 @@ function countOf(rows: KitItem[]) {
   return c;
 }
 
-export function KitSheet({ riderId, initial, editable, labels }: { riderId: number; initial: KitItem[]; editable: boolean; labels: Labels }) {
+export type KitHint = { recommended: string; links: { url: string; label: string; host: string; by: string }[] };
+
+export function KitSheet({
+  riderId,
+  initial,
+  editable,
+  labels,
+  hints,
+}: {
+  riderId: number;
+  initial: KitItem[];
+  editable: boolean;
+  labels: Labels;
+  hints?: Record<string, KitHint>;
+}) {
   const [rows, setRows] = useState<KitItem[]>(initial);
   const [filter, setFilter] = useState<"all" | Status | "missing">("all");
   const [q, setQ] = useState("");
@@ -136,6 +150,8 @@ export function KitSheet({ riderId, initial, editable, labels }: { riderId: numb
   const [, startTransition] = useTransition();
   const root = useRef<HTMLDivElement>(null);
   const pending = useRef(0);
+  const frozen = useRef<{ key: string; groups: { key: string; label: string; ids: number[] }[] } | null>(null);
+  const [openId, setOpenId] = useState<number | null>(null);
 
   // Server re-renders (another tab, another rider) — take them unless we are mid-save.
   useEffect(() => {
@@ -172,7 +188,7 @@ export function KitSheet({ riderId, initial, editable, labels }: { riderId: numb
       markBusy(id, false);
       if (res.ok) {
         setRows((rs) => rs.map((r) => (r.id === id ? res.item : r)));
-        setFlash({ kind: "ok", text: "Saved" });
+        setFlash({ kind: "ok", text: p.status ? `${res.item.name}: ${STATUS_LABEL[res.item.status]}` : "Saved" });
       } else {
         setRows((rs) => rs.map((r) => (r.id === id ? before : r)));
         setFlash({ kind: "err", text: res.error });
@@ -180,10 +196,6 @@ export function KitSheet({ riderId, initial, editable, labels }: { riderId: numb
     });
   }
 
-  function cycle(it: KitItem) {
-    const next = STATUS_CYCLE[(STATUS_CYCLE.indexOf(it.status) + 1) % STATUS_CYCLE.length];
-    patch(it.id, { status: next });
-  }
 
   function remove(it: KitItem) {
     if (!confirm(`Remove "${it.name}" from the list?`)) return;
@@ -234,26 +246,36 @@ export function KitSheet({ riderId, initial, editable, labels }: { riderId: numb
     return true;
   });
   const statusRank = (s: Status) => STATUS_CYCLE.indexOf(s);
-  const sorted = [...shown].sort((a, b) => {
-    const k = sort.key;
-    let d = 0;
-    if (k === "status") d = statusRank(a.status) - statusRank(b.status);
-    else if (k === "qty") d = a.qty - b.qty;
-    else if (k === "category") d = labels.categories.findIndex((o) => o.value === a.category) - labels.categories.findIndex((o) => o.value === b.category);
-    else if (k === "storage") d = labels.storage.findIndex((o) => o.value === a.storage) - labels.storage.findIndex((o) => o.value === b.storage);
-    else d = String(a[k]).localeCompare(String(b[k]));
-    return d * sort.dir || a.name.localeCompare(b.name);
-  });
-
-  const groups: { key: string; label: string; rows: KitItem[] }[] = [];
-  if (groupBy === "none") groups.push({ key: "all", label: "", rows: sorted });
-  else {
-    const order = groupBy === "category" ? labels.categories.map((o) => o.value) : groupBy === "storage" ? labels.storage.map((o) => o.value) : STATUS_CYCLE;
-    for (const k of order) {
-      const g = sorted.filter((r) => (groupBy === "category" ? r.category : groupBy === "storage" ? r.storage : r.status) === k);
-      if (g.length) groups.push({ key: k, label: groupBy === "category" ? catLabel.get(k) ?? k : groupBy === "storage" ? (k ? storeLabel.get(k) ?? k : "No home yet") : STATUS_LABEL[k as Status], rows: g });
+  function computeGroups() {
+    const sorted = [...shown].sort((a, b) => {
+      const k = sort.key;
+      let d = 0;
+      if (k === "status") d = statusRank(a.status) - statusRank(b.status);
+      else if (k === "qty") d = a.qty - b.qty;
+      else if (k === "category") d = labels.categories.findIndex((o) => o.value === a.category) - labels.categories.findIndex((o) => o.value === b.category);
+      else if (k === "storage") d = labels.storage.findIndex((o) => o.value === a.storage) - labels.storage.findIndex((o) => o.value === b.storage);
+      else d = String(a[k]).localeCompare(String(b[k]));
+      return d * sort.dir || a.name.localeCompare(b.name);
+    });
+    const out: { key: string; label: string; ids: number[] }[] = [];
+    if (groupBy === "none") out.push({ key: "all", label: "", ids: sorted.map((x) => x.id) });
+    else {
+      const order = groupBy === "category" ? labels.categories.map((o) => o.value) : groupBy === "storage" ? labels.storage.map((o) => o.value) : STATUS_CYCLE;
+      for (const k of order) {
+        const g = sorted.filter((r) => (groupBy === "category" ? r.category : groupBy === "storage" ? r.storage : r.status) === k);
+        if (g.length) out.push({ key: k, label: groupBy === "category" ? catLabel.get(k) ?? k : groupBy === "storage" ? (k ? storeLabel.get(k) ?? k : "No home yet") : STATUS_LABEL[k as Status], ids: g.map((x) => x.id) });
+      }
     }
+    return out;
   }
+  // Rows stay where they are while you edit them (like a spreadsheet); the order is
+  // only recalculated when you change the sort, grouping, filter or search, or add/remove a row.
+  const viewKey = `${sort.key}|${sort.dir}|${groupBy}|${filter}|${needle}|${rows.map((x) => x.id).join(",")}`;
+  if (!frozen.current || frozen.current.key !== viewKey) frozen.current = { key: viewKey, groups: computeGroups() };
+  const byId = new Map(rows.map((x) => [x.id, x]));
+  const groups = frozen.current.groups
+    .map((g) => ({ ...g, rows: g.ids.map((id) => byId.get(id)).filter((x): x is KitItem => !!x) }))
+    .filter((g) => g.rows.length);
 
   function header(k: SortKey, label: string, className?: string) {
     const on = sort.key === k;
@@ -373,23 +395,45 @@ export function KitSheet({ riderId, initial, editable, labels }: { riderId: numb
                 {g.rows.map((it) => {
                   const ri = r++;
                   return (
-                    <tr key={it.id} id={`item-${it.id}`} data-st={it.status} data-busy={busy.has(it.id) ? "yes" : undefined}>
+                    <Fragment key={it.id}>
+                    <tr id={`item-${it.id}`} data-st={it.status} data-busy={busy.has(it.id) ? "yes" : undefined} data-open={openId === it.id ? "yes" : undefined}>
                       <td className="sticky-1 st-cell">
-                        <button
-                          type="button"
-                          className="st"
-                          data-st={it.status}
-                          data-r={ri}
-                          data-c="status"
-                          disabled={!editable}
-                          onClick={() => cycle(it)}
-                          title={editable ? "Click to change: Need → Ordered → Have" : STATUS_LABEL[it.status]}
-                        >
-                          <span aria-hidden="true">{STATUS_ICON[it.status]}</span> {STATUS_LABEL[it.status]}
-                        </button>
+                        {editable ? (
+                          <select
+                            className="st"
+                            data-st={it.status}
+                            value={it.status}
+                            data-r={ri}
+                            data-c="status"
+                            aria-label={`Status of ${it.name}`}
+                            onChange={(e) => patch(it.id, { status: e.target.value as Status })}
+                          >
+                            {STATUS_CYCLE.map((k) => (
+                              <option key={k} value={k}>
+                                {STATUS_ICON[k]}  {STATUS_LABEL[k]}
+                              </option>
+                            ))}
+                          </select>
+                        ) : (
+                          <span className="st" data-st={it.status}>
+                            <span aria-hidden="true">{STATUS_ICON[it.status]}</span> {STATUS_LABEL[it.status]}
+                          </span>
+                        )}
                       </td>
                       <td className="sticky-2">
-                        <TextCell value={it.name} disabled={!editable} r={ri} c="name" root={root} className="cell-name" onCommit={(v) => (v.trim() ? patch(it.id, { name: v }) : undefined)} />
+                        <div className="name-wrap">
+                          <button
+                            type="button"
+                            className="row-expand"
+                            aria-expanded={openId === it.id}
+                            aria-label={`${openId === it.id ? "Close" : "Open"} ${it.name}`}
+                            title={openId === it.id ? "Close" : "Open this item"}
+                            onClick={() => setOpenId(openId === it.id ? null : it.id)}
+                          >
+                            ▸
+                          </button>
+                          <TextCell value={it.name} disabled={!editable} r={ri} c="name" root={root} className="cell-name" onCommit={(v) => (v.trim() ? patch(it.id, { name: v }) : undefined)} />
+                        </div>
                       </td>
                       <td className="num">
                         <TextCell value={String(it.qty)} type="number" disabled={!editable} r={ri} c="qty" root={root} onCommit={(v) => patch(it.id, { qty: Number(v) || 0 })} />
@@ -419,6 +463,22 @@ export function KitSheet({ riderId, initial, editable, labels }: { riderId: numb
                         </td>
                       )}
                     </tr>
+                    {openId === it.id && (
+                      <tr className="sheet-detail">
+                        <td colSpan={editable ? 8 : 7}>
+                          <ItemDetail
+                            it={it}
+                            editable={editable}
+                            labels={labels}
+                            hint={hints?.[it.name.toLowerCase()]}
+                            onPatch={(p) => patch(it.id, p)}
+                            onRemove={() => remove(it)}
+                            onClose={() => setOpenId(null)}
+                          />
+                        </td>
+                      </tr>
+                    )}
+                    </Fragment>
                   );
                 })}
               </tbody>
@@ -476,7 +536,137 @@ export function KitSheet({ riderId, initial, editable, labels }: { riderId: numb
       </div>
       {shown.length === 0 && rows.length > 0 && <p className="muted small">Nothing matches — clear the filter or search.</p>}
       {rows.length === 0 && <p className="muted small">Nothing on this list yet{editable ? " — type in the bottom row, or add from the suggested list." : "."}</p>}
-      {editable && <p className="xs muted">Click a cell to edit — it saves as you leave it. Enter moves down a row; Esc undoes the cell. Click the status to step it Need → Ordered → Have.</p>}
+      {editable && <p className="xs muted">Click a cell to edit — it saves as you leave it. Enter moves down a row; Esc undoes the cell. Choose Need / Ordered / Have from the status; ▸ opens an item to edit it in full.</p>}
+    </div>
+  );
+}
+
+function ItemDetail({
+  it,
+  editable,
+  labels,
+  hint,
+  onPatch,
+  onRemove,
+  onClose,
+}: {
+  it: KitItem;
+  editable: boolean;
+  labels: Labels;
+  hint?: KitHint;
+  onPatch: (p: Partial<KitItem>) => void;
+  onRemove: () => void;
+  onClose: () => void;
+}) {
+  const [name, setName] = useState(it.name);
+  const [qty, setQty] = useState(String(it.qty));
+  const [notes, setNotes] = useState(it.notes);
+  const [link, setLink] = useState(it.link);
+  useEffect(() => setName(it.name), [it.name]);
+  useEffect(() => setQty(String(it.qty)), [it.qty]);
+  useEffect(() => setNotes(it.notes), [it.notes]);
+  useEffect(() => setLink(it.link), [it.link]);
+  const extraLinks = (hint?.links ?? []).filter((l) => l.url !== it.link);
+
+  return (
+    <div className="detail">
+      <div className="detail-head">
+        <b>{it.name}</b>
+        <button type="button" className="btn btn-sm btn-quiet" onClick={onClose}>
+          Close
+        </button>
+      </div>
+
+      <div className="detail-status" role="group" aria-label="Status">
+        {STATUS_CYCLE.map((k) => (
+          <button key={k} type="button" className="st" data-st={k} aria-pressed={it.status === k} disabled={!editable} onClick={() => it.status !== k && onPatch({ status: k })}>
+            <span aria-hidden="true">{STATUS_ICON[k]}</span> {STATUS_LABEL[k]}
+          </button>
+        ))}
+      </div>
+
+      <div className="detail-grid">
+        <label className="field">
+          <span>Item</span>
+          <input type="text" value={name} disabled={!editable} onChange={(e) => setName(e.target.value)} onBlur={() => name.trim() && name !== it.name && onPatch({ name })} />
+        </label>
+        <label className="field">
+          <span>How many</span>
+          <input type="number" min={0} inputMode="numeric" value={qty} disabled={!editable} onChange={(e) => setQty(e.target.value)} onBlur={() => Number(qty) !== it.qty && onPatch({ qty: Number(qty) || 0 })} />
+        </label>
+        <label className="field">
+          <span>Category</span>
+          <select value={it.category} disabled={!editable} onChange={(e) => onPatch({ category: e.target.value as KitItem["category"] })}>
+            {labels.categories.map((o) => (
+              <option key={o.value} value={o.value}>
+                {o.label}
+              </option>
+            ))}
+          </select>
+        </label>
+        <label className="field">
+          <span>Where it goes</span>
+          <select value={it.storage} disabled={!editable} onChange={(e) => onPatch({ storage: e.target.value as KitItem["storage"] })}>
+            {labels.storage.map((o) => (
+              <option key={o.value} value={o.value}>
+                {o.label}
+              </option>
+            ))}
+          </select>
+        </label>
+      </div>
+
+      <label className="field">
+        <span>Note</span>
+        <textarea rows={3} value={notes} disabled={!editable} onChange={(e) => setNotes(e.target.value)} onBlur={() => notes !== it.notes && onPatch({ notes })} />
+      </label>
+
+      <label className="field">
+        <span>Link — the one you&rsquo;re buying</span>
+        <div className="row" style={{ gap: 8, flexWrap: "nowrap" }}>
+          <input type="url" value={link} placeholder="https://…" disabled={!editable} onChange={(e) => setLink(e.target.value)} onBlur={() => link !== it.link && onPatch({ link })} />
+          {it.link && (
+            <a className="btn btn-sm btn-primary" href={it.link} target="_blank" rel="noopener" style={{ whiteSpace: "nowrap" }}>
+              Open ↗
+            </a>
+          )}
+        </div>
+      </label>
+
+      {(hint?.recommended || extraLinks.length > 0) && (
+        <div className="detail-hint">
+          <div className="label">From the suggested list</div>
+          {hint?.recommended && <p className="small" style={{ margin: "6px 0" }}>{hint.recommended}</p>}
+          {extraLinks.length > 0 && (
+            <ul className="detail-links">
+              {extraLinks.map((l) => (
+                <li key={l.url}>
+                  <a href={l.url} target="_blank" rel="noopener" className="link-chip">
+                    <b>{l.label || l.host}</b> ↗<span className="muted"> · {l.host}{l.by ? ` · posted by ${l.by}` : ""}</span>
+                  </a>
+                  {editable && (
+                    <button type="button" className="btn btn-sm btn-quiet" onClick={() => onPatch({ link: l.url })}>
+                      Use this link
+                    </button>
+                  )}
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
+      )}
+
+      <div className="row-between">
+        <span className="xs muted">
+          Last changed by {it.updatedBy}
+          {it.updatedAt ? `, ${new Date(it.updatedAt).toLocaleString("en-GB", { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" })}` : ""}
+        </span>
+        {editable && (
+          <button type="button" className="btn btn-sm btn-quiet btn-danger" onClick={onRemove}>
+            Remove from list
+          </button>
+        )}
+      </div>
     </div>
   );
 }

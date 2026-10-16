@@ -2463,3 +2463,123 @@ table.sheet.matrix {
     left: 6.5rem;
   }
 }
+
+/* Status as a dropdown in the sheet — looks like the pill, opens the three choices. */
+select.st {
+  appearance: none;
+  -webkit-appearance: none;
+  padding-right: 22px;
+  background-image: linear-gradient(45deg, transparent 50%, var(--st) 50%), linear-gradient(135deg, var(--st) 50%, transparent 50%);
+  background-position: calc(100% - 12px) 50%, calc(100% - 7px) 50%;
+  background-size: 5px 5px, 5px 5px;
+  background-repeat: no-repeat;
+  background-color: var(--st-soft);
+  min-height: 34px;
+  border: 0;
+}
+select.st option {
+  background: var(--color-bg-raised);
+  color: var(--color-fg);
+}
+
+/* ▸ opens an item */
+.name-wrap {
+  display: flex;
+  align-items: center;
+}
+.row-expand {
+  appearance: none;
+  border: 0;
+  background: none;
+  color: var(--color-fg-muted);
+  width: 30px;
+  min-height: 40px;
+  flex: none;
+  cursor: pointer;
+  font-size: var(--text-sm);
+  transition: transform var(--dur-fast) var(--ease);
+}
+.row-expand:hover {
+  color: var(--color-fg);
+}
+.row-expand[aria-expanded="true"] {
+  transform: rotate(90deg);
+  color: var(--color-brand);
+}
+.name-wrap .cell {
+  padding-left: 2px;
+}
+.sheet tr[data-open="yes"] td {
+  background: var(--color-bg-sunken);
+}
+.sheet-detail > td {
+  background: var(--color-bg-sunken);
+  padding: 0;
+}
+.sheet-detail .detail {
+  position: sticky;
+  left: 0;
+  width: min(44rem, calc(100vw - 2 * var(--gutter) - 2px));
+  padding: var(--space-4);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+.detail-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: var(--text-md);
+}
+.detail-status {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-2);
+}
+.detail-status .st {
+  justify-content: center;
+  min-height: var(--tap);
+  background: transparent;
+  box-shadow: inset 0 0 0 1px var(--color-border-strong);
+  color: var(--color-fg-muted);
+  font-weight: var(--weight-medium);
+}
+.detail-status .st[aria-pressed="true"] {
+  background: var(--st-soft);
+  color: var(--st);
+  box-shadow: inset 0 0 0 2px var(--st);
+  font-weight: var(--weight-bold);
+}
+.detail-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 0 var(--space-3);
+}
+.detail .field {
+  margin-bottom: 0;
+}
+.detail-hint {
+  padding: var(--space-3);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-bg-raised);
+}
+.detail-links {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.detail-links li {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  flex-wrap: wrap;
+}
+@media (max-width: 640px) {
+  .detail-grid {
+    grid-template-columns: 1fr;
+  }
+}
