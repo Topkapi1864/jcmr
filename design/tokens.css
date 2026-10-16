@@ -82,6 +82,17 @@
 
   --color-focus: var(--duck-egg-deep);
 
+  /* Vehicles — the default palette a vehicle's colour is picked from (Crew → Vehicles).
+     Bright enough to read on the dark crew shell and as map markers. */
+  --vehicle-v1: #f0b64a; /* amber */
+  --vehicle-v2: #5fb3f9; /* sky */
+  --vehicle-v3: #41c98a; /* green */
+  --vehicle-v4: #e879b9; /* pink */
+  --vehicle-v5: #ff8a5c; /* orange */
+  --vehicle-v6: #a78bfa; /* violet */
+  --vehicle-v7: #b9dad6; /* duck egg */
+  --vehicle-v8: #f4e04d; /* yellow */
+
   /* ---- Type ------------------------------------------------------------ */
   --font-sans: "Figtree", system-ui, -apple-system, "Segoe UI", sans-serif;
   --font-serif: "Literata", Georgia, serif;

@@ -9,6 +9,8 @@ const nextConfig: NextConfig = {
     "/**": ["./content/**/*"],
   },
   serverExternalPackages: ["@libsql/client"],
+  // Vehicle photos are resized in the browser (≈200 KB) but travel in a form post.
+  experimental: { serverActions: { bodySizeLimit: "3mb" } },
   async headers() {
     return [
       {

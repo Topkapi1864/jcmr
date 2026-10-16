@@ -212,7 +212,7 @@ export const KIT_CATEGORY_LABELS: Record<KitCategory, string> = {
   repair: "On-bike repair",
   nutrition: "Nutrition",
   "off-bike": "Off the bike",
-  "tools-spares": "Tools & spares (car / camper)",
+  "tools-spares": "Tools & spares (vehicles)",
   other: "Other",
 };
 export const KIT_STATUSES = ["need", "ordered", "have"] as const;
@@ -222,8 +222,8 @@ export const KIT_STORAGE = ["", "bike", "car", "robyn", "bag", "van", "home"] as
 export const KIT_STORAGE_LABELS: Record<(typeof KIT_STORAGE)[number], string> = {
   "": "— not decided",
   bike: "On the bike",
-  car: "Leapfrog car",
-  robyn: "Robyn (camper)",
+  car: "Follow vehicle",
+  robyn: "Motorhome (Robyn)",
   bag: "Overnight bag",
   van: "Yasmin's van",
   home: "Stays at home",
@@ -274,8 +274,9 @@ export type Agreed = (typeof AGREED)[number];
 export const AGREED_LABELS: Record<Agreed, string> = { unknown: "Not asked yet", asked: "Asked, waiting", yes: "Yes — in", no: "Can't make it" };
 export const CREW_ROLE_SUGGESTIONS = [
   "Rider",
-  "Leapfrog car driver",
-  "Robyn (camper) driver",
+  "Follow vehicle driver",
+  "Motorhome driver",
+  "Crew chief",
   "Support / feed stops",
   "First aider",
   "Photos & social",
@@ -343,6 +344,100 @@ export const sleeping = sqliteTable(
 
 export type SleepingPlace = typeof sleepingPlaces.$inferSelect;
 export type SleepingRow = typeof sleeping.$inferSelect;
+
+// ---- Vehicles ---------------------------------------------------------------
+
+/** Where a vehicle's colour comes from: a palette slot (v1…v8, defined in design/tokens.css) or a custom #rrggbb. */
+export const VEHICLE_PALETTE = ["v1", "v2", "v3", "v4", "v5", "v6", "v7", "v8"] as const;
+export const SEATS = ["driver", "passenger"] as const;
+export type Seat = (typeof SEATS)[number];
+export const SEAT_LABELS: Record<Seat, string> = { driver: "Driver", passenger: "Passenger" };
+export const POSITION_SOURCES = ["phone", "tracker", "pasted"] as const;
+
+export const vehicles = sqliteTable("vehicles", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
+  name: text("name").notNull(),
+  colour: text("colour").notNull().default("v1"),
+  make: text("make").notNull().default(""), // type of vehicle: "VW Transporter T6", "6-berth motorhome"
+  registration: text("registration").notNull().default(""),
+  role: text("role").notNull().default(""), // what this vehicle is for
+  strategy: text("strategy").notNull().default(""), // how it is driven: leapfrogging, behind the riders, ahead to the stops
+  contents: text("contents").notNull().default(""), // notes on what goes in it
+  kitStorage: text("kit_storage").notNull().default(""), // a KIT_STORAGE key — riders' kit packed here shows on the vehicle
+  trackerUrl: text("tracker_url").notNull().default(""), // a share link from a bought tracker / app
+  token: text("token").notNull(), // for tracker apps posting positions; rotatable
+  photo: text("photo"), // a resized JPEG as a data: URL — served by /api/vehicles/photo/<id>
+  sortOrder: integer("sort_order").notNull().default(100),
+  active: integer("active", { mode: "boolean" }).notNull().default(true),
+  updatedBy: text("updated_by").notNull().default(""),
+  updatedAt: text("updated_at").notNull().default(""),
+});
+
+/** Who is in which vehicle, and for which part of the ride. A person who switches vehicles has two rows.
+ *  from_point / until_point are route points: "day:1" (the start of day 1), "stop:<id>", or "end". */
+export const vehicleCrew = sqliteTable(
+  "vehicle_crew",
+  {
+    id: integer("id").primaryKey({ autoIncrement: true }),
+    vehicleId: integer("vehicle_id")
+      .notNull()
+      .references(() => vehicles.id),
+    personId: integer("person_id")
+      .notNull()
+      .references(() => people.id),
+    seat: text("seat", { enum: SEATS }).notNull().default("passenger"),
+    fromPoint: text("from_point").notNull().default("day:1"),
+    untilPoint: text("until_point").notNull().default("end"),
+    note: text("note").notNull().default(""),
+    updatedBy: text("updated_by").notNull(),
+    updatedAt: text("updated_at").notNull(),
+  },
+  (t) => [index("vehicle_crew_vehicle_idx").on(t.vehicleId), index("vehicle_crew_person_idx").on(t.personId)],
+);
+
+/** The pre-ride packing check: one row per thing that should be in the vehicle. */
+export const vehicleChecklist = sqliteTable(
+  "vehicle_checklist",
+  {
+    id: integer("id").primaryKey({ autoIncrement: true }),
+    vehicleId: integer("vehicle_id")
+      .notNull()
+      .references(() => vehicles.id),
+    name: text("name").notNull(),
+    qty: integer("qty").notNull().default(1),
+    note: text("note").notNull().default(""),
+    checked: integer("checked", { mode: "boolean" }).notNull().default(false),
+    checkedBy: text("checked_by").notNull().default(""),
+    checkedAt: text("checked_at").notNull().default(""),
+    sortOrder: integer("sort_order").notNull().default(100),
+  },
+  (t) => [index("vehicle_checklist_vehicle_idx").on(t.vehicleId)],
+);
+
+/** Positions, newest last. Pruned to a short trail per vehicle. */
+export const vehiclePositions = sqliteTable(
+  "vehicle_positions",
+  {
+    id: integer("id").primaryKey({ autoIncrement: true }),
+    vehicleId: integer("vehicle_id")
+      .notNull()
+      .references(() => vehicles.id),
+    lat: real("lat").notNull(),
+    lng: real("lng").notNull(),
+    accuracy: real("accuracy"), // metres
+    speed: real("speed"), // m/s
+    battery: real("battery"), // 0–100, if the device says
+    source: text("source", { enum: POSITION_SOURCES }).notNull().default("phone"),
+    by: text("by").notNull().default(""),
+    at: text("at").notNull(),
+  },
+  (t) => [index("vehicle_positions_vehicle_idx").on(t.vehicleId, t.at)],
+);
+
+export type Vehicle = typeof vehicles.$inferSelect;
+export type VehicleCrewRow = typeof vehicleCrew.$inferSelect;
+export type VehicleChecklistRow = typeof vehicleChecklist.$inferSelect;
+export type VehiclePosition = typeof vehiclePositions.$inferSelect;
 
 export const audit = sqliteTable("audit", {
   id: integer("id").primaryKey({ autoIncrement: true }),
