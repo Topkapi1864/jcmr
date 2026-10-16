@@ -238,6 +238,7 @@ export const kitCatalogue = sqliteTable("kit_catalogue", {
   notes: text("notes").notNull().default(""),
   source: text("source").notNull().default(""),
   link: text("link").notNull().default(""),
+  recommended: text("recommended").notNull().default(""),
   sortOrder: integer("sort_order").notNull().default(100),
   active: integer("active", { mode: "boolean" }).notNull().default(true),
 });

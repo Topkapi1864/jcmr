@@ -45,8 +45,12 @@ function RowForm({ r }: { r?: KitCatalogueRow }) {
         <input type="text" name="notes" defaultValue={r?.notes ?? ""} />
       </label>
       <label className="field" style={{ flex: "2 1 12rem" }}>
-        <span>Link(s)</span>
-        <input type="text" name="link" defaultValue={r?.link ?? ""} placeholder="https://… (several: separate with spaces)" />
+        <span>Recommended</span>
+        <input type="text" name="recommended" defaultValue={r?.recommended ?? ""} placeholder="Sealskinz — Simon, 27 Sept" />
+      </label>
+      <label className="field" style={{ flex: "3 1 16rem" }}>
+        <span>Links — one per line, optional “| label”</span>
+        <textarea name="link" rows={2} defaultValue={r?.link ?? ""} placeholder="https://… | Castelli Commuter Reflex" style={{ minHeight: 44 }} />
       </label>
       <label className="field" style={{ flex: "1 1 7rem" }}>
         <span>Source</span>
@@ -94,6 +98,7 @@ export default async function SuggestedPage({ searchParams }: { searchParams: Pr
       storage: r.carriedIn ? KIT_STORAGE_LABELS[r.carriedIn] : "",
       notes: r.notes,
       source: r.source,
+      recommended: r.recommended,
       links: links.get(r.id) ?? [],
       riders: ridersFor(r.name),
       mine: mine ? statusFor(mine.id, r.name) : null,
@@ -107,7 +112,8 @@ export default async function SuggestedPage({ searchParams }: { searchParams: Pr
       storage: x.storage ? KIT_STORAGE_LABELS[x.storage] : "",
       notes: x.notes,
       source: x.by,
-      links: x.link ? [{ url: x.link, host: hostOf(x.link), by: x.by }] : [],
+      recommended: "",
+      links: x.link ? [{ url: x.link, host: hostOf(x.link), by: x.by, label: "" }] : [],
       riders: ridersFor(x.name),
       mine: mine ? statusFor(mine.id, x.name) : null,
     })),
@@ -134,8 +140,8 @@ export default async function SuggestedPage({ searchParams }: { searchParams: Pr
         )}
       </div>
       <p className="muted small">
-        {table.length} items — the long list plus anything a rider has put on their own list. Open the links to study them; <b>+ Add</b> puts an item straight onto your list as <i>Need</i>. The coloured
-        letters show who already has it.
+        {table.length} items — the long list plus anything a rider has put on their own list. <b>Recommended</b> is what someone in the groups swears by; open a link to study it or order it, and <b>+ Add</b> puts the
+        item straight onto your list as <i>Need</i>, carrying the first link. The coloured letters show who already has it.
       </p>
       {sp.saved && <p className="notice">Saved.</p>}
 
@@ -174,7 +180,7 @@ export default async function SuggestedPage({ searchParams }: { searchParams: Pr
           <section className="card stack-sm">
             <h3>Import CSV</h3>
             <p className="muted small">
-              Suggested list: <code>name,category,qty,carried_in,notes,source,link</code> — categories {KIT_CATEGORIES.join(" · ")}; carried_in one of{" "}
+              Suggested list: <code>name,category,qty,carried_in,notes,source,link,recommended</code> — on an existing item a blank cell keeps what is there; links one per line as <code>url | label</code> — categories {KIT_CATEGORIES.join(" · ")}; carried_in one of{" "}
               {KIT_STORAGE.filter(Boolean).join(" · ")}. Re-running updates by name. Riders&rsquo; lists:{" "}
               <code>rider,name,category,qty,status,storage,notes,link</code> (status need / ordered / have).
             </p>

@@ -14,7 +14,8 @@ export type SuggestionRow = {
   storage: string;
   notes: string;
   source: string;
-  links: { url: string; host: string; by: string }[];
+  recommended: string;
+  links: { url: string; host: string; by: string; label: string }[];
   riders: { name: string; status: Status | null }[];
   mine: Status | null;
 };
@@ -38,6 +39,7 @@ export function KitSuggested({
   const [cat, setCat] = useState("all");
   const [hideMine, setHideMine] = useState(false);
   const [linksOnly, setLinksOnly] = useState(false);
+  const [recOnly, setRecOnly] = useState(false);
   const [busy, setBusy] = useState<string | null>(null);
   const [flash, setFlash] = useState<{ kind: "ok" | "err"; text: string } | null>(null);
   const [, start] = useTransition();
@@ -62,10 +64,12 @@ export function KitSuggested({
       (cat === "all" || r.category === cat) &&
       (!hideMine || !r.mine) &&
       (!linksOnly || r.links.length > 0) &&
-      (!needle || `${r.name} ${r.notes} ${r.links.map((l) => l.host).join(" ")}`.toLowerCase().includes(needle)),
+      (!recOnly || !!r.recommended) &&
+      (!needle || `${r.name} ${r.notes} ${r.recommended} ${r.links.map((l) => `${l.host} ${l.label}`).join(" ")}`.toLowerCase().includes(needle)),
   );
   const onMine = rows.filter((r) => r.mine).length;
   const withLinks = rows.filter((r) => r.links.length).length;
+  const withRec = rows.filter((r) => r.recommended).length;
 
   return (
     <div className="stack">
@@ -87,8 +91,11 @@ export function KitSuggested({
               Hide the {onMine} on my list
             </button>
           )}
+          <button type="button" aria-pressed={recOnly} onClick={() => setRecOnly(!recOnly)}>
+            Recommended ({withRec})
+          </button>
           <button type="button" aria-pressed={linksOnly} onClick={() => setLinksOnly(!linksOnly)}>
-            Only with links ({withLinks})
+            With links ({withLinks})
           </button>
         </div>
         <span className={`kit-flash ${flash?.kind ?? ""}`} role="status" aria-live="polite">
@@ -111,8 +118,9 @@ export function KitSuggested({
               <th className="num">Qty</th>
               <th>Category</th>
               <th>Usually goes</th>
+              <th>Recommended</th>
               <th>Note</th>
-              <th>Links to study</th>
+              <th>Links — study or order</th>
               <th>Riders</th>
             </tr>
           </thead>
@@ -137,13 +145,22 @@ export function KitSuggested({
                 <td className="num cell-text mono">{r.qty}</td>
                 <td className="cell-text muted">{catLabel.get(r.category) ?? r.category}</td>
                 <td className="cell-text muted">{r.storage || "—"}</td>
+                <td className="cell-text small rec-cell">{r.recommended || <span className="faint xs">—</span>}</td>
                 <td className="cell-text muted small">{r.notes}</td>
                 <td className="cell-text">
                   {r.links.length ? (
                     <span className="link-chips">
                       {r.links.map((l) => (
                         <a key={l.url} href={l.url} target="_blank" rel="noopener" className="link-chip" title={l.url}>
-                          {l.host} ↗{l.by && <span className="muted"> · {l.by}</span>}
+                          <b>{l.label || l.host}</b> ↗
+                          {(l.label || l.by) && (
+                            <span className="muted">
+                              {" "}
+                              · {l.label ? l.host : ""}
+                              {l.label && l.by ? " · " : ""}
+                              {l.by ? `posted by ${l.by}` : ""}
+                            </span>
+                          )}
                         </a>
                       ))}
                     </span>

@@ -150,6 +150,7 @@ export async function saveSuggested(form: FormData) {
     notes: String(form.get("notes") ?? ""),
     source: String(form.get("source") ?? ""),
     link: String(form.get("link") ?? ""),
+    recommended: String(form.get("recommended") ?? ""),
     active: form.get("active") !== "off",
   });
   await journal(s.name, `kit suggested list: saved "${String(form.get("name")).slice(0, 60)}"`);

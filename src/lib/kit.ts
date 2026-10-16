@@ -90,23 +90,34 @@ export async function addFromCatalogue(actor: Actor, riderId: number, catalogueI
   if (!c) throw new Error("Not on the suggested list");
   const existing = await db.select().from(schema.kitItems).where(and(eq(schema.kitItems.riderId, riderId), eq(schema.kitItems.name, c.name))).get();
   if (existing) return existing.id;
-  const firstLink = c.link.split(/\s+/).find(Boolean) ?? "";
+  const firstLink = parseLinks(c.link)[0]?.url ?? "";
   return upsertItem(actor, riderId, { name: c.name, category: c.category, qty: c.suggestedQty, status: "need", storage: c.carriedIn, notes: "", link: firstLink, catalogueId: c.id });
 }
 
 // ---- Links -----------------------------------------------------------------
 
-/** Keep only http(s) URLs, one per line (a suggested item can carry several). */
+/**
+ * Links, one per line: a URL, optionally followed by " | label" (e.g. "Castelli Commuter Reflex · posted by Simon").
+ * Bare URLs separated by spaces or commas are also accepted.
+ */
+export function parseLinks(v: string): { url: string; label: string }[] {
+  const out: { url: string; label: string }[] = [];
+  for (const line of v.split(/\n+/)) {
+    const [head, ...rest] = line.split("|");
+    const label = rest.join("|").trim();
+    const urls = head.split(/[\s,]+/).filter((x) => /^https?:\/\//i.test(x.trim()));
+    urls.forEach((u, i) => out.push({ url: u.trim(), label: i === urls.length - 1 ? label.slice(0, 120) : "" }));
+  }
+  return out.slice(0, 8);
+}
+
 export function cleanLinks(v: string) {
-  return v
-    .split(/[\s,]+/)
-    .map((x) => x.trim())
-    .filter((x) => /^https?:\/\//i.test(x))
-    .slice(0, 8)
+  return parseLinks(v)
+    .map((l) => (l.label ? `${l.url} | ${l.label}` : l.url))
     .join("\n");
 }
 
-export type PostedLink = { url: string; host: string; by: string };
+export type PostedLink = { url: string; host: string; by: string; label: string };
 
 export function hostOf(url: string) {
   try {
@@ -125,12 +136,12 @@ export async function linksForCatalogue(rows: KitCatalogueRow[]): Promise<Map<nu
   const items = await db.select({ i: schema.kitItems, r: schema.riders }).from(schema.kitItems).leftJoin(schema.riders, eq(schema.kitItems.riderId, schema.riders.id)).all();
   const byName = new Map(rows.map((r) => [r.name.toLowerCase(), r.id]));
   const out = new Map<number, PostedLink[]>();
-  const push = (cid: number, url: string, by: string) => {
+  const push = (cid: number, url: string, by: string, label = "") => {
     const list = out.get(cid) ?? [];
-    if (!list.some((l) => l.url === url)) list.push({ url, host: hostOf(url), by });
+    if (!list.some((l) => l.url === url)) list.push({ url, host: hostOf(url), by, label });
     out.set(cid, list);
   };
-  for (const r of rows) for (const u of r.link.split(/\s+/).filter(Boolean)) push(r.id, u, r.source && r.source !== "sheet" ? r.source : "");
+  for (const r of rows) for (const l of parseLinks(r.link)) push(r.id, l.url, "", l.label);
   for (const { i, r } of items) {
     if (!i.link) continue;
     const cid = i.catalogueId ?? byName.get(i.name.toLowerCase());
@@ -175,7 +186,7 @@ export async function catalogue(includeInactive = false): Promise<KitCatalogueRo
   return includeInactive ? rows : rows.filter((r) => r.active);
 }
 
-export async function saveCatalogueRow(input: { id?: number; name: string; category: string; qty: number; carriedIn: string; notes: string; source: string; link?: string; active: boolean }) {
+export async function saveCatalogueRow(input: { id?: number; name: string; category: string; qty: number; carriedIn: string; notes: string; source: string; link?: string; recommended?: string; active: boolean }) {
   await ready();
   const vals = {
     name: input.name.trim().slice(0, 120),
@@ -185,6 +196,7 @@ export async function saveCatalogueRow(input: { id?: number; name: string; categ
     notes: input.notes.trim().slice(0, 300),
     source: input.source.trim().slice(0, 120),
     link: cleanLinks(input.link ?? ""),
+    recommended: (input.recommended ?? "").trim().slice(0, 300),
     active: input.active,
   };
   if (!vals.name) throw new Error("A suggested item needs a name");
@@ -196,9 +208,16 @@ export async function saveCatalogueRow(input: { id?: number; name: string; categ
   return r[0].id;
 }
 
+/** A CSV cell that is absent or blank keeps the previous value. */
+const keep = (cell: string | undefined, prev: string | undefined) => (cell === undefined || cell.trim() === "" ? prev : cell);
+
 export type KitImportReport = { imported: number; updated: number; rejected: { row: number; reason: string; name: string }[] };
 
-/** CSV: name,category,qty,carried_in,notes,source,link — idempotent on name (case-insensitive). */
+/**
+ * CSV: name,category,qty,carried_in,notes,source,link,recommended — idempotent on name (case-insensitive).
+ * On an existing item a missing column or an empty cell keeps what is there, so a CSV can carry just
+ * name + link + recommended to fill those in.
+ */
 export async function importCatalogueCsv(csv: string): Promise<KitImportReport> {
   await ready();
   const rows = csvToObjects(csv);
@@ -223,10 +242,11 @@ export async function importCatalogueCsv(csv: string): Promise<KitImportReport> 
       name,
       category: asCategory(category || prev?.category || "other"),
       suggestedQty: Math.max(0, parseInt(r.qty || String(prev?.suggestedQty ?? 1), 10) || 1),
-      carriedIn: asStorage((r.carried_in ?? prev?.carriedIn ?? "").trim().toLowerCase()),
-      notes: (r.notes ?? prev?.notes ?? "").trim(),
-      source: (r.source ?? prev?.source ?? "").trim(),
-      link: cleanLinks(r.link ?? prev?.link ?? ""),
+      carriedIn: asStorage((keep(r.carried_in, prev?.carriedIn) ?? "").trim().toLowerCase()),
+      notes: (keep(r.notes, prev?.notes) ?? "").trim(),
+      source: (keep(r.source, prev?.source) ?? "").trim(),
+      link: cleanLinks(keep(r.link, prev?.link) ?? ""),
+      recommended: (keep(r.recommended, prev?.recommended) ?? "").trim().slice(0, 300),
       sortOrder: prev?.sortOrder ?? order++,
       active: true,
     };

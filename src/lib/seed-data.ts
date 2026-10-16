@@ -148,6 +148,11 @@ export async function seedAll(withItems: boolean, log: (s: string) => void = con
       const r = await importCatalogueCsv(fs.readFileSync(catPath, "utf8"));
       say(`kit suggested list: ${r.imported} imported, ${r.updated} updated, ${r.rejected.length} rejected`);
     }
+    const recPath = path.join(process.cwd(), "content", "seed", "kit-recommended.csv");
+    if (fs.existsSync(recPath)) {
+      const r = await importCatalogueCsv(fs.readFileSync(recPath, "utf8"));
+      say(`kit recommendations: ${r.imported} new, ${r.updated} updated, ${r.rejected.length} rejected`);
+    }
     if (fs.existsSync(ridersPath)) {
       const fiona = await db.select().from(schema.people).where(eq(schema.people.shortName, "Fiona")).get();
       const r = await importRiderItemsCsv({ name: "Fiona", pid: fiona!.id, role: "admin" }, fs.readFileSync(ridersPath, "utf8"));
