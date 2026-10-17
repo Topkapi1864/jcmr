@@ -25,6 +25,10 @@ export default async function RoutePage({ searchParams }: { searchParams: Promis
         <p className="prose">
           {startLabel} to Yeadon Cemetery — about {total} miles over two days, the finish on the second anniversary.
         </p>
+        <p className="row mt-4">
+          <a className="btn btn-primary" href="/route/ride/view.html">Ride the route in photos</a>
+          <span className="muted">A street photo every quarter mile, with the climbs and the stops.</span>
+        </p>
       </header>
       <div className="mt-4">
         <PublicRoute profiles={profiles} results={results} hasPlan={!!saved} dayLabels={dayLabels} />

@@ -7,6 +7,8 @@ const nextConfig: NextConfig = {
   // The GPX files and seed CSV are read from disk at request time.
   outputFileTracingIncludes: {
     "/**": ["./content/**/*"],
+    // The street-photo viewer's page and photos, only for the route that serves them.
+    "/route/ride/**": ["./ride/**/*"],
   },
   serverExternalPackages: ["@libsql/client"],
   // Vehicle photos are resized in the browser (≈200 KB) but travel in a form post.
