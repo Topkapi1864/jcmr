@@ -210,6 +210,9 @@ export function RoutePlanner({ profiles, initial, saved: savedIn, me }: Props) {
           <button className="btn btn-primary" onClick={save} disabled={pending || (!dirty && !!saved)} title="Everyone sees this plan; the public route page shows the times">
             {pending ? "Saving…" : dirty || !saved ? "Save as the crew plan" : "Saved"}
           </button>
+          <a className="btn" href="/crew/ride/view.html" title="A street photo every quarter mile, with a time-lapse of the whole ride">
+            Ride the route in photos
+          </a>
           <button className="btn" onClick={share}>
             Share scenario
           </button>
