@@ -226,7 +226,8 @@ export function KitFigures({ riders, items, myRiderId }: { riders: FigRider[]; i
       <div className="figs" data-active={active ?? undefined}>
         {ordered.map((r) => {
           const t = totals.find((x) => x.r.id === r.id)!;
-          const pct = t.total ? Math.round((t.have / t.total) * 100) : 0;
+          const sorted = t.have + t.ordered;
+          const pct = t.total ? Math.round((sorted / t.total) * 100) : 0;
           const cells = grid.get(r.id)!;
           return (
             <section key={r.id} className="fig" aria-label={`${r.name}'s kit`}>
@@ -237,7 +238,7 @@ export function KitFigures({ riders, items, myRiderId }: { riders: FigRider[]; i
                 </Link>
                 <span className="xs muted">
                   {t.have > 0 && t.have === mostHave && <span className="fig-most">★ most kit · </span>}
-                  <b className="fig-num">{t.have}</b> in hand of {t.total} · {pct}%
+                  <b className="fig-num">{sorted}</b> of {t.total} sorted · {pct}% · {t.have} in hand
                 </span>
               </div>
               <svg viewBox="0 0 520 424" className="fig-svg" role="img" aria-label={`${r.name}: ${t.have} have, ${t.ordered} ordered, ${t.need} need`} onPointerLeave={() => hover(null)}>
@@ -279,7 +280,7 @@ export function KitFigures({ riders, items, myRiderId }: { riders: FigRider[]; i
                           )}
                           {c.total > 0 && (
                             <text y="38" className="cnt">
-                              {c.have}/{c.total}
+                              {c.have + c.ordered}/{c.total}
                             </text>
                           )}
                         </g>
@@ -306,7 +307,7 @@ export function KitFigures({ riders, items, myRiderId }: { riders: FigRider[]; i
                       <svg viewBox="0 0 24 24" width="18" height="18" className="ico" aria-hidden="true">
                         <Icon id={z.id} />
                       </svg>
-                      {z.label} <span className="mono">{c.total ? `${c.have}/${c.total}` : "—"}</span>
+                      {z.label} <span className="mono">{c.total ? `${c.have + c.ordered}/${c.total}` : "—"}</span>
                     </button>
                   );
                 })}
@@ -490,7 +491,7 @@ function AreaTable({
                           {c.need > 0 && <span data-st="need" style={{ width: w(c.need) }} />}
                         </div>
                         <span className="mono xs">
-                          {c.total ? `${c.have}/${c.total}` : "—"}
+                          {c.total ? `${c.have + c.ordered}/${c.total}` : "—"}
                           {lead && " ★"}
                         </span>
                       </td>
