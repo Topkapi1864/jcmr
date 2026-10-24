@@ -93,6 +93,28 @@
   --vehicle-v7: #b9dad6; /* duck egg */
   --vehicle-v8: #f4e04d; /* yellow */
 
+  /* Weather — the cross-section on Crew → Weather. Temperature bins cold → warm
+     (below 0, 0–3, 3–6, 6–9, 9–12, 12–15, 15+ °C), chosen to read on both the
+     cream and the navy shells; rain, snow and thunder marks; wind head/tail/cross. */
+  --wx-t0: #8e9bff;
+  --wx-t1: #5fa8f5;
+  --wx-t2: #4fc4c0;
+  --wx-t3: #74cf8c;
+  --wx-t4: #d9d35e;
+  --wx-t5: #f0b64a;
+  --wx-t6: #ff8a5c;
+  --wx-ink: var(--navy);
+  --wx-rain: #5fb3f9;
+  --wx-snow: #e8f1ff;
+  --wx-storm: #f4e04d;
+  --wx-head: #e5574a;
+  --wx-tail: #41c98a;
+  --wx-cross: #f0b64a;
+  --wx-head-soft: rgba(229, 87, 74, 0.18);
+  --wx-tail-soft: rgba(65, 201, 138, 0.18);
+  --wx-cross-soft: rgba(240, 182, 74, 0.2);
+  --wx-night: rgba(13, 21, 38, 0.35);
+
   /* ---- Type ------------------------------------------------------------ */
   --font-sans: "Figtree", system-ui, -apple-system, "Segoe UI", sans-serif;
   --font-serif: "Literata", Georgia, serif;

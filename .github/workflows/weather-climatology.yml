@@ -1,0 +1,32 @@
+name: Weather climatology
+# Writes content/weather/climatology.json — ten mid-Novembers of ERA5 averages
+# at every 10-mile point of the route — and commits it. Run it from the Actions
+# tab after the route changes; it also runs itself each autumn.
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "23 3 1 10 *" # 1 October, 03:23 UTC
+permissions:
+  contents: write
+jobs:
+  climatology:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci --no-audit --no-fund
+      - run: npm run weather:climatology
+      - name: Commit the file
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add content/weather/climatology.json
+          if git diff --cached --quiet; then
+            echo "climatology unchanged"
+          else
+            git commit -m "Weather: refresh the ERA5 climatology along the route"
+            git push
+          fi

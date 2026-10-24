@@ -1966,6 +1966,340 @@ details.done-group summary {
     display: none;
   }
 }
+/* ---- Weather (crew) ------------------------------------------------------
+   Crew → Weather: day tiles, the key, and the cross-section — temperature band,
+   rain marks and wind arrows drawn over the route profile. Colours are the
+   --wx-* tokens. [data-source="typical"] marks averages rather than a forecast. */
+.wx-tile {
+  text-decoration: none;
+  min-width: 0;
+  overflow: hidden;
+}
+.wx-tile .eyebrow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-1) var(--space-2);
+}
+.wx-tile .tile-row {
+  flex-wrap: wrap;
+}
+.wx-tile .tile-row b {
+  font-size: var(--text-2xl);
+}
+.wx-day,
+.wx-key-card {
+  min-width: 0;
+}
+@media (max-width: 480px) {
+  .wx-tile .tile-row b {
+    font-size: var(--text-xl);
+  }
+}
+.wx-conf {
+  background: var(--color-accent-soft);
+  color: var(--color-fg);
+  font-family: var(--font-mono);
+  font-weight: var(--weight-medium);
+  letter-spacing: 0;
+  text-transform: none;
+}
+.wx-conf[data-level="0"] {
+  background: var(--color-blocked-soft);
+  color: var(--color-fg-muted);
+}
+.wx-conf[data-level="1"] {
+  background: var(--color-amber-soft);
+  color: var(--color-amber);
+}
+.wx-conf[data-level="3"],
+.wx-conf[data-level="4"] {
+  background: var(--color-ok-soft);
+  color: var(--color-ok);
+}
+.wx-windbar {
+  display: flex;
+  height: 6px;
+  border-radius: var(--radius-pill);
+  overflow: hidden;
+  background: var(--color-border);
+  margin-top: var(--space-1);
+}
+.wx-windbar span[data-kind="tail"] {
+  background: var(--wx-tail);
+}
+.wx-windbar span[data-kind="cross"] {
+  background: var(--wx-cross);
+}
+.wx-windbar span[data-kind="head"] {
+  background: var(--wx-head);
+}
+.wx-key-card {
+  padding: var(--space-3) var(--space-4);
+}
+.wx-mode {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+.wx-mode .btn[data-on] {
+  background: var(--color-accent);
+  color: var(--color-accent-fg);
+  border-color: var(--color-accent);
+}
+.wx-key {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2) var(--space-5);
+  align-items: center;
+}
+.wx-key-group {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  flex-wrap: wrap;
+}
+.wx-swatch {
+  display: inline-block;
+  padding: 1px var(--space-2);
+  border-radius: var(--radius-sm);
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  color: var(--wx-ink);
+}
+.wx-swatch[data-bin="0"],
+.wx-chip[data-bin="0"] {
+  background: var(--wx-t0);
+}
+.wx-swatch[data-bin="1"],
+.wx-chip[data-bin="1"] {
+  background: var(--wx-t1);
+}
+.wx-swatch[data-bin="2"],
+.wx-chip[data-bin="2"] {
+  background: var(--wx-t2);
+}
+.wx-swatch[data-bin="3"],
+.wx-chip[data-bin="3"] {
+  background: var(--wx-t3);
+}
+.wx-swatch[data-bin="4"],
+.wx-chip[data-bin="4"] {
+  background: var(--wx-t4);
+}
+.wx-swatch[data-bin="5"],
+.wx-chip[data-bin="5"] {
+  background: var(--wx-t5);
+}
+.wx-swatch[data-bin="6"],
+.wx-chip[data-bin="6"] {
+  background: var(--wx-t6);
+}
+.wx-chip {
+  display: inline-block;
+  min-width: 2.6em;
+  text-align: center;
+  padding: 1px var(--space-2);
+  border-radius: var(--radius-sm);
+  font-family: var(--font-mono);
+  font-weight: var(--weight-bold);
+  color: var(--wx-ink);
+}
+.wx-key-glyph {
+  width: 18px;
+  height: 18px;
+  overflow: visible;
+}
+.wx-key-glyph.wide {
+  width: 32px;
+}
+.wx-key-glyph + .xs {
+  margin-right: var(--space-2);
+}
+.wx-source {
+  margin: 0;
+  padding: var(--space-2) var(--space-3);
+  background: var(--color-bg-sunken);
+  border-radius: var(--radius-md);
+  border-left: 3px solid var(--color-fg-muted);
+}
+.wx-source[data-level="1"] {
+  border-left-color: var(--color-amber);
+}
+.wx-source[data-level="2"] {
+  border-left-color: var(--color-progress);
+}
+.wx-source[data-level="3"],
+.wx-source[data-level="4"] {
+  border-left-color: var(--color-ok);
+}
+.wx-chart-wrap {
+  display: grid;
+  gap: var(--space-2);
+}
+.wx-chart {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+.wx-chart svg {
+  width: 100%;
+  min-width: 720px;
+  height: auto;
+  display: block;
+  touch-action: pan-y;
+}
+.wx-night {
+  fill: var(--wx-night);
+}
+.wx-rowlabel {
+  fill: var(--color-fg-muted);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.04em;
+}
+.wx-divider {
+  stroke: var(--color-border-strong);
+  stroke-width: 1;
+  vector-effect: non-scaling-stroke;
+}
+.wx-eta {
+  fill: var(--color-fg-muted);
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+}
+.wx-eta[data-dark] {
+  fill: var(--color-amber);
+}
+.wx-temp {
+  stroke: var(--color-bg-raised);
+  stroke-width: 1;
+}
+svg[data-source="typical"] .wx-temp {
+  opacity: 0.78;
+}
+.wx-temp-txt {
+  fill: var(--wx-ink);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: var(--weight-bold);
+  pointer-events: none;
+}
+.wx-sub {
+  fill: var(--color-fg-muted);
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  pointer-events: none;
+}
+.wx-wind-txt[data-kind="head"] {
+  fill: var(--wx-head);
+  font-weight: var(--weight-bold);
+}
+.wx-wind-txt[data-kind="tail"] {
+  fill: var(--wx-tail);
+}
+.wx-town {
+  fill: var(--color-fg-muted);
+  font-size: 9.5px;
+}
+.wx-hit {
+  fill: transparent;
+  cursor: pointer;
+}
+.wx-col[data-sel] .wx-hit {
+  fill: var(--color-fg);
+  opacity: 0.08;
+}
+.wx-col[data-sel] .wx-temp {
+  stroke: var(--color-fg);
+  stroke-width: 2;
+}
+.wx-none {
+  fill: var(--color-fg-muted);
+  opacity: 0.45;
+}
+.wx-drop {
+  fill: var(--wx-rain);
+}
+.wx-drop-maybe {
+  fill: none;
+  stroke: var(--wx-rain);
+  stroke-width: 1.4;
+  stroke-dasharray: 2 1.5;
+}
+.wx-flake {
+  stroke: var(--wx-snow);
+  stroke-width: 1.5;
+  fill: none;
+  stroke-linecap: round;
+}
+.wx-bolt {
+  fill: var(--wx-storm);
+}
+.wx-arrow {
+  fill: none;
+  stroke-width: 2.6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.wx-arrow[data-kind="head"] {
+  stroke: var(--wx-head);
+}
+.wx-arrow[data-kind="tail"] {
+  stroke: var(--wx-tail);
+}
+.wx-arrow[data-kind="cross"] {
+  stroke: var(--wx-cross);
+}
+.wx-detail {
+  min-height: 2.4em;
+  padding: var(--space-2) var(--space-3);
+  background: var(--color-bg-sunken);
+  border-radius: var(--radius-md);
+}
+.wx-kind[data-kind="head"] {
+  background: var(--wx-head-soft);
+  color: var(--wx-head);
+}
+.wx-kind[data-kind="tail"] {
+  background: var(--wx-tail-soft);
+  color: var(--wx-tail);
+}
+.wx-kind[data-kind="cross"] {
+  background: var(--wx-cross-soft);
+  color: var(--wx-cross);
+}
+b.wx-kind {
+  background: none;
+}
+.wx-table summary {
+  cursor: pointer;
+  color: var(--color-link);
+}
+.wx-rows td.mono {
+  white-space: nowrap;
+}
+.wx-rows tr[data-dark] td:nth-child(3) {
+  color: var(--color-amber);
+}
+.wx-rows .moon {
+  color: var(--color-amber);
+}
+@media (max-width: 640px) {
+  .wx-rows th:nth-child(2),
+  .wx-rows td:nth-child(2) {
+    display: none;
+  }
+}
+@media print {
+  .wx-key-card .wx-mode,
+  .wx-detail {
+    display: none !important;
+  }
+  .wx-chart svg {
+    min-width: 0;
+  }
+}
+
 /* Public route page */
 .pub-map {
   height: 70vh;

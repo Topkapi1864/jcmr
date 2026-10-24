@@ -81,6 +81,7 @@ const CREW_NAV = [
   { href: "/crew/sleeping", label: "Sleeping" },
   { href: "/crew/vehicles", label: "Vehicles" },
   { href: "/crew/route", label: "Route" },
+  { href: "/crew/weather", label: "Weather" },
   { href: "/crew/live", label: "Live" },
 ];
 // Phone tab bar: four fixed tabs, then "More" for every section.

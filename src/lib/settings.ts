@@ -13,6 +13,7 @@ export const SETTING_KEYS = [
   "donate.total_cached_at",
   "donate.embed_verdict",
   "read_door.token_hash",
+  "weather.forecast",
 ] as const;
 export type SettingKey = (typeof SETTING_KEYS)[number];
 
@@ -28,6 +29,7 @@ export const SETTING_DEFAULTS: Record<SettingKey, string> = {
   "donate.total_cached_at": "",
   "donate.embed_verdict": "",
   "read_door.token_hash": "",
+  "weather.forecast": "",
 };
 
 export async function getSetting(key: SettingKey): Promise<string> {

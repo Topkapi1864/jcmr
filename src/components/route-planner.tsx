@@ -213,6 +213,9 @@ export function RoutePlanner({ profiles, initial, saved: savedIn, me }: Props) {
           <a className="btn" href="/crew/ride/view.html" title="A street photo every quarter mile, with a time-lapse of the whole ride">
             Ride the route in photos
           </a>
+          <a className="btn" href="/crew/weather" title="The forecast every 10 miles at the hour this plan has us there">
+            Weather
+          </a>
           <button className="btn" onClick={share}>
             Share scenario
           </button>

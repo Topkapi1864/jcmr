@@ -52,6 +52,16 @@ Sign in at `/crew/signin` with the crew password, pick a name. Gary and Fiona ar
   3. *Paste* — a Google / Apple Maps link (what you get from a WhatsApp location) or "lat, lng". Short links are followed.
   WhatsApp's live location can't be read by another app. A bought tracker's own share link can be stored on the vehicle.
 
+## Weather
+
+**Crew → Weather** (`/crew/weather`; JSON at `/api/weather`, `?fresh=1` to force a fetch). The route is cut into 10-mile stretches; each gets the hour of weather at the time the saved crew plan (Crew → Route) has the riders passing it. Two views per day: the cross-section — temperature as a heat band with a key, rain as marks, wind as arrows drawn relative to the direction of travel (you ride left → right; red = headwind, green = tailwind, amber = crosswind) over the elevation profile with the timetable along the top — and the point-by-point table.
+
+- **Forecast**: [Open-Meteo](https://open-meteo.com) best-match (ECMWF, Met Office and DWD blended; rain chances from ensembles), hourly, for every point in one request, 16 days ahead. Cached in settings (`weather.forecast`) for 30 minutes; "Fetch the latest forecast" forces it. The 14th comes into range on 30 Oct, the 15th on 31 Oct — the page switches by itself and says how many days out and how much to trust it.
+- **Typical** (before then, and as the "normally…" comparison after): `content/weather/climatology.json`, ten mid-Novembers of ERA5 averages hour by hour at every point, written by `npm run weather:climatology` (Open-Meteo archive, no key). The **Weather climatology** GitHub workflow runs it and commits the file — run it from the Actions tab after the route changes. Until the file exists the page uses long-term regional averages built into `src/lib/weather.ts`, adjusted for height.
+- Dry run with invented weather: `OPEN_METEO_FORECAST_URL=http://127.0.0.1:3099/v1/forecast WEATHER_TODAY=2026-11-06 npm run dev` against any server that answers in Open-Meteo's shape.
+
+The maths (segments, headings, head/tail/cross) is `src/lib/weather.ts`; fetching and caching `src/lib/weather-server.ts`; the page `src/components/weather-view.tsx`; colours are the `--wx-*` tokens.
+
 ## The dark switch
 
 `site.public_live` in settings; flipped from Admin, journaled. The `PUBLIC_LIVE` environment variable (`true`/`false`) overrides it if set. While dark every public route serves the holding page with `noindex` and `robots.txt` disallows everything — except for a signed-in crew session, which previews the full pages (with a banner and a link to see the holding page).
