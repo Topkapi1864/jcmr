@@ -25,6 +25,12 @@ export async function GET(req: Request, ctx: RouteContext<"/crew/ride/[[...path]
   }
 
   const isPage = rel.endsWith(".html");
+  if (isPage) {
+    // Google Street View fills the gaps when a browser key is configured (Vercel env GOOGLE_MAPS_KEY).
+    // The key is restricted in Google Cloud to this site and to Street View, so it is safe in the page.
+    const key = process.env.GOOGLE_MAPS_KEY ?? "";
+    if (/^AIza[\w-]{30,}$/.test(key)) body = Buffer.from(body.toString("utf8").replace("__GMAPS_KEY__", key));
+  }
   return new Response(new Uint8Array(body), {
     headers: {
       "Content-Type": isPage ? "text/html; charset=utf-8" : "image/jpeg",
