@@ -1592,8 +1592,9 @@ details.done-group summary {
   gap: var(--space-5);
   align-items: start;
 }
-.planner-controls {
-  min-width: 0;
+.planner-controls,
+.planner-main {
+  min-width: 0; /* grid items default to min-content width; on a phone that pushed the page 18 px past the edge */
 }
 .planner-controls h2,
 .planner-main h2 {
