@@ -19,6 +19,7 @@ export default async function RidersPage({ searchParams }: { searchParams: Promi
   const g = await gate(await searchParams);
   if (g.holding) return <Holding />;
   await ready();
+  // sortOrder puts Gary and Simon first, so the 2×2 grid has the brothers on the top row.
   const riders = await db.select().from(schema.riders).orderBy(schema.riders.sortOrder).all();
 
   return (
@@ -28,20 +29,26 @@ export default async function RidersPage({ searchParams }: { searchParams: Promi
         <h1 className="page-title">The riders</h1>
         <p className="prose">Four of us, riding as one.</p>
       </header>
-      <div className="rider-cards mt-4">
+      <div className="rider-grid mt-4">
         {riders.map((r) => (
-          <article key={r.id} className="card rider-card">
-            {r.photoAsset ? <img className="avatar" src={r.photoAsset} alt="" /> : <div className="avatar" aria-hidden="true">{initials(r.displayName)}</div>}
-            <div style={{ minWidth: 0 }}>
-              <h3 style={{ fontFamily: "inherit", fontSize: "var(--text-md)", margin: "0 0 2px" }}>{r.displayName}</h3>
-              {r.bioMd ? <div className="prose" dangerouslySetInnerHTML={{ __html: renderMarkdown(r.bioMd) }} /> : <p className="muted small">Bio to come.</p>}
+          <article key={r.id} className="rider-profile">
+            {r.photoAsset ? (
+              <img className="rider-profile-photo" src={r.photoAsset} alt={r.displayName} />
+            ) : (
+              <div className="rider-profile-photo rider-profile-placeholder" aria-hidden="true">
+                {initials(r.displayName)}
+              </div>
+            )}
+            <div className="rider-profile-head">
+              <h2>{r.displayName}</h2>
               {r.stravaUrl && (
-                <p className="small mono" style={{ margin: 0 }}>
-                  <a href={r.stravaUrl} target="_blank" rel="noopener">
-                    On Strava →
-                  </a>
-                </p>
+                <a className="rider-profile-strava" href={r.stravaUrl} target="_blank" rel="noopener">
+                  On Strava →
+                </a>
               )}
+            </div>
+            <div className="rider-profile-bio">
+              {r.bioMd ? <div dangerouslySetInnerHTML={{ __html: renderMarkdown(r.bioMd) }} /> : <p className="muted">Bio to come.</p>}
             </div>
           </article>
         ))}
