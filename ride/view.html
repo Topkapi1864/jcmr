@@ -213,14 +213,15 @@ function drawProfile(){
   s.append(el('path',{d,fill:css('--moss'),opacity:.18}));
   s.append(el('path',{d:'M'+pts.map((p,k)=>`${px(k).toFixed(1)},${py(p.ele).toFixed(1)}`).join('L'),fill:'none',stroke:css('--moss'),'stroke-width':1.6}));
   const bw=(W-16)/n;
+  const m0=pts[0].day_miles; // a day can start part-way in (the public viewer starts away from the house)
   pts.forEach((p,k)=>s.append(el('rect',{x:px(k)-bw/2,y:band[0],width:bw+.4,height:band[1]-band[0],fill:p.s?(p.pass===2?css('--pass2'):css('--ok')):(G&&p.g?css('--goog'):css('--gapc'))})));
-  D.stops.filter(t=>t.day===day&&t.miles>0.5&&t.miles<D.days[day-1].miles-0.5).forEach(t=>{
-    const k=Math.round(t.miles*4);
+  D.stops.filter(t=>t.day===day&&t.miles>m0+0.5&&t.miles<D.days[day-1].miles-0.5).forEach(t=>{
+    const k=Math.round((t.miles-m0)*4);
     s.append(el('line',{x1:px(k),x2:px(k),y1:pTop-4,y2:band[1],stroke:css('--heather'),'stroke-width':1.5,'stroke-dasharray':'3 3'}));
     const tx=el('text',{x:px(k),y:H-6,'text-anchor':'middle','font-size':11,fill:css('--heather'),'font-family':css('--body'),'font-weight':600});
     tx.textContent=t.name.replace(/^D\d /,'').replace(/ \(.*$/,'').replace('OPTIONAL STOP','Optional').replace('STOP','Stop');s.append(tx);
   });
-  for(let m=0;m<=D.days[day-1].miles;m+=20){const t=el('text',{x:px(Math.min(m*4,n-1)),y:H-22,'text-anchor':'middle','font-size':10,fill:css('--muted'),'font-family':css('--mono')});t.textContent=m+' mi';s.append(t);}
+  for(let m=0;m<=D.days[day-1].miles;m+=20){if(m<m0)continue;const t=el('text',{x:px(Math.min(Math.round((m-m0)*4),n-1)),y:H-22,'text-anchor':'middle','font-size':10,fill:css('--muted'),'font-family':css('--mono')});t.textContent=m+' mi';s.append(t);}
   s.append(el('line',{id:'cur',y1:pTop-6,y2:band[1]+2,stroke:css('--ink'),'stroke-width':2}));
   s.append(el('circle',{id:'curdot',r:5,fill:css('--heather'),stroke:css('--panel'),'stroke-width':2}));
   s._py=py;

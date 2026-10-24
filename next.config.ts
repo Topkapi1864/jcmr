@@ -9,6 +9,7 @@ const nextConfig: NextConfig = {
     "/**": ["./content/**/*"],
     // The street-photo viewer's page and photos, only for the route that serves them.
     "/crew/ride/**": ["./ride/**/*"],
+    "/route/ride/**": ["./ride/**/*"],
   },
   serverExternalPackages: ["@libsql/client"],
   // Vehicle photos are resized in the browser (≈200 KB) but travel in a form post.
