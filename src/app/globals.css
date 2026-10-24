@@ -414,40 +414,34 @@ select {
 }
 
 /* The riders page: four profiles in a 2×2, each with a photo slot.
-   On a phone the photo sits beside the name and the bio runs full width. */
+   The photo floats top-left and the bio wraps round it, so the text gets
+   the full card width; on phones the photo is smaller and square. */
 .rider-grid {
   display: grid;
   grid-template-columns: 1fr;
   gap: var(--space-4);
 }
-@media (min-width: 760px) {
+@media (min-width: 900px) {
   .rider-grid {
     grid-template-columns: 1fr 1fr;
   }
 }
 .rider-profile {
+  display: flow-root;
   background: var(--color-bg-raised);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-xl);
-  padding: 20px 22px;
-  display: grid;
-  grid-template-columns: 11rem minmax(0, 1fr);
-  grid-template-areas:
-    "photo head"
-    "photo bio";
-  column-gap: 20px;
-  row-gap: var(--space-2);
-  align-items: start;
-  align-content: start;
+  padding: 22px 24px;
 }
 .rider-profile-photo {
-  grid-area: photo;
-  width: 100%;
+  float: left;
+  width: 10rem;
   aspect-ratio: 4 / 5;
   object-fit: cover;
   object-position: 50% 20%;
   border-radius: var(--radius-lg);
   background: var(--color-bg-band);
+  margin: 4px 20px 10px 0;
 }
 .rider-profile-placeholder {
   display: grid;
@@ -459,11 +453,11 @@ select {
   color: var(--color-fg-on-band);
 }
 .rider-profile-head {
-  grid-area: head;
   display: flex;
   flex-wrap: wrap;
   align-items: baseline;
   gap: var(--space-2) var(--space-3);
+  margin-bottom: var(--space-2);
 }
 .rider-profile-head h2 {
   font-size: var(--text-xl);
@@ -477,7 +471,6 @@ select {
   text-decoration: none;
 }
 .rider-profile-bio {
-  grid-area: bio;
   font-size: var(--text-md);
   line-height: var(--leading-loose);
 }
@@ -490,16 +483,11 @@ select {
 @media (max-width: 560px) {
   .rider-profile {
     padding: 16px 18px;
-    grid-template-columns: 5.5rem minmax(0, 1fr);
-    grid-template-areas:
-      "photo head"
-      "bio bio";
-    column-gap: 14px;
-    row-gap: var(--space-3);
-    align-items: center;
   }
   .rider-profile-photo {
+    width: 6rem;
     aspect-ratio: 1 / 1;
+    margin: 2px 14px 6px 0;
   }
   .rider-profile-placeholder {
     font-size: var(--text-xl);
