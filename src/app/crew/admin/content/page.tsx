@@ -2,7 +2,7 @@ import Link from "next/link";
 import { eq } from "drizzle-orm";
 import { db, ready, schema } from "@/db/client";
 import { requireAdmin } from "@/lib/auth";
-import { bioFileFor, listRiders } from "@/lib/riders";
+import { bioFileFor, hasBioFile, listRiders } from "@/lib/riders";
 import { saveContent, saveMumPhoto, saveRider } from "../actions";
 
 export default async function ContentPage({ searchParams }: { searchParams: Promise<Record<string, string | undefined>> }) {
@@ -82,10 +82,16 @@ export default async function ContentPage({ searchParams }: { searchParams: Prom
             <span>Bio in the rider&rsquo;s own words (≤120 words)</span>
             <textarea name="bioMd" rows={5} defaultValue={r.bioMd} />
           </label>
-          {!r.bioMd.trim() && (
+          {hasBioFile(r) ? (
             <p className="muted small">
-              Type it here, or commit it as <code>{bioFileFor(r)}</code> and it will be picked up from there. Once a bio is saved here, this box is the one that counts.
+              A committed copy lives at <code>{bioFileFor(r)}</code>: the site follows that file until a change is saved here, after which this box is the one that counts.
             </p>
+          ) : (
+            !r.bioMd.trim() && (
+              <p className="muted small">
+                Type it here, or commit it as <code>{bioFileFor(r)}</code> and it will be picked up from there.
+              </p>
+            )
           )}
           <button className="btn btn-sm btn-primary" type="submit">
             Save {r.displayName}

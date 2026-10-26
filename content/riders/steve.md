@@ -1,6 +1,9 @@
-Meet Steve: husband, proud father of three girls and professional listener—a skill finely tuned at home, where he is comprehensively outnumbered.
+---
+photo: /photos/steve.jpg
+---
+Meet Steve: husband, proud father of three girls and professional listener, a skill finely tuned at home, where he is comprehensively outnumbered.
 
-His family is his greatest asset and purpose. His wife and daughters are at the heart of everything he does, and being someone they can rely on—and be proud of—matters most.
+His family is his greatest asset and purpose. His wife and daughters are at the heart of everything he does, and being someone they can rely on, and be proud of, matters most.
 
 Unfortunately, his commitment to being a good role model has landed him on a bike for 240 miles, alongside a team that is about as athletic as a Sunday pub quiz team. Some “used-to-be” nostalgia is being rebranded as “still got it”!
 
