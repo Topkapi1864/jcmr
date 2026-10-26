@@ -1,7 +1,7 @@
-import { db, ready, schema } from "@/db/client";
 import { PublicShell } from "@/components/shells";
 import { Holding } from "@/components/holding";
 import { gate, publicMetadata } from "@/lib/public";
+import { listRiders } from "@/lib/riders";
 import { renderMarkdown } from "@/lib/util";
 
 export const dynamic = "force-dynamic";
@@ -18,9 +18,8 @@ const initials = (n: string) =>
 export default async function RidersPage({ searchParams }: { searchParams: Promise<Record<string, string | undefined>> }) {
   const g = await gate(await searchParams);
   if (g.holding) return <Holding />;
-  await ready();
   // sortOrder puts Gary and Simon first, so the 2×2 grid has the brothers on the top row.
-  const riders = await db.select().from(schema.riders).orderBy(schema.riders.sortOrder).all();
+  const riders = await listRiders();
 
   return (
     <PublicShell preview={g.preview} liveActive={g.liveActive}>

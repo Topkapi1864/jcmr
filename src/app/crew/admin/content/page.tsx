@@ -2,6 +2,7 @@ import Link from "next/link";
 import { eq } from "drizzle-orm";
 import { db, ready, schema } from "@/db/client";
 import { requireAdmin } from "@/lib/auth";
+import { bioFileFor, listRiders } from "@/lib/riders";
 import { saveContent, saveMumPhoto, saveRider } from "../actions";
 
 export default async function ContentPage({ searchParams }: { searchParams: Promise<Record<string, string | undefined>> }) {
@@ -9,7 +10,7 @@ export default async function ContentPage({ searchParams }: { searchParams: Prom
   const sp = await searchParams;
   await ready();
   const content = Object.fromEntries((await db.select().from(schema.content).all()).map((c) => [c.key, c.md]));
-  const riders = await db.select().from(schema.riders).orderBy(schema.riders.sortOrder).all();
+  const riders = await listRiders();
   const mum = await db.select().from(schema.assets).where(eq(schema.assets.kind, "mum_photo")).get();
 
   return (
@@ -78,9 +79,14 @@ export default async function ContentPage({ searchParams }: { searchParams: Prom
             </label>
           </div>
           <label className="field">
-            <span>Bio in Gary&rsquo;s words (≤120 words)</span>
+            <span>Bio in the rider&rsquo;s own words (≤120 words)</span>
             <textarea name="bioMd" rows={5} defaultValue={r.bioMd} />
           </label>
+          {!r.bioMd.trim() && (
+            <p className="muted small">
+              Type it here, or commit it as <code>{bioFileFor(r)}</code> and it will be picked up from there. Once a bio is saved here, this box is the one that counts.
+            </p>
+          )}
           <button className="btn btn-sm btn-primary" type="submit">
             Save {r.displayName}
           </button>

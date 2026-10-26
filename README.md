@@ -36,6 +36,7 @@ Sign in at `/crew/signin` with the crew password, pick a name. Gary and Fiona ar
 
 - Words, Mum's photo path, rider bios, route days and stops, links, settings: Admin → Content / Route / Links / Settings.
 - Photos: commit under `public/photos/` and type the path (`/photos/mum.jpg`).
+- Rider bios: type them in Admin → Content, or commit `content/riders/<first name>.md` (`content/riders/nathan.md`). A rider with no bio takes the file the first time the riders are shown (public page or Admin); after that the Admin copy is the one that counts, so the file is only a seed.
 - GPX: commit Simon's files as `content/route/day1.gpx` and `content/route/day2.gpx`. The map, elevation and towns appear when they exist; until then a day is a dashed schematic from the roadbook.
 - Route planner: **Crew → Route** (`/crew/route`). Start times, moving speed, routine-stop rules (5 min every hour, 15 every three, halfway…) and the motorhome rendezvous (from Admin → Route, or **Import** there to load Simon's roadbook stops). "Save as the crew plan" stores it in settings (`route.plan`) and writes the arrival times onto the stops, so the public route page shows them. "Share scenario" encodes the plan in the link; "Copy timetable" is WhatsApp-ready. The engine is `src/lib/plan.ts`; the GPX → miles/elevation/waypoints/towns derivation is `src/lib/route.ts` (served at `/api/route-geo?format=profile`).
 
