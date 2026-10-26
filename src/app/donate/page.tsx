@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { PublicShell } from "@/components/shells";
 import { Holding } from "@/components/holding";
-import { GivingBridge } from "@/components/giving-bridge";
+import { GivingChart } from "@/components/giving-chart";
 import { gate, publicMetadata } from "@/lib/public";
 import { JUSTGIVING_URL } from "@/lib/settings";
 import { fmtPounds, getDonateTotal, getDonations, PAGE_OPENED } from "@/lib/donate";
@@ -84,19 +84,12 @@ export default async function DonatePage({ searchParams }: { searchParams: Promi
         </div>
       </div>
 
-      <section className="section" aria-labelledby="bridge-heading">
-        <h2 id="bridge-heading">Building the bridge</h2>
+      <section className="section" aria-labelledby="chart-heading">
+        <h2 id="chart-heading">Gift by gift</h2>
         <p className="prose">
-          Every gift lays another plank of the bridge from Barnes to Yeadon. The deck is finished when we reach {fmtPounds(target)}. Beneath it, the water
-          rises with each gift since the page opened; hover a drop to see who gave and when.
+          Every gift since the page opened, each one stacked on the last. Hover a block to see who gave and when.
         </p>
-        <GivingBridge total={amount} target={target} donations={gifts} opened={PAGE_OPENED} today={londonDate()} />
-        <div className="bridge-key small muted">
-          <span>Deck and cable: built so far</span>
-          <span>Dotted: still to build</span>
-          <span>Drops: each gift, sized by amount</span>
-          <span>Water: the running total</span>
-        </div>
+        <GivingChart total={amount} target={target} donations={gifts} opened={PAGE_OPENED} today={londonDate()} />
       </section>
 
       {words.length > 0 && (

@@ -3787,7 +3787,7 @@ select.st option {
   left: 0;
 }
 
-/* ---- Give: the charity, the bridge, the words -------------------------- */
+/* ---- Give: the charity, the chart, the words -------------------------- */
 .give-grid {
   display: grid;
   grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
@@ -3836,138 +3836,69 @@ select.st option {
   color: var(--color-fg-muted);
 }
 
-/* The bridge */
-.bridge-scroll {
-  overflow-x: auto;
-  -webkit-overflow-scrolling: touch;
-  margin: var(--space-5) calc(-1 * var(--gutter)) 0;
-  padding: 0 var(--gutter);
-}
-.bridge {
+/* The chart: one block per gift */
+.giving-chart {
   display: block;
   width: 100%;
-  min-width: 720px;
   height: auto;
+  margin-top: var(--space-4);
 }
-.bridge text {
+.giving-chart text {
   font-family: var(--font-mono);
   fill: var(--color-fg);
-  paint-order: stroke;
-  stroke: var(--color-bg);
-  stroke-width: 3;
-  stroke-linejoin: round;
 }
-.bridge-tick {
+.gc-tick {
   font-size: 12px;
   fill: var(--color-fg-muted);
 }
-.bridge-tick-strong {
+.gc-tick-strong {
   fill: var(--color-fg);
   font-weight: var(--weight-bold);
 }
-.bridge-place {
-  font-family: var(--font-serif);
-  font-size: 15px;
-  font-style: italic;
-  fill: var(--color-fg-on-band);
-}
-.bridge-total {
-  font-size: 30px;
-  font-weight: var(--weight-bold);
-  fill: var(--navy);
-}
-.bridge-label {
+.gc-label {
   font-size: 11px;
   letter-spacing: var(--tracking-label);
   text-transform: uppercase;
   fill: var(--color-fg-muted);
 }
-.bridge-ride-band {
-  fill: var(--duck-egg);
-  fill-opacity: 0.22;
+.gc-total {
+  font-size: 30px;
+  font-weight: var(--weight-bold);
+  fill: var(--navy);
 }
-.bridge-water {
-  fill: var(--duck-egg);
-  fill-opacity: 0.55;
+.gc-grid {
+  stroke: var(--color-border);
+  stroke-width: 1;
 }
-.bridge-water-line {
-  fill: none;
-  stroke: var(--duck-egg-deep);
-  stroke-width: 1.5;
-  stroke-linejoin: round;
-}
-.bridge-axis {
+.gc-axis {
   stroke: var(--color-border-strong);
   stroke-width: 1;
 }
-.bridge-today {
-  stroke: var(--navy);
-  stroke-width: 1;
-  stroke-dasharray: 3 4;
+.gc-ride-band {
+  fill: var(--duck-egg);
+  fill-opacity: 0.25;
 }
-.bridge-gift {
+.gc-block {
   fill: var(--teal);
-  stroke: var(--cream);
-  stroke-width: 1.5;
-  transition: r var(--dur-fast) var(--ease);
 }
-.bridge-gift:hover {
+.gc-block:nth-of-type(even) {
+  fill: var(--duck-egg-deep);
+}
+.gc-block:hover {
   fill: var(--legion-red);
 }
-.bridge-gift-hidden {
-  fill: var(--cream);
-  stroke: var(--teal);
-}
-.bridge-bank {
+.gc-block-extra {
   fill: var(--duck-egg);
 }
-.bridge-ghost path,
-.bridge-ghost line,
-.bridge-ghost rect {
-  fill: none;
+.gc-target {
   stroke: var(--navy);
-  stroke-opacity: 0.16;
-  stroke-width: 1;
-  stroke-dasharray: 2 3;
+  stroke-width: 1.5;
+  stroke-dasharray: 6 5;
 }
-.bridge-cable {
-  fill: none;
-  stroke: var(--navy);
-  stroke-width: 3;
-  stroke-linecap: round;
-}
-.bridge-hanger {
+.gc-now {
   stroke: var(--navy);
   stroke-width: 1;
-}
-.bridge-deck {
-  fill: var(--teal);
-}
-.bridge-plank {
-  stroke: var(--cream);
-  stroke-opacity: 0.6;
-  stroke-width: 1;
-}
-.bridge-tower rect {
-  fill: var(--navy);
-}
-.bridge-wheel-ring {
-  fill: var(--cream);
-  stroke: var(--legion-red);
-  stroke-width: 3.5;
-}
-.bridge-wheel-spoke {
-  stroke: var(--navy);
-  stroke-width: 1.4;
-}
-.bridge-wheel-hub {
-  fill: var(--navy);
-}
-.bridge-key {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px 18px;
-  margin-top: 10px;
+  stroke-dasharray: 2 4;
 }
 
 /* Recent words from the donor wall */
