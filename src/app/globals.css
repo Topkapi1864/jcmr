@@ -470,9 +470,29 @@ select {
   text-transform: uppercase;
   text-decoration: none;
 }
+/* Every bio shows the same number of lines, so the four cards sit at one
+   height; a long one fades out and gets "Read more" (rider-bio.tsx). The
+   clamp uses overflow: clip, not hidden, so the text still wraps round the
+   floated photo. */
 .rider-profile-bio {
+  --bio-lines: 15;
+  position: relative;
   font-size: var(--text-md);
   line-height: var(--leading-loose);
+}
+.rider-profile-bio[data-clamped] {
+  max-height: calc(var(--bio-lines) * 1lh);
+  overflow: clip;
+}
+.rider-profile-bio[data-fade]::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 3lh;
+  background: linear-gradient(to bottom, transparent, var(--color-bg-raised));
+  pointer-events: none;
 }
 .rider-profile-bio p {
   margin: 0 0 var(--space-3);
@@ -480,9 +500,29 @@ select {
 .rider-profile-bio p:last-child {
   margin-bottom: 0;
 }
+.rider-bio-more {
+  display: inline-block;
+  margin-top: var(--space-3);
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
+  color: var(--color-link);
+}
+.rider-bio-more:hover {
+  color: var(--color-link-hover);
+  text-decoration: underline;
+}
 @media (max-width: 560px) {
   .rider-profile {
     padding: 16px 18px;
+  }
+  .rider-profile-bio {
+    --bio-lines: 20;
   }
   .rider-profile-photo {
     width: 6rem;

@@ -1,5 +1,6 @@
 import { PublicShell } from "@/components/shells";
 import { Holding } from "@/components/holding";
+import { RiderBio } from "@/components/rider-bio";
 import { gate, publicMetadata } from "@/lib/public";
 import { listRiders } from "@/lib/riders";
 import { renderMarkdown } from "@/lib/util";
@@ -46,12 +47,20 @@ export default async function RidersPage({ searchParams }: { searchParams: Promi
                 </a>
               )}
             </div>
-            <div className="rider-profile-bio">
-              {r.bioMd ? <div dangerouslySetInnerHTML={{ __html: renderMarkdown(r.bioMd) }} /> : <p className="muted">Bio to come.</p>}
-            </div>
+            {r.bioMd ? (
+              <RiderBio html={renderMarkdown(r.bioMd)} name={r.displayName} />
+            ) : (
+              <div className="rider-profile-bio">
+                <p className="muted">Bio to come.</p>
+              </div>
+            )}
           </article>
         ))}
       </div>
+      {/* Without JavaScript nothing can expand a bio, so show them whole. */}
+      <noscript>
+        <style>{`.rider-profile-bio { max-height: none; }`}</style>
+      </noscript>
     </PublicShell>
   );
 }
