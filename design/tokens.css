@@ -144,6 +144,7 @@
 
   --tracking-label: 0.08em;
   --tracking-lockup: 0.2em;
+  --tracking-nav: 0.14em; /* public nav words — caps, a touch looser than labels */
   --tracking-tight: -0.02em;
 
   /* ---- Space ----------------------------------------------------------- */
