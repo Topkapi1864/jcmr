@@ -12,6 +12,8 @@ export const SETTING_KEYS = [
   "donate.total_cached",
   "donate.total_cached_at",
   "donate.embed_verdict",
+  "donate.donations_cached",
+  "donate.donations_cached_at",
   "read_door.token_hash",
   "weather.forecast",
 ] as const;
@@ -28,6 +30,8 @@ export const SETTING_DEFAULTS: Record<SettingKey, string> = {
   "donate.total_cached": "",
   "donate.total_cached_at": "",
   "donate.embed_verdict": "",
+  "donate.donations_cached": "",
+  "donate.donations_cached_at": "",
   "read_door.token_hash": "",
   "weather.forecast": "",
 };

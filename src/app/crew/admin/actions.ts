@@ -9,7 +9,7 @@ import { journal, requireAdmin } from "@/lib/auth";
 import { importItemsCsv, type ImportReport } from "@/lib/import";
 import { SETTING_KEYS, setSetting, type SettingKey } from "@/lib/settings";
 import { randomToken, sha256Hex } from "@/lib/util";
-import { fetchJustGivingTotal } from "@/lib/donate";
+import { fetchJustGivingTotal, fetchJustGivingDonations } from "@/lib/donate";
 import { nowIso } from "@/lib/time";
 
 function bump() {
@@ -33,7 +33,7 @@ export async function saveSettings(form: FormData) {
   const s = await requireAdmin();
   const changed: string[] = [];
   for (const key of SETTING_KEYS) {
-    if (key === "site.public_live" || key === "read_door.token_hash" || key.startsWith("donate.total_cached")) continue;
+    if (key === "site.public_live" || key === "read_door.token_hash" || key.startsWith("donate.total_cached") || key.startsWith("donate.donations_cached")) continue;
     const v = form.get(key);
     if (v === null) continue;
     await setSetting(key as SettingKey, String(v).trim());
@@ -51,6 +51,11 @@ export async function refreshDonateTotal() {
     await setSetting("donate.total_cached", JSON.stringify(live));
     await setSetting("donate.total_cached_at", nowIso());
     await journal(s.name, `donate total refreshed: £${live.amount}`);
+    const gifts = await fetchJustGivingDonations();
+    if (gifts) {
+      await setSetting("donate.donations_cached", JSON.stringify(gifts));
+      await setSetting("donate.donations_cached_at", nowIso());
+    }
   } else {
     await journal(s.name, "donate total refresh FAILED");
   }

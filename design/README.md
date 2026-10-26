@@ -49,7 +49,7 @@ One stylesheet, organised by section. Classes the templates use:
 | The route (incl. map) | `src/app/route/page.tsx`, `src/components/route-map-inner.tsx` |
 | Crew → Route planner | `src/components/route-planner.tsx`, `route-plan-map.tsx`, `elevation.tsx`; styles under “Route planner” in `globals.css` |
 | Crew → Weather (cross-section, tiles, key) | `src/components/weather-view.tsx`; styles under “Weather (crew)” in `globals.css`; the heat-map and wind colours are the `--wx-*` tokens |
-| Give | `src/app/donate/page.tsx` |
+| Give (charity, the giving bridge, latest words) | `src/app/donate/page.tsx`, `src/components/giving-bridge.tsx`; styles under “Give” in `globals.css`; the Legion logo is `public/charity/rbl-logo.png` |
 | Live — phone and TV forms | `src/components/live-view.tsx` (one component, `tv` prop) |
 
 ## 5. Crew components
