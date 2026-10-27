@@ -385,8 +385,9 @@ export function RideStrip({ profiles, results, dayLabels }: Props) {
   );
 }
 
-/** A small side-on bicycle with a rider, drawn with the ground at y = 0 and the front to the right. */
-function Bicycle() {
+/** A small side-on bicycle with a rider, drawn with the ground at y = 0 and the front to the right.
+ *  Also the "riders are here" marker on the public weather page. */
+export function Bicycle() {
   return (
     <g className="ride-bike-glyph">
       <g className="ride-wheel">

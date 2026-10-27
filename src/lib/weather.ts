@@ -10,6 +10,7 @@
 import type { ProfilePoint, RouteProfile } from "./route";
 import type { DayResult } from "./plan";
 import { RIDE_DATES, fmtHm, pointAtMile, timeAtMile } from "./plan";
+import { londonDate } from "./time";
 
 export const SEGMENT_MI = 10;
 /** Open-Meteo's forecast runs 16 days: today plus 15. */
@@ -106,6 +107,9 @@ export type SegmentWx = Segment & {
   typical: Hour;
   wind: WindRel;
   source: Source;
+  /** The whole day at this point, hour 0 to 23 (the forecast, or the typical day), so a page can
+   *  look at the hours around the pass time or move the pass time without another fetch. */
+  hours: Hour[];
 };
 
 export type Confidence = { level: 0 | 1 | 2 | 3 | 4; label: string; note: string };
@@ -441,6 +445,7 @@ export function buildDay(inp: DayInputs): DayWx {
       typical,
       wind: windRelative(hour.wd, s.heading, hour.ws),
       source: fh ? "forecast" : "typical",
+      hours: fh ?? typ.hours,
     });
   }
   const source: Source = anyForecast ? "forecast" : "typical";
@@ -512,6 +517,74 @@ export function round1(n: number): number {
 function round(n: number, dp: number): number {
   const f = 10 ** dp;
   return Math.round(n * f) / f;
+}
+
+// ---- the hours around a point, and moving the clock ------------------------------
+//
+// The public page lets a spectator pick the place they'll watch from, or the
+// stretch they'll ride, and on the weekend it moves the pass times along by how
+// far behind (or ahead of) the plan the riders' own updates say they are.
+
+/** Which of a point's 24 hours a clock time (minutes after midnight) falls in. */
+export function hourIndex(minutes: number): number {
+  return Math.min(23, Math.max(0, Math.round(minutes / 60)));
+}
+
+/** The 10-mile stretch a mile of the day falls in (the last one for the finish). */
+export function segmentAt(d: DayWx, mile: number): SegmentWx | null {
+  return d.segments.find((s) => mile >= s.fromMi && mile < s.toMi) ?? d.segments[d.segments.length - 1] ?? null;
+}
+
+/** The same day with the pass times beyond `fromMile` moved by `offsetMin`, each stretch
+ *  re-read at its new hour. Nothing changes behind the riders. */
+export function shiftDay(d: DayWx, offsetMin: number, fromMile: number): DayWx {
+  if (!offsetMin) return d;
+  const segments = d.segments.map((s) => {
+    if (s.midMi <= fromMile) return s;
+    const eta = s.eta + offsetMin;
+    const hour = s.hours[hourIndex(eta)] ?? s.hour;
+    return { ...s, eta, etaHm: fmtHm(eta), dark: eta < d.sunrise || eta > d.sunset, hour, wind: windRelative(hour.wd, s.heading, hour.ws) };
+  });
+  return { ...d, segments, summary: summarise(segments) };
+}
+
+/** What the live page knows that the weather page needs: the riders' latest reported mile
+ *  (cumulative over both days) and when that post was made. */
+export type LiveMile = { phase: "pre" | "riding" | "overnight" | "finished"; day: 1 | 2 | null; mile: number; overnightMile: number; at: string | null };
+
+export function liveMileFrom(p: { phase: LiveMile["phase"]; day: 1 | 2 | null; mile: number; overnightMile: number; updates: { mile: number | null; postedAt: string }[] }): LiveMile {
+  const latest = p.updates.find((u) => u.mile != null);
+  return { phase: p.phase, day: p.day, mile: p.mile, overnightMile: p.overnightMile, at: latest?.postedAt ?? null };
+}
+
+/** Minutes after midnight in London for an instant. */
+export function londonMinutes(iso: string): number {
+  const parts = new Intl.DateTimeFormat("en-GB", { timeZone: "Europe/London", hour: "2-digit", minute: "2-digit", hourCycle: "h23" }).formatToParts(new Date(iso));
+  const g = (t: string) => Number(parts.find((p) => p.type === t)?.value ?? 0);
+  return g("hour") * 60 + g("minute");
+}
+
+export type Progress = {
+  day: number;
+  /** Mile of the day the riders had reached at the last post. */
+  mile: number;
+  at: string;
+  /** Minutes behind the plan (negative = ahead). */
+  offsetMin: number;
+  /** Whether the offset is big enough to move the times by. */
+  applied: boolean;
+};
+
+/** How the riders are doing against a day's plan, from their latest post with a mile — or null
+ *  when there isn't one for this day that's fresh enough to steer by. */
+export function progressFor(live: LiveMile, day: number, result: DayResult, nowMs: number): Progress | null {
+  if (live.phase !== "riding" || live.day !== day || !live.at) return null;
+  if (londonDate(new Date(live.at)) !== RIDE_DATES[day]) return null; // yesterday's last post says nothing about today
+  if (nowMs - Date.parse(live.at) > 4 * 3_600_000) return null; // too old to steer by
+  const mile = Math.max(0, Math.min(result.miles, day === 2 ? live.mile - live.overnightMile : live.mile));
+  const planned = timeAtMile(result.events, mile, 60 / result.speedMph);
+  const offsetMin = Math.round(londonMinutes(live.at) - planned);
+  return { day, mile, at: live.at, offsetMin, applied: Math.abs(offsetMin) >= 10 };
 }
 
 /** "5–9 °C", "rain 40%", "SW 12 mph" — the one-line day. */

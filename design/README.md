@@ -35,7 +35,7 @@ One stylesheet, organised by section. Classes the templates use:
 
 ## 3. The three shells — `src/components/shells.tsx`
 
-- `PublicShell` — header (brand, four-tile nav, Give button), optional preview banner, main, footer.
+- `PublicShell` — header (brand, the nav: Mum, The album, The riders, The route, Weather, Give, and Live on the weekend; the Donate button), optional preview banner, main, footer.
 - `CrewShell` — compact header with the crew nav and sign-out.
 - `TvShell` — no chrome; sets `data-shell="tv"` so the TV token block applies.
 
@@ -48,7 +48,8 @@ One stylesheet, organised by section. Classes the templates use:
 | The riders | `src/app/riders/page.tsx` |
 | The route (incl. map) | `src/app/route/page.tsx`, `src/components/route-map-inner.tsx` |
 | Crew → Route planner | `src/components/route-planner.tsx`, `route-plan-map.tsx`, `elevation.tsx`; styles under “Route planner” in `globals.css` |
-| Crew → Weather (cross-section, tiles, key) | `src/components/weather-view.tsx`; styles under “Weather (crew)” in `globals.css`; the heat-map and wind colours are the `--wx-*` tokens |
+| Crew → Weather (cross-section, tiles, key) | `src/components/weather-view.tsx` over the shared pieces in `src/components/weather-parts.tsx`; styles under “Weather (crew)” in `globals.css`; the heat-map and wind colours are the `--wx-*` tokens |
+| Weather (public: the same pieces, “Where will you be?”, the hours either side, the riders’ live mile) | `src/app/weather/page.tsx`, `src/components/public-weather.tsx`; styles under “Weather (public)” in `globals.css` |
 | Give (charity, the gift-by-gift chart, latest words) | `src/app/donate/page.tsx`, `src/components/giving-chart.tsx`; styles under “Give” in `globals.css`; the Legion logo is `public/charity/rbl-logo.png` |
 | Live — phone and TV forms | `src/components/live-view.tsx` (one component, `tv` prop) |
 

@@ -262,10 +262,13 @@ select {
   }
 }
 @media (max-width: 560px) {
+  /* Six words don't fit a phone in one row, so they wrap to two, left-aligned
+     under the lockup rather than spread to the edges. */
   .pub-nav {
-    gap: 0;
+    gap: 0 var(--space-1);
     width: 100%;
-    justify-content: space-between;
+    justify-content: flex-start;
+    margin-left: calc(-1 * var(--space-1));
   }
   .pub-nav a {
     padding: 0 var(--space-1);
@@ -2388,6 +2391,121 @@ b.wx-kind {
   }
   .wx-chart svg {
     min-width: 0;
+  }
+}
+
+/* ---- Weather (public) ----------------------------------------------------
+   /weather: the crew's tiles, key, cross-section and table on the cream shell,
+   plus "Where will you be?" — the pick drawn on the chart, the hours either side
+   of the pass, the stretch someone rides with them — and the riders' live mile. */
+.pub-wx .planner-tiles {
+  grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+}
+.pub-wx-status b {
+  color: var(--color-fg);
+}
+.pub-wx .wx-day h2 {
+  font-size: var(--text-2xl);
+}
+.pub-wx .wx-table summary {
+  padding: var(--space-1) 0;
+}
+/* the pick, drawn on the chart */
+.wx-range rect {
+  fill: var(--color-live);
+  fill-opacity: 0.12;
+  stroke: var(--color-live);
+  stroke-width: 2;
+  vector-effect: non-scaling-stroke;
+  pointer-events: none;
+}
+/* the riders, now */
+.wx-live {
+  pointer-events: none;
+}
+.wx-live line {
+  stroke: var(--color-fg);
+  stroke-dasharray: 3 3;
+  vector-effect: non-scaling-stroke;
+  opacity: 0.7;
+}
+.wx-live text {
+  fill: var(--color-fg);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: var(--weight-bold);
+  letter-spacing: 0.04em;
+  paint-order: stroke;
+  stroke: var(--color-bg-raised);
+  stroke-width: 4px;
+  stroke-linejoin: round;
+}
+.wx-col[data-passed] .wx-temp,
+.wx-col[data-passed] .wx-drop,
+.wx-col[data-passed] .wx-arrow,
+.wx-col[data-passed] .wx-sub,
+.wx-col[data-passed] .wx-temp-txt {
+  opacity: 0.45;
+}
+.wx-live-line {
+  border-left-color: var(--color-live);
+}
+/* the hours either side of the pass */
+.wx-hours {
+  display: flex;
+  gap: var(--space-2);
+  flex-wrap: wrap;
+}
+.wx-hour {
+  flex: 1 1 5.5rem;
+  display: grid;
+  gap: 4px;
+  justify-items: center;
+  padding: var(--space-2) var(--space-1);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-bg-raised);
+  color: var(--color-fg-muted);
+}
+.wx-hour[data-at] {
+  border-color: var(--color-live);
+  box-shadow: inset 0 0 0 1px var(--color-live);
+  color: var(--color-fg);
+}
+.wx-hour .wx-chip {
+  font-size: var(--text-base);
+}
+.wx-hour-rain {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+.wx-hour-rain .wx-key-glyph + .xs {
+  margin-right: 0;
+}
+.wx-hour-wind[data-kind="head"] {
+  color: var(--wx-head);
+}
+.wx-hour-wind[data-kind="tail"] {
+  color: var(--wx-tail);
+}
+.wx-legs .probe-answer {
+  border-left-color: var(--color-brand);
+}
+.wx-leg-rows td {
+  white-space: nowrap;
+}
+@media (max-width: 640px) {
+  .wx-leg-rows th:nth-child(2),
+  .wx-leg-rows td:nth-child(2),
+  .wx-leg-rows th:nth-child(6),
+  .wx-leg-rows td:nth-child(6) {
+    display: none;
+  }
+}
+@media print {
+  .pub-wx .pub-probe .form-inline {
+    display: none;
   }
 }
 

@@ -11,6 +11,7 @@ const PUBLIC_NAV = [
   { href: "/mum/album", label: "The album" },
   { href: "/riders", label: "The riders" },
   { href: "/route", label: "The route" },
+  { href: "/weather", label: "Weather" },
   { href: "/donate", label: "Give" },
 ];
 

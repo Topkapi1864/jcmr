@@ -2,7 +2,7 @@ import "server-only";
 import fs from "node:fs";
 import path from "node:path";
 import type { RouteProfile } from "./route";
-import { loadRoutePlan } from "./plan-server";
+import { loadRoutePlan, publicResults } from "./plan-server";
 import { RIDE_DATES, planAll, type DayResult } from "./plan";
 import { getSetting, setSetting } from "./settings";
 import { londonDate, minutesSince, nowIso } from "./time";
@@ -167,10 +167,15 @@ function sameSet(a: string[], b: string[]): boolean {
 
 export type RideWeatherPage = { weather: RideWeather; profiles: RouteProfile[]; results: DayResult[] };
 
-/** Everything the weather page shows. `force` ignores the half-hour cache. */
-export async function getRideWeather(force = false): Promise<RideWeatherPage> {
+/** Whose timetable the pass times follow: the crew's plan at the crew's pace, or the same plan
+ *  at the public pace (a fixed 12 mph — the crew's chosen speed never reaches the public). */
+export type Pace = "crew" | "public";
+
+/** Everything the weather page shows. `force` ignores the half-hour cache. The forecast is one
+ *  cache whichever pace is asked for; only the hour each stretch is read at differs. */
+export async function getRideWeather(force = false, pace: Pace = "crew"): Promise<RideWeatherPage> {
   const { profiles, initial } = await loadRoutePlan();
-  const results = planAll(initial, profiles);
+  const results = pace === "public" ? publicResults(initial, profiles) : planAll(initial, profiles);
   const today = /^\d{4}-\d{2}-\d{2}$/.test(TODAY_OVERRIDE) ? TODAY_OVERRIDE : londonDate();
   const points = samplePoints(profiles.flatMap(segmentsFor));
   const dates = [1, 2].map((d) => RIDE_DATES[d]).filter((d) => inForecastRange(today, d));

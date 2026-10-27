@@ -2,7 +2,7 @@
 
 One codebase, one store, two doors (spec v0.1):
 
-- **Public front** — `/`, `/mum`, `/riders`, `/route`, `/donate`, `/live`, `/live/tv`. Dark (a holding page) until an admin flips the switch.
+- **Public front** — `/`, `/mum`, `/mum/album`, `/riders`, `/route`, `/weather`, `/donate`, `/live`, `/live/tv`. Dark (a holding page) until an admin flips the switch.
 - **Crew job board** — `/crew/*` behind a shared password + name pick. Items with one owner, a due date, a status, what they're waiting on, and the **Stale** view.
 - **Fiona's read door** — `GET /api/board/<token>.json` and `.csv`.
 
@@ -70,7 +70,13 @@ Sign in at `/crew/signin` with the crew password, pick a name. Gary and Fiona ar
 - **Typical** (before then, and as the "normally…" comparison after): `content/weather/climatology.json`, ten mid-Novembers of ERA5 averages hour by hour at every point, written by `npm run weather:climatology` (Open-Meteo archive, no key). The **Weather climatology** GitHub workflow runs it and commits the file — run it from the Actions tab after the route changes. Until the file exists the page uses long-term regional averages built into `src/lib/weather.ts`, adjusted for height.
 - Dry run with invented weather: `OPEN_METEO_FORECAST_URL=http://127.0.0.1:3099/v1/forecast WEATHER_TODAY=2026-11-06 npm run dev` against any server that answers in Open-Meteo's shape.
 
-The maths (segments, headings, head/tail/cross) is `src/lib/weather.ts`; fetching and caching `src/lib/weather-server.ts`; the page `src/components/weather-view.tsx`; colours are the `--wx-*` tokens.
+**Public → Weather** (`/weather`, "Weather" in the top nav, behind the dark switch like the rest of the public site). The same tiles, key, cross-section and table at the public pace (the crew plan at a fixed 12 mph, every stop in; the crew's chosen speed never reaches the public), for spectators and anyone riding a stretch alongside:
+
+- **Where will you be?** — pick the place you'll watch from (the start, the support stops, the finish and every town the line passes, by day and mile; or tap a stretch on a chart) and see the time the riders are expected, the weather at that hour, and the hours either side. If a support stop is at that place it says when they arrive and when they leave. Add a second place to ride along to, and the stretch between is summed up (miles, times, temperatures, rain, how much is tail, cross and head) and listed piece by piece. The pick is drawn on the chart; the map link goes to the road at that mile, not the town centre.
+- **Updates itself**: the page fetches `/api/weather?pace=public&full=1` every ten minutes (and when a phone comes back to it after five), so the half-hourly forecast reaches it without a reload, and the typical-day view switches to the forecast on its own when the dates come into range.
+- **On the weekend** it polls `/api/live` once a minute. The crew's latest post with a mile puts a bicycle on the chart at that mile, fades the stretches behind it and, when the riders are 10 minutes or more off the plan, moves every time ahead of them by that much and re-reads each stretch at its new hour (`shiftDay` / `progressFor` in `src/lib/weather.ts`). A post from another day, or more than four hours old, is ignored.
+
+The maths (segments, headings, head/tail/cross, the hours around a point, moving the clock) is `src/lib/weather.ts`; fetching and caching `src/lib/weather-server.ts` (`getRideWeather(force, pace)`); the shared pieces `src/components/weather-parts.tsx`; the crew page `src/components/weather-view.tsx`; the public page `src/components/public-weather.tsx`; colours are the `--wx-*` tokens. `/api/weather` gives an anonymous visitor the public pace whatever it asks for; a crew session gets the crew pace unless it asks for `pace=public`.
 
 ## The dark switch
 
