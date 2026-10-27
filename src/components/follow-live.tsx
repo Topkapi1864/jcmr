@@ -93,7 +93,7 @@ export function FollowLive({ initial, showLinks }: { initial: LivePayload; showL
             <div className="live-where">{where}</div>
             {st && (
               <div className="small muted" style={{ marginTop: 4 }}>
-                {hhmm(st.postedAt)} · {st.postedBy}, crew
+                {hhmm(st.postedAt)} · {st.postedBy}, {st.who}
               </div>
             )}
           </div>
@@ -181,7 +181,7 @@ export function Updates({ initial, fold = 6 }: { initial: LivePayload; fold?: nu
               </div>
             )}
             <div className="xs muted">
-              {m.postedBy}, crew
+              {m.postedBy}, {m.who}
               {m.pinned ? " · pinned" : ""}
               {m.edited ? " · edited" : ""}
             </div>

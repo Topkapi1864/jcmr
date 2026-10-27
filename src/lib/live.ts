@@ -11,7 +11,7 @@ export type LivePayload = {
   now: string;
   day: 1 | 2 | null;
   mode: "single" | "all";
-  status: { text: string; place: string; postedAt: string; postedBy: string } | null;
+  status: { text: string; place: string; postedAt: string; postedBy: string; who: Who } | null;
   nextStop: { name: string; plannedTime: string | null; kind: string } | null;
   links: { id: number; rider: string | null; provider: string; url: string; label: string; primary: boolean; frameable: boolean }[];
   total: { amount: number | null; target: number | null; fetchedAt: string | null };
@@ -29,6 +29,9 @@ export type LivePayload = {
   riders: { id: number; name: string; bio: string; link: string | null }[];
 };
 
+/** How a poster is tagged on the public site: "Gary, rider" or "Yasmin, crew". */
+export type Who = "rider" | "crew";
+
 export type LiveUpdate = {
   id: string; // "m12" for a message, "s5" for a status line
   kind: "message" | "status";
@@ -37,9 +40,19 @@ export type LiveUpdate = {
   mile: number | null;
   postedAt: string;
   postedBy: string;
+  who: Who;
   pinned: boolean;
   edited: boolean;
 };
+
+/** Riders are the people the riders table points at; everyone else who posts is crew.
+ *  A message carries the poster's person id; a status line only the short name. */
+async function whoPosted(): Promise<(personId: number | null | undefined, postedBy: string) => Who> {
+  const riders = await db.select({ pid: schema.riders.personId, short: schema.people.shortName }).from(schema.riders).leftJoin(schema.people, eq(schema.riders.personId, schema.people.id)).all();
+  const pids = new Set(riders.map((r) => r.pid).filter((p): p is number => p != null));
+  const names = new Set(riders.map((r) => r.short).filter((n): n is string => !!n));
+  return (personId, postedBy) => ((personId != null && pids.has(personId)) || names.has(postedBy) ? "rider" : "crew");
+}
 
 const RIDE_MILES = 240;
 const FEED_MESSAGES = 60; // messages fetched for the feed
@@ -105,10 +118,11 @@ export async function livePayload(): Promise<LivePayload> {
   const linkFor = (id: number) => links.find((l) => rows.find((r) => r.link.id === l.id)?.link.riderId === id)?.url ?? null;
 
   // The feed: messages and status lines together, pinned first, then newest first.
+  const who = await whoPosted();
   const posts = await listMessages(FEED_MESSAGES);
   const updates: LiveUpdate[] = [
-    ...posts.map((m) => ({ id: `m${m.id}`, kind: "message" as const, text: m.body, place: "", mile: null, postedAt: m.postedAt, postedBy: m.postedBy, pinned: m.pinned, edited: !!m.editedAt })),
-    ...recent.map((r) => ({ id: `s${r.id}`, kind: "status" as const, text: r.text, place: r.place, mile: r.mile ?? null, postedAt: r.postedAt, postedBy: r.postedBy, pinned: false, edited: false })),
+    ...posts.map((m) => ({ id: `m${m.id}`, kind: "message" as const, text: m.body, place: "", mile: null, postedAt: m.postedAt, postedBy: m.postedBy, who: who(m.personId, m.postedBy), pinned: m.pinned, edited: !!m.editedAt })),
+    ...recent.map((r) => ({ id: `s${r.id}`, kind: "status" as const, text: r.text, place: r.place, mile: r.mile ?? null, postedAt: r.postedAt, postedBy: r.postedBy, who: who(null, r.postedBy), pinned: false, edited: false })),
   ]
     .sort((a, b) => Number(b.pinned) - Number(a.pinned) || b.postedAt.localeCompare(a.postedAt))
     .slice(0, FEED_MAX);
@@ -130,7 +144,7 @@ export async function livePayload(): Promise<LivePayload> {
     now: new Date().toISOString(),
     day,
     mode: s["tracker.mode"] === "all" ? "all" : "single",
-    status: status ? { text: status.text, place: status.place, postedAt: status.postedAt, postedBy: status.postedBy } : null,
+    status: status ? { text: status.text, place: status.place, postedAt: status.postedAt, postedBy: status.postedBy, who: who(null, status.postedBy) } : null,
     nextStop,
     links,
     total: { amount: total.amount, target: total.target, fetchedAt: total.fetchedAt },

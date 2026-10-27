@@ -131,7 +131,7 @@ export function LiveView({ initial, tv }: { initial: LivePayload; tv: boolean })
             {data.status && (
               <div className="small muted">
                 {data.status.place && `${data.status.place} · `}
-                {hhmm(data.status.postedAt)} · {data.status.postedBy}, crew
+                {hhmm(data.status.postedAt)} · {data.status.postedBy}, {data.status.who}
               </div>
             )}
           </div>
