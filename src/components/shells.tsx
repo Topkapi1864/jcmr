@@ -8,6 +8,7 @@ import { JUSTGIVING_URL } from "@/lib/constants";
 
 const PUBLIC_NAV = [
   { href: "/mum", label: "Mum" },
+  { href: "/mum/album", label: "The album" },
   { href: "/riders", label: "The riders" },
   { href: "/route", label: "The route" },
   { href: "/donate", label: "Give" },
@@ -43,7 +44,7 @@ export function PublicShell({
           </Link>
           <nav className="pub-nav" aria-label="Site">
             {PUBLIC_NAV.map((n) => (
-              <NavLink key={n.href} href={n.href}>
+              <NavLink key={n.href} href={n.href} exact={n.href !== "/mum/album"}>
                 {n.label}
               </NavLink>
             ))}
