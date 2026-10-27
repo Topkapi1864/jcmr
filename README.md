@@ -2,7 +2,7 @@
 
 One codebase, one store, two doors (spec v0.1):
 
-- **Public front** — `/`, `/mum`, `/mum/album`, `/riders`, `/route`, `/weather`, `/donate`, `/live`, `/live/tv`. Dark (a holding page) until an admin flips the switch.
+- **Public front** — `/`, `/mum`, `/mum/album`, `/riders`, `/support-crew`, `/route`, `/weather`, `/donate`, `/live`, `/live/tv`. Dark (a holding page) until an admin flips the switch.
 - **Crew job board** — `/crew/*` behind a shared password + name pick. Items with one owner, a due date, a status, what they're waiting on, and the **Stale** view.
 - **Fiona's read door** — `GET /api/board/<token>.json` and `.csv`.
 
@@ -48,6 +48,10 @@ Sign in at `/crew/signin` with the crew password, pick a name. Gary and Fiona ar
 - GPX: commit Simon's files as `content/route/day1.gpx` and `content/route/day2.gpx`. The map, elevation and towns appear when they exist; until then a day is a dashed schematic from the roadbook.
 - Route planner: **Crew → Route** (`/crew/route`). Start times, moving speed, routine-stop rules (5 min every hour, 15 every three, halfway…) and the motorhome rendezvous (from Admin → Route, or **Import** there to load Simon's roadbook stops). "Save as the crew plan" stores it in settings (`route.plan`) and writes the arrival times onto the stops, so the public route page shows them. "Share scenario" encodes the plan in the link; "Copy timetable" is WhatsApp-ready. The engine is `src/lib/plan.ts`; the GPX → miles/elevation/waypoints/towns derivation is `src/lib/route.ts` (served at `/api/route-geo?format=profile`).
 - Public route page (`/route`): the crew plan run at a fixed **12 mph** (`PUBLIC_SPEED_MPH` in `src/lib/plan-server.ts`; the crew's chosen speed never reaches the public), every stop in the timeline, only the rendezvous listed. At the top, the ride as a looping cross-section (`src/components/ride-strip.tsx`): both days' profiles, a bicycle riding them with the time of day above it, the towns lighting up as it passes, the rendezvous as numbered pins, after-sunset shaded; two days in about a minute, Pause/Play, static under reduced motion. Below it, "Where will they be?": day, time, a scrubber, "When do they reach…", a tap on the map or a profile. The same probe as the crew's, without the speed controls. On 14–15 November it opens at the current time.
+
+## The crew (public)
+
+`/support-crew`, "The crew" in the top nav (`/crew` is the board's door, so the public page lives here). For now a holding card, "To be announced"; the names and roles replace it once the crew is finalised. The footer's link to the board reads "Crew sign-in" so the two don't collide.
 
 ## Vehicles
 

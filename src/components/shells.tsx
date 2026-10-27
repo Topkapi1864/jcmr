@@ -6,10 +6,13 @@ import { JUSTGIVING_URL } from "@/lib/constants";
 
 // The three shells (spec §3.4), in the JCMR identity (design handoff v1).
 
+// "The crew" is the public page about the support crew (/support-crew); the
+// board itself is /crew, which the footer's sign-in link reaches.
 const PUBLIC_NAV = [
   { href: "/mum", label: "Mum" },
   { href: "/mum/album", label: "The album" },
   { href: "/riders", label: "The riders" },
+  { href: "/support-crew", label: "The crew" },
   { href: "/route", label: "The route" },
   { href: "/weather", label: "Weather" },
   { href: "/donate", label: "Give" },
@@ -64,7 +67,7 @@ export function PublicShell({
         <div className="container">
           <div className="memorial-line">In memory of Janet Channon · 15 November 2024</div>
           <div>
-            Royal British Legion, registered charity 219279 (England and Wales) and SC054446 (Scotland) · <Link href="/crew">Crew</Link>
+            Royal British Legion, registered charity 219279 (England and Wales) and SC054446 (Scotland) · <Link href="/crew">Crew sign-in</Link>
           </div>
         </div>
       </footer>

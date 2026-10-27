@@ -586,6 +586,27 @@ select {
     font-size: var(--text-xl);
   }
 }
+
+/* The crew page (/support-crew): the holding card until the crew is
+   finalised. The names and roles take its place. */
+.crew-tba {
+  text-align: center;
+  padding: 48px 24px;
+}
+.crew-tba h2 {
+  font-size: var(--text-2xl);
+  margin: 10px 0 12px;
+}
+.crew-tba p {
+  max-width: 40ch;
+  margin: 0 auto;
+  line-height: var(--leading-loose);
+}
+@media (max-width: 560px) {
+  .crew-tba {
+    padding: 32px 18px;
+  }
+}
 .donate-card {
   background: var(--navy);
   color: var(--cream);
