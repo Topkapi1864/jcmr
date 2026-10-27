@@ -68,7 +68,19 @@ export async function loadRoutePlan(): Promise<{ profiles: ReturnType<typeof loa
   return { profiles, days, saved, initial: { ...base, namedStops: merged } };
 }
 
-/** The saved plan run, with the crew's routine stops stripped: what the public sees. */
+/** The pace the public pages run at. The crew can plan at any speed; the public sees one steady figure, Simon's 12. */
+export const PUBLIC_SPEED_MPH = 12;
+
+/** The crew's plan — start times, stop rules, the rendezvous — at the public pace. */
+export function publicPlan(plan: Plan): Plan {
+  const days: Plan["days"] = {};
+  for (const [d, v] of Object.entries(plan.days)) days[Number(d)] = { ...v, speedMph: null };
+  return { ...plan, speedMph: PUBLIC_SPEED_MPH, days };
+}
+
+/** The public timetable: the crew's plan at the public pace, every stop included so
+ *  "where are they at 10:40" lands between the rendezvous. The page decides which
+ *  stops it lists (see `publicEvents` in plan.ts). */
 export function publicResults(plan: Plan, profiles: ReturnType<typeof loadProfiles>): DayResult[] {
-  return planAll(plan, profiles).map((r) => ({ ...r, events: r.events.filter((e) => e.kind === "start" || e.kind === "named" || e.kind === "finish") }));
+  return planAll(publicPlan(plan), profiles);
 }

@@ -363,12 +363,13 @@ export function timeAtMile(events: PlanEvent[], mile: number, minPerMile: number
 /** Where the riders are at a clock time: mile, and whether they're stopped. */
 export function mileAtTime(events: PlanEvent[], time: number, minPerMile: number): { mile: number; stopped: PlanEvent | null; before: boolean; after: boolean } {
   if (!events.length) return { mile: 0, stopped: null, before: true, after: false };
-  if (time <= events[0].arrive) return { mile: 0, stopped: events[0], before: true, after: false };
-  for (let i = 0; i < events.length; i++) {
+  if (time < events[0].arrive) return { mile: 0, stopped: events[0], before: true, after: false };
+  for (let i = 0; i < events.length - 1; i++) {
     const e = events[i];
-    if (time >= e.arrive && time <= e.depart) return { mile: e.mile, stopped: e, before: false, after: false };
     const n = events[i + 1];
-    if (n && time > e.depart && time < n.arrive) return { mile: e.mile + (time - e.depart) / minPerMile, stopped: null, before: false, after: false };
+    // Stopped from the moment they arrive until the moment they leave; riding from then until the next arrival.
+    if (time < e.depart) return { mile: e.mile, stopped: e, before: false, after: false };
+    if (time < n.arrive) return { mile: e.mile + (time - e.depart) / minPerMile, stopped: null, before: false, after: false };
   }
   const last = events[events.length - 1];
   return { mile: last.mile, stopped: last, before: false, after: true };
@@ -376,6 +377,21 @@ export function mileAtTime(events: PlanEvent[], time: number, minPerMile: number
 
 export function planAll(plan: Plan, profiles: RouteProfile[]): DayResult[] {
   return profiles.map((p) => planDay(plan, p));
+}
+
+/** The events the public pages list: start, rendezvous and finish. The crew's routine stops stay on the crew side. */
+export function publicEvents(events: PlanEvent[]): PlanEvent[] {
+  return events.filter((e) => e.kind === "start" || e.kind === "named" || e.kind === "finish");
+}
+
+/** The town the riders are at or near a mile, if one is within 4 miles along the line. */
+export function nearestTown(p: RouteProfile, mile: number): { name: string; offMi: number; mile: number } | null {
+  let best: { name: string; offMi: number; mile: number; d: number } | null = null;
+  for (const t of p.towns) {
+    const d = Math.abs(t.mile - mile);
+    if (!best || d < best.d) best = { name: t.name, offMi: t.offMi, mile: t.mile, d };
+  }
+  return best && best.d <= 4 ? best : null;
 }
 
 // ---- plan (de)serialisation ------------------------------------------------

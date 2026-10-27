@@ -18,6 +18,8 @@ type Props = {
   hover: MapProbe;
   onPick: (p: { day: number; mile: number }) => void;
   focusDay: number | null;
+  /** Draw the routine stops (short, long, halfway). Off on the public page, where only the rendezvous show. */
+  showRoutine?: boolean;
 };
 
 function cssVar(name: string, fallback = ""): string {
@@ -25,7 +27,7 @@ function cssVar(name: string, fallback = ""): string {
   return getComputedStyle(document.documentElement).getPropertyValue(name).trim() || fallback;
 }
 
-export default function RoutePlanMap({ profiles, results, probe, hover, onPick, focusDay }: Props) {
+export default function RoutePlanMap({ profiles, results, probe, hover, onPick, focusDay, showRoutine = true }: Props) {
   const ref = useRef<HTMLDivElement>(null);
   const map = useRef<L.Map | null>(null);
   const layers = useRef<{ lines: L.LayerGroup; stops: L.LayerGroup; towns: L.LayerGroup; probe: L.CircleMarker | null; hover: L.CircleMarker | null }>({
@@ -126,6 +128,7 @@ export default function RoutePlanMap({ profiles, results, probe, hover, onPick, 
       let n = 0;
       for (const e of r.events) {
         const routine = e.kind === "short" || e.kind === "long" || e.kind === "halfway";
+        if (routine && !showRoutine) continue;
         const big = e.kind === "start" || e.kind === "finish" || e.kind === "named";
         if (e.kind === "named") n++;
         const marker = big
@@ -143,7 +146,7 @@ export default function RoutePlanMap({ profiles, results, probe, hover, onPick, 
         g.addLayer(marker);
       }
     }
-  }, [results]);
+  }, [results, showRoutine]);
 
   // Probe + hover markers.
   useEffect(() => {

@@ -2399,6 +2399,215 @@ b.wx-kind {
 .pub-route .elev-area {
   fill: var(--color-progress-soft);
 }
+.pub-route .elev-probe line {
+  stroke-dasharray: 4 3;
+}
+.pub-probe .form-inline input[type="time"] {
+  width: 100%;
+  min-height: var(--tap);
+  padding: var(--space-2) var(--space-3);
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-md);
+  background: var(--color-bg-raised);
+  color: var(--color-fg);
+  font: inherit;
+  font-size: 16px;
+}
+.pub-probe input[type="range"] {
+  width: 100%;
+  min-height: var(--tap);
+  accent-color: var(--color-brand);
+}
+.pub-probe h2 {
+  font-size: var(--text-lg);
+  margin: 0;
+}
+
+/* The ride as a cross-section: the strip at the top of the public route page */
+.ride-strip {
+  display: grid;
+  gap: var(--space-2);
+}
+.ride-strip svg {
+  display: block;
+  overflow: visible;
+}
+.ride-strip-wait {
+  border-radius: var(--radius-md);
+  background: var(--color-bg-sunken);
+}
+.ride-strip-foot {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--space-3);
+  flex-wrap: wrap;
+}
+.ride-row[data-day="1"] {
+  --day: var(--color-accent);
+}
+.ride-row[data-day="2"] {
+  --day: var(--color-amber);
+}
+.ride-head {
+  fill: var(--color-fg-muted);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: var(--weight-medium);
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
+  transition: fill var(--dur-normal) var(--ease);
+}
+.ride-row[data-active="1"] .ride-head {
+  fill: var(--color-fg);
+}
+.ride-night {
+  fill: var(--color-fg);
+  opacity: 0.07;
+}
+.ride-ground {
+  stroke: var(--color-border-strong);
+  stroke-width: 1;
+}
+.ride-area {
+  fill: var(--day);
+  opacity: 0.1;
+}
+.ride-area.ride-done {
+  opacity: 0.3;
+}
+.ride-line {
+  fill: none;
+  stroke: var(--day);
+  stroke-width: 1.4;
+  opacity: 0.35;
+  stroke-linejoin: round;
+}
+.ride-line.ride-done {
+  opacity: 1;
+  stroke-width: 2;
+}
+.ride-tick {
+  stroke: var(--color-fg-muted);
+  stroke-width: 1.5;
+  opacity: 0.35;
+  transition: opacity var(--dur-normal) var(--ease), stroke var(--dur-normal) var(--ease);
+}
+.ride-name {
+  fill: var(--color-fg-muted);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  opacity: 0.6;
+  paint-order: stroke;
+  stroke: var(--color-bg-raised);
+  stroke-width: 4px;
+  stroke-linejoin: round;
+  transition: opacity var(--dur-normal) var(--ease), fill var(--dur-normal) var(--ease);
+}
+.ride-tick[data-lit="1"] {
+  stroke: var(--day);
+  opacity: 1;
+}
+.ride-name[data-lit="1"] {
+  fill: var(--color-fg);
+  font-weight: var(--weight-bold);
+  opacity: 1;
+}
+.ride-tick[data-just="1"] {
+  animation: ride-pop 0.9s var(--ease);
+}
+.ride-name[data-just="1"] {
+  fill: var(--day);
+}
+@keyframes ride-pop {
+  0% {
+    stroke-width: 5;
+  }
+  100% {
+    stroke-width: 1.5;
+  }
+}
+.ride-stop line {
+  stroke: var(--color-fg-muted);
+  stroke-dasharray: 3 4;
+  opacity: 0.5;
+}
+.ride-stop circle {
+  fill: var(--color-bg-raised);
+  stroke: var(--color-fg-muted);
+  stroke-width: 1.5;
+  transition: fill var(--dur-normal) var(--ease), stroke var(--dur-normal) var(--ease);
+}
+.ride-stop text {
+  fill: var(--color-fg-muted);
+  font-family: var(--font-mono);
+  font-size: 9px;
+  font-weight: var(--weight-bold);
+  pointer-events: none;
+}
+.ride-stop[data-lit="1"] circle {
+  fill: var(--day);
+  stroke: var(--color-bg-raised);
+}
+.ride-stop[data-lit="1"] text {
+  fill: var(--cream);
+}
+.ride-bike-glyph {
+  fill: none;
+  stroke: var(--color-fg);
+  stroke-width: 1.7;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.ride-bike-glyph .ride-wheel {
+  stroke-width: 1.4;
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: ride-spin 0.75s linear infinite;
+  animation-play-state: paused;
+}
+.ride-bike[data-moving="1"] .ride-wheel {
+  animation-play-state: running;
+}
+.ride-rider-head {
+  fill: var(--color-fg);
+  stroke: none;
+}
+@keyframes ride-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+.ride-clock,
+.ride-mile {
+  font-family: var(--font-mono);
+  paint-order: stroke;
+  stroke: var(--color-bg-raised);
+  stroke-width: 5px;
+  stroke-linejoin: round;
+}
+.ride-clock {
+  fill: var(--color-fg);
+  font-size: 15px;
+  font-weight: var(--weight-bold);
+}
+.ride-mile {
+  fill: var(--color-fg-muted);
+  font-size: 10px;
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
+}
+@media (prefers-reduced-motion: reduce) {
+  .ride-bike-glyph .ride-wheel {
+    animation: none;
+  }
+  .ride-tick,
+  .ride-name,
+  .ride-stop circle,
+  .ride-head {
+    transition: none;
+  }
+}
 
 /* ---- Kit: the sheet, the bars, the matrix ------------------------------- */
 /* Status colours: have = ok (green), ordered = amber, need = red. */

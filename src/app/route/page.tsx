@@ -11,8 +11,9 @@ export const generateMetadata = () => publicMetadata("The route");
 export default async function RoutePage({ searchParams }: { searchParams: Promise<Record<string, string | undefined>> }) {
   const g = await gate(await searchParams);
   if (g.holding) return <Holding />;
-  const { profiles, days, saved, initial } = await loadRoutePlan();
+  const { profiles, days, initial } = await loadRoutePlan();
   const startLabel = await getSetting("route.start_label");
+  // The crew's plan at the public pace (12 mph, fixed), every stop in so the clock is right between the rendezvous.
   const results = publicResults(initial, profiles);
   const total = Math.round(profiles.reduce((a, p) => a + p.miles, 0) / 5) * 5;
   const dayLabels = Object.fromEntries(days.map((d) => [d.day, { label: d.label, start: d.day === 1 ? startLabel : d.startLabel, end: d.endLabel, stravaUrl: d.stravaUrl }]));
@@ -31,7 +32,7 @@ export default async function RoutePage({ searchParams }: { searchParams: Promis
         </p>
       </header>
       <div className="mt-4">
-        <PublicRoute profiles={profiles} results={results} hasPlan={!!saved} dayLabels={dayLabels} />
+        <PublicRoute profiles={profiles} results={results} dayLabels={dayLabels} />
       </div>
     </PublicShell>
   );

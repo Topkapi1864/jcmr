@@ -10,13 +10,17 @@ type Props = {
   result: DayResult;
   onHover: (mile: number | null) => void;
   onPick: (mile: number) => void;
+  /** Mark the routine stops (short, long, halfway). Off on the public page. */
+  showRoutine?: boolean;
+  /** A moment to mark on the profile: the public page's "where will they be" probe. */
+  probeMile?: number | null;
 };
 
 const W = 1000;
 const H = 220;
 const PAD = { l: 44, r: 12, t: 18, b: 26 };
 
-export function Elevation({ profile, result, onHover, onPick }: Props) {
+export function Elevation({ profile, result, onHover, onPick, showRoutine = true, probeMile = null }: Props) {
   const [cursor, setCursor] = useState<number | null>(null);
   const svg = useRef<SVGSVGElement>(null);
   const miles = profile.miles || 1;
@@ -85,7 +89,11 @@ export function Elevation({ profile, result, onHover, onPick }: Props) {
         onMouseLeave={leave}
         onTouchMove={move}
         onTouchEnd={leave}
-        onClick={() => cursor != null && onPick(cursor)}
+        onClick={(ev) => {
+          // From the click itself, not the hover state: a tap on a phone never hovers.
+          const m = mileFromEvent(ev);
+          if (m != null) onPick(m);
+        }}
         role="img"
         aria-label={`Elevation profile for day ${profile.day}`}
       >
@@ -106,13 +114,19 @@ export function Elevation({ profile, result, onHover, onPick }: Props) {
           </text>
         ))}
         {result.events
-          .filter((e) => e.kind !== "start" && e.kind !== "finish")
+          .filter((e) => e.kind !== "start" && e.kind !== "finish" && (showRoutine || e.kind === "named"))
           .map((e, i) => (
             <g key={i} className="elev-stop" data-kind={e.kind}>
               <line x1={x(e.mile)} x2={x(e.mile)} y1={PAD.t} y2={H - PAD.b} />
               <circle cx={x(e.mile)} cy={y(e.eleM)} r={e.kind === "named" ? 5 : 3.5} />
             </g>
           ))}
+        {probeMile != null && probeMile >= 0 && probeMile <= miles && cursor == null && (
+          <g className="elev-cursor elev-probe">
+            <line x1={x(probeMile)} x2={x(probeMile)} y1={PAD.t} y2={H - PAD.b} />
+            <circle cx={x(probeMile)} cy={y(pointAtMile(profile.points, probeMile)[2])} r={5} />
+          </g>
+        )}
         {cur && curT != null && (
           <g className="elev-cursor">
             <line x1={x(cur[3])} x2={x(cur[3])} y1={PAD.t} y2={H - PAD.b} />

@@ -10,6 +10,7 @@ import {
   fmtDur,
   fmtHm,
   mileAtTime,
+  nearestTown,
   normalisePlan,
   parseHm,
   planAll,
@@ -592,15 +593,6 @@ function RuleRow({ label, hint, rule, onChange }: { label: string; hint: string;
       </span>
     </div>
   );
-}
-
-function nearestTown(p: RouteProfile, mile: number): { name: string; offMi: number } | null {
-  let best: { name: string; offMi: number; d: number } | null = null;
-  for (const t of p.towns) {
-    const d = Math.abs(t.mile - mile);
-    if (!best || d < best.d) best = { name: t.name, offMi: t.offMi, d };
-  }
-  return best && best.d <= 4 ? best : null;
 }
 
 function nextEvent(events: PlanEvent[], mile: number): string {
