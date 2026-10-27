@@ -16,12 +16,16 @@ export default async function AlbumHub({ searchParams }: { searchParams: Promise
   const years = album.photos.map((p) => p.year).filter((y): y is number => y != null);
   const first = Math.min(...years);
   const last = Math.max(...years);
-  const withJanet = album.photos.filter((p) => p.faces.some((f) => album.janetClusters.includes(f.c))).length;
+  const withJanet = album.photos.filter((p) => p.janet === "yes").length;
   const mosaic = album.mosaics[0];
 
-  // One picture per view, for the cards: the best of each kind.
-  const best = (pred: (p: (typeof album.photos)[number]) => boolean) =>
-    [...album.photos].filter(pred).sort((a, b) => b.q - a.q || a.id.localeCompare(b.id))[0]?.id;
+  // One picture per view, for the cards: the best of each kind, no picture used twice.
+  const taken = new Set<string>();
+  const best = (pred: (p: (typeof album.photos)[number]) => boolean) => {
+    const id = [...album.photos].filter((p) => pred(p) && !taken.has(p.id)).sort((a, b) => b.q - a.q || a.id.localeCompare(b.id))[0]?.id;
+    if (id) taken.add(id);
+    return id;
+  };
   const covers: Record<string, string | undefined> = {
     "/mum/album/wall": best((p) => p.janet === "yes" && p.ppl >= 3),
     "/mum/album/years": best((p) => p.year != null && p.year < 2010 && p.janet === "yes"),
