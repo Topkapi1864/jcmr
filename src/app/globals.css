@@ -167,6 +167,11 @@ select {
   margin-top: 4px;
   color: var(--color-brand-name, var(--color-fg));
 }
+.lockup-name-stacked span {
+  display: block;
+  line-height: 1.45;
+  white-space: nowrap;
+}
 [data-shell="crew"] .lockup-name,
 [data-shell="dark"] .lockup-name {
   color: var(--duck-egg);
@@ -213,6 +218,11 @@ select {
   display: flex;
   gap: var(--space-2);
   flex-wrap: wrap;
+  justify-content: center;
+  /* Takes the room between the lockup and Donate and wraps its own words
+     when short of it, so Donate stays on the first row. */
+  flex: 1 1 0;
+  min-width: 0;
 }
 .pub-nav a {
   position: relative;
@@ -261,10 +271,21 @@ select {
     transition: none;
   }
 }
+@media (max-width: 1080px) {
+  /* A narrower window: the words a touch smaller and tighter, so the row holds
+     down to about 930px before the nav wraps. */
+  .pub-nav a {
+    font-size: 0.8125rem;
+    letter-spacing: var(--tracking-label);
+  }
+}
 @media (max-width: 560px) {
-  /* Six words don't fit a phone in one row, so they wrap to two, left-aligned
-     under the lockup rather than spread to the edges. */
+  /* Seven words don't fit a phone in one row, so they wrap to two, left-aligned
+     under the lockup rather than spread to the edges; Donate stays up beside
+     the lockup. */
   .pub-nav {
+    order: 1;
+    flex: 0 0 100%;
     gap: 0 var(--space-1);
     width: 100%;
     justify-content: flex-start;

@@ -25,20 +25,30 @@ export function Wheel({ size = 40, onDark = false, spokes = 8, title = "" }: { s
   );
 }
 
-export function Lockup({ onDark = false, size = "md" }: { onDark?: boolean; size?: "sm" | "md" | "lg" }) {
-  const wheel = size === "lg" ? 44 : size === "md" ? 36 : 28;
-  const word = size === "lg" ? 24 : size === "md" ? 21 : 17;
-  const name = size === "lg" ? 8.5 : size === "md" ? 7.5 : 6.5;
+// Wheel, "JCMR" and the ride's name, in px for each size. `stacked` puts the
+// name on two lines ("Janet Channon" over "Memorial Ride"), which is how the
+// public header carries the bigger lockup without widening it.
+const LOCKUP_SIZES = { sm: [28, 17, 6.5], md: [36, 21, 7.5], lg: [44, 24, 8.5], xl: [50, 28, 10] } as const;
+
+export function Lockup({ onDark = false, size = "md", stacked = false }: { onDark?: boolean; size?: keyof typeof LOCKUP_SIZES; stacked?: boolean }) {
+  const [wheel, word, name] = LOCKUP_SIZES[size];
   return (
-    <span className="lockup" style={{ display: "inline-flex", alignItems: "center", gap: 10 }}>
+    <span className="lockup" style={{ display: "inline-flex", alignItems: "center", gap: size === "xl" ? 12 : 10 }}>
       <Wheel size={wheel} onDark={onDark} />
       <span>
         <span className="lockup-word" style={{ fontSize: word }}>
           JCMR
         </span>
-        <span className="lockup-name" style={{ fontSize: name }}>
-          Janet Channon Memorial Ride
-        </span>
+        {stacked ? (
+          <span className="lockup-name lockup-name-stacked" style={{ fontSize: name }}>
+            <span>Janet Channon</span>
+            <span>Memorial Ride</span>
+          </span>
+        ) : (
+          <span className="lockup-name" style={{ fontSize: name }}>
+            Janet Channon Memorial Ride
+          </span>
+        )}
       </span>
     </span>
   );

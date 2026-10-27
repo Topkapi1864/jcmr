@@ -44,7 +44,7 @@ export function PublicShell({
       <header className="pub-header">
         <div className="container">
           <Link href="/" className="lockup" aria-label="JCMR home">
-            <Lockup />
+            <Lockup size="xl" stacked />
           </Link>
           <nav className="pub-nav" aria-label="Site">
             {PUBLIC_NAV.map((n) => (
