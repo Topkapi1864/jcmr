@@ -21,35 +21,47 @@ export const DAY_SHORT: Record<number, string> = { 1: "Sat 14 Nov", 2: "Sun 15 N
 
 export function DayTile({ d, href }: { d: DayWx; href?: string }) {
   const s = d.summary;
+  const notes = [s.snow && "❄ snow in the forecast", s.thunder && "thunder possible", s.fog && "fog at some point"].filter((x): x is string => !!x);
   return (
     <a className="tile day-tile wx-tile" href={href ?? `#wx-day-${d.day}`} data-source={d.source}>
       <span className="eyebrow">
         Day {d.day} · {DAY_SHORT[d.day]} · <ConfidenceBadge d={d} />
       </span>
-      <span className="tile-row">
-        <b>
-          {Math.round(s.tMin)}–{Math.round(s.tMax)}°
-        </b>
-        <span className="arrow">·</span>
-        <b>
-          {compass(s.windFrom)} {Math.round(s.windMean)}
-        </b>
-        <span className="xs muted">mph</span>
-      </span>
-      <span className="xs muted">
-        {s.rainChance != null ? `rain ${Math.round(s.rainChance)}%` : `${s.rainMm} mm rain`}
-        {s.rainMm >= 0.5 && s.rainChance != null ? ` (${s.rainMm} mm)` : ""} · feels {Math.round(s.feelsMin)}° at worst · gusts {Math.round(s.gustMax)} mph
+      <span className="wx-stats">
+        <span className="wx-stat">
+          <b>
+            {Math.round(s.tMin)}–{Math.round(s.tMax)}°
+          </b>
+          <span>air, low to high</span>
+        </span>
+        <span className="wx-stat">
+          <b>{Math.round(s.feelsMin)}°</b>
+          <span>feels like, at worst</span>
+        </span>
+        <span className="wx-stat">
+          <b>
+            {compass(s.windFrom)} {Math.round(s.windMean)}
+            <small>mph</small>
+          </b>
+          <span>wind, gusts {Math.round(s.gustMax)}</span>
+        </span>
+        <span className="wx-stat">
+          <b>{s.rainChance != null ? `${Math.round(s.rainChance)}%` : `${s.rainMm} mm`}</b>
+          <span>{s.rainChance != null ? (s.rainMm >= 0.5 ? `rain, ${s.rainMm} mm` : "chance of rain") : "rain over the day"}</span>
+        </span>
       </span>
       <span className="wx-windbar" aria-label={`tailwind ${s.tailMi} miles, crosswind ${s.crossMi}, headwind ${s.headMi}`}>
         <span data-kind="tail" style={{ flex: s.tailMi }} title={`tailwind ${s.tailMi} mi`} />
         <span data-kind="cross" style={{ flex: s.crossMi }} title={`crosswind ${s.crossMi} mi`} />
         <span data-kind="head" style={{ flex: s.headMi }} title={`headwind ${s.headMi} mi`} />
       </span>
-      <span className="xs muted">
-        tail {Math.round(s.tailMi)} mi · cross {Math.round(s.crossMi)} · head {Math.round(s.headMi)}
-        {s.snow && <> · ❄ snow in the forecast</>}
-        {s.thunder && <> · thunder possible</>}
-        {s.fog && <> · fog at some point</>}
+      <span className="wx-windkey xs muted">
+        <span data-kind="tail">tail {Math.round(s.tailMi)} mi</span>
+        <span data-kind="cross">cross {Math.round(s.crossMi)}</span>
+        <span data-kind="head">head {Math.round(s.headMi)}</span>
+        {notes.map((n) => (
+          <span key={n}>{n}</span>
+        ))}
       </span>
     </a>
   );
