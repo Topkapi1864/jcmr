@@ -45,7 +45,10 @@ export default async function CrewLivePage({ searchParams }: { searchParams: Pro
               <input type="number" name="mile" min={0} max={400} step={0.5} inputMode="decimal" placeholder={statuses[0]?.mile != null ? String(statuses[0].mile) : "0"} />
             </label>
           </div>
-          <p className="xs muted" style={{ margin: 0 }}>The miles figure drives the progress bar on the public page — the stop&rsquo;s mile from the route plan is close enough.</p>
+          <p className="xs muted" style={{ margin: 0 }}>
+            The miles figure drives the progress bar on the public page — the stop&rsquo;s mile from the route plan is close enough. Each line also lands on the board under the live card; anything longer, or
+            before the day, goes on <Link href="/crew/messages">Messages</Link>.
+          </p>
           <button className="btn btn-primary" type="submit" style={{ width: "100%" }}>
             Post as {s.name}
           </button>

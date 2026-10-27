@@ -85,9 +85,9 @@ export default async function HomePage({ searchParams }: { searchParams: Promise
         </div>
       </section>
 
-      <section className="section two-col">
+      <section className="section two-col" id="messages">
         <div>
-          <h2 style={{ marginBottom: 6 }}>Updates from the crew</h2>
+          <h2 style={{ marginBottom: 6 }}>Messages from the crew</h2>
           <Updates initial={live} />
         </div>
         <div className="donate-card" id="donate">

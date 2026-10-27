@@ -1,6 +1,6 @@
 import { client, ready } from "@/db/client";
 
-const TABLES = ["settings", "people", "riders", "content", "assets", "route_days", "route_stops", "tracker_links", "live_status", "items", "item_notes", "item_events", "links", "kit_catalogue", "kit_items", "crew_details", "sleeping_places", "sleeping", "vehicles", "vehicle_crew", "vehicle_checklist", "vehicle_positions", "audit"];
+const TABLES = ["settings", "people", "riders", "content", "assets", "route_days", "route_stops", "tracker_links", "live_status", "messages", "items", "item_notes", "item_events", "links", "kit_catalogue", "kit_items", "crew_details", "sleeping_places", "sleeping", "vehicles", "vehicle_crew", "vehicle_checklist", "vehicle_positions", "audit"];
 
 /** Every table as JSON — the nightly export and the admin download are the same thing. */
 export async function fullBackup(): Promise<Record<string, unknown[]>> {

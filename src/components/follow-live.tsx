@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import type { LivePayload } from "@/lib/live";
 import { RouteMap } from "./route-map";
+import { MessageBody } from "./message-body";
 
 // The "Follow the Ride" live card from the design handoff: status line, big
 // miles, where they are, next stop + ETA, progress bar with the overnight
@@ -147,29 +148,51 @@ export function FollowLive({ initial, showLinks }: { initial: LivePayload; showL
   );
 }
 
-export function Updates({ initial }: { initial: LivePayload }) {
+function dayShort(iso: string) {
+  return new Intl.DateTimeFormat("en-GB", { timeZone: "Europe/London", day: "numeric", month: "short" }).format(new Date(iso));
+}
+
+// The board: the crew's messages and, on the day, the road's status lines,
+// pinned first then newest first. Longer boards fold after `fold` entries.
+export function Updates({ initial, fold = 6 }: { initial: LivePayload; fold?: number }) {
   const { data } = useLive(initial);
+  const [open, setOpen] = useState(false);
   const list = data.updates;
+  const shown = open || list.length <= fold + 1 ? list : list.slice(0, fold);
+  const hidden = list.length - shown.length;
   return (
     <div>
       <div className="small muted" style={{ marginBottom: 10 }}>
-        {list.length ? `${list.length} update${list.length === 1 ? "" : "s"} so far` : "No updates yet — the crew post from the road on the day."}
+        {list.length ? `${list.length} message${list.length === 1 ? "" : "s"} so far` : "Nothing posted yet. The crew write here before the ride, and from the road on the day."}
       </div>
-      {list.map((m) => (
-        <div key={m.id} className="update">
+      {shown.map((m) => (
+        <div key={m.id} className="update" data-kind={m.kind} data-pinned={m.pinned ? "" : undefined}>
           <div>
             <div className="mono time">{hhmm(m.postedAt)}</div>
-            <div className="mono xs muted">{m.mile != null ? `${m.mile} mi` : ""}</div>
+            <div className="mono xs muted">{m.mile != null ? `${m.mile} mi` : dayShort(m.postedAt)}</div>
           </div>
           <div>
-            <div className="text">
-              {m.place && <b>{m.place} — </b>}
-              {m.text}
+            {m.kind === "message" ? (
+              <MessageBody text={m.text} className="text" />
+            ) : (
+              <div className="text">
+                {m.place && <b>{m.place} — </b>}
+                {m.text}
+              </div>
+            )}
+            <div className="xs muted">
+              {m.postedBy}, crew
+              {m.pinned ? " · pinned" : ""}
+              {m.edited ? " · edited" : ""}
             </div>
-            <div className="xs muted">{m.postedBy}, crew</div>
           </div>
         </div>
       ))}
+      {hidden > 0 && (
+        <button type="button" className="btn btn-sm" style={{ marginTop: 12 }} onClick={() => setOpen(true)}>
+          Show {hidden} earlier
+        </button>
+      )}
     </div>
   );
 }

@@ -69,6 +69,17 @@ export const MIGRATIONS: string[] = [
      posted_at TEXT NOT NULL,
      posted_by TEXT NOT NULL
    )`,
+  `CREATE TABLE IF NOT EXISTS messages (
+     id INTEGER PRIMARY KEY AUTOINCREMENT,
+     body TEXT NOT NULL,
+     person_id INTEGER REFERENCES people(id),
+     posted_by TEXT NOT NULL,
+     posted_at TEXT NOT NULL,
+     edited_by TEXT,
+     edited_at TEXT,
+     pinned INTEGER NOT NULL DEFAULT 0,
+     deleted INTEGER NOT NULL DEFAULT 0
+   )`,
   `CREATE TABLE IF NOT EXISTS items (
      id INTEGER PRIMARY KEY AUTOINCREMENT,
      title TEXT NOT NULL,

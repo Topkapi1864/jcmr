@@ -3,7 +3,7 @@
 One codebase, one store, two doors (spec v0.1):
 
 - **Public front** — `/`, `/mum`, `/mum/album`, `/riders`, `/support-crew`, `/route`, `/weather`, `/donate`, `/live`, `/live/tv`. Dark (a holding page) until an admin flips the switch.
-- **Crew job board** — `/crew/*` behind a shared password + name pick. Items with one owner, a due date, a status, what they're waiting on, and the **Stale** view.
+- **Crew job board** — `/crew/*` behind a shared password + name pick. Items with one owner, a due date, a status, what they're waiting on, and the **Stale** view. Also the crew's way onto the public site: **Messages** (the board on the home page) and **Live** (the status line and the day's map links).
 - **Fiona's read door** — `GET /api/board/<token>.json` and `.csv`.
 
 Stack: Next.js (App Router) · TypeScript · Drizzle + libSQL (a local SQLite file in dev, [Turso](https://turso.tech) in production) · plain CSS driven by `design/tokens.css` · Leaflet on OpenStreetMap tiles · Vercel.
@@ -48,6 +48,10 @@ Sign in at `/crew/signin` with the crew password, pick a name. Gary and Fiona ar
 - GPX: commit Simon's files as `content/route/day1.gpx` and `content/route/day2.gpx`. The map, elevation and towns appear when they exist; until then a day is a dashed schematic from the roadbook.
 - Route planner: **Crew → Route** (`/crew/route`). Start times, moving speed, routine-stop rules (5 min every hour, 15 every three, halfway…) and the motorhome rendezvous (from Admin → Route, or **Import** there to load Simon's roadbook stops). "Save as the crew plan" stores it in settings (`route.plan`) and writes the arrival times onto the stops, so the public route page shows them. "Share scenario" encodes the plan in the link; "Copy timetable" is WhatsApp-ready. The engine is `src/lib/plan.ts`; the GPX → miles/elevation/waypoints/towns derivation is `src/lib/route.ts` (served at `/api/route-geo?format=profile`).
 - Public route page (`/route`): the crew plan run at a fixed **12 mph** (`PUBLIC_SPEED_MPH` in `src/lib/plan-server.ts`; the crew's chosen speed never reaches the public), every stop in the timeline, only the rendezvous listed. At the top, the ride as a looping cross-section (`src/components/ride-strip.tsx`): both days' profiles, a bicycle riding them with the time of day above it, the towns lighting up as it passes, the rendezvous as numbered pins, after-sunset shaded; two days in about a minute, Pause/Play, static under reduced motion. Below it, "Where will they be?": day, time, a scrubber, "When do they reach…", a tap on the map or a profile. The same probe as the crew's, without the speed controls. On 14–15 November it opens at the current time.
+
+## Messages from the crew
+
+The board on the home page (`#messages`) and on `/live`. Anyone with a crew session posts from **Crew → Messages** (`/crew/messages`): plain text, blank lines make paragraphs, web addresses become links, up to 2,000 characters. A message is edited or removed by whoever posted it, or by an admin; admins can pin one to the top. The road's status lines from Crew → Live land on the same board with the miles, so on the day it is one feed. Pinned first, then newest first; the home page shows six and folds the rest behind "Show earlier" (Live shows twelve). The pages poll `/api/live` once a minute, so a post reaches open phones without a reload. Every post, edit, removal and pin is journaled; a removed message stays in the `messages` table marked `deleted`. Rendering is `src/components/message-body.tsx` (React nodes, never injected HTML); the library is `src/lib/messages.ts`.
 
 ## The crew (public)
 

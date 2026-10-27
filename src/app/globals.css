@@ -1612,6 +1612,35 @@ details.done-group summary {
   line-height: 1.5;
   text-wrap: pretty;
 }
+.update .text p {
+  margin: 0 0 8px;
+}
+.update .text p:last-child {
+  margin-bottom: 0;
+}
+.update .text a {
+  overflow-wrap: anywhere;
+}
+.update[data-pinned] .time {
+  color: var(--color-brand);
+}
+/* Crew → Messages: the board as the crew see it */
+.message-row {
+  padding: 14px 16px;
+}
+.message-text {
+  margin-top: 8px;
+  line-height: 1.5;
+}
+.message-text p {
+  margin: 0 0 8px;
+}
+.message-text p:last-child {
+  margin-bottom: 0;
+}
+.message-text a {
+  overflow-wrap: anywhere;
+}
 .family-words {
   border: 1px dashed var(--color-border-strong);
   border-radius: var(--radius-lg);

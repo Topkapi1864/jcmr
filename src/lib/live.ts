@@ -5,6 +5,7 @@ import { getAllSettings } from "./settings";
 import { RIDE_DAYS } from "./public";
 import { londonDate } from "./time";
 import { gpxExists } from "./gpx";
+import { listMessages } from "./messages";
 
 export type LivePayload = {
   now: string;
@@ -22,11 +23,27 @@ export type LivePayload = {
   labels: { start: string; overnight: string; finish: string };
   daysToGo: number;
   hasRoute: boolean;
-  updates: { id: number; text: string; place: string; mile: number | null; postedAt: string; postedBy: string }[];
+  // The board: the crew's messages (Crew → Messages) and the road's status
+  // lines (Crew → Live) in one feed, pinned first, then newest first.
+  updates: LiveUpdate[];
   riders: { id: number; name: string; bio: string; link: string | null }[];
 };
 
+export type LiveUpdate = {
+  id: string; // "m12" for a message, "s5" for a status line
+  kind: "message" | "status";
+  text: string; // a message keeps its paragraphs (blank-line separated)
+  place: string;
+  mile: number | null;
+  postedAt: string;
+  postedBy: string;
+  pinned: boolean;
+  edited: boolean;
+};
+
 const RIDE_MILES = 240;
+const FEED_MESSAGES = 60; // messages fetched for the feed
+const FEED_MAX = 80; // feed entries sent to the page (messages + status lines)
 
 export async function livePayload(): Promise<LivePayload> {
   await ready();
@@ -87,6 +104,15 @@ export async function livePayload(): Promise<LivePayload> {
   const riderRows = await db.select().from(schema.riders).orderBy(schema.riders.sortOrder).all();
   const linkFor = (id: number) => links.find((l) => rows.find((r) => r.link.id === l.id)?.link.riderId === id)?.url ?? null;
 
+  // The feed: messages and status lines together, pinned first, then newest first.
+  const posts = await listMessages(FEED_MESSAGES);
+  const updates: LiveUpdate[] = [
+    ...posts.map((m) => ({ id: `m${m.id}`, kind: "message" as const, text: m.body, place: "", mile: null, postedAt: m.postedAt, postedBy: m.postedBy, pinned: m.pinned, edited: !!m.editedAt })),
+    ...recent.map((r) => ({ id: `s${r.id}`, kind: "status" as const, text: r.text, place: r.place, mile: r.mile ?? null, postedAt: r.postedAt, postedBy: r.postedBy, pinned: false, edited: false })),
+  ]
+    .sort((a, b) => Number(b.pinned) - Number(a.pinned) || b.postedAt.localeCompare(a.postedAt))
+    .slice(0, FEED_MAX);
+
   return {
     phase,
     mile,
@@ -99,7 +125,7 @@ export async function livePayload(): Promise<LivePayload> {
     },
     daysToGo,
     hasRoute: gpxExists(1) || gpxExists(2),
-    updates: recent.map((r) => ({ id: r.id, text: r.text, place: r.place, mile: r.mile ?? null, postedAt: r.postedAt, postedBy: r.postedBy })),
+    updates,
     riders: riderRows.map((r) => ({ id: r.id, name: r.displayName, bio: r.bioMd.split(/\n/)[0].replace(/[*_#]/g, "").slice(0, 90), link: linkFor(r.id) })),
     now: new Date().toISOString(),
     day,

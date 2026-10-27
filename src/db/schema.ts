@@ -140,6 +140,21 @@ export const liveStatus = sqliteTable("live_status", {
   postedBy: text("posted_by").notNull(),
 });
 
+// The message board: what the crew write to the public site (home page and
+// Live). Plain text, paragraphs kept; the road's status lines sit beside them
+// in the same feed. A removed message stays in the table, marked deleted.
+export const messages = sqliteTable("messages", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
+  body: text("body").notNull(),
+  personId: integer("person_id").references(() => people.id),
+  postedBy: text("posted_by").notNull(),
+  postedAt: text("posted_at").notNull(),
+  editedBy: text("edited_by"),
+  editedAt: text("edited_at"),
+  pinned: integer("pinned", { mode: "boolean" }).notNull().default(false),
+  deleted: integer("deleted", { mode: "boolean" }).notNull().default(false),
+});
+
 export const items = sqliteTable(
   "items",
   {
@@ -455,4 +470,5 @@ export type RouteDay = typeof routeDays.$inferSelect;
 export type RouteStop = typeof routeStops.$inferSelect;
 export type TrackerLink = typeof trackerLinks.$inferSelect;
 export type LiveStatus = typeof liveStatus.$inferSelect;
+export type Message = typeof messages.$inferSelect;
 export type Link = typeof links.$inferSelect;
