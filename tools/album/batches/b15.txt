@@ -1,0 +1,40 @@
+p0694	/home/claude/janet/mid/p0694.jpg	2021-07-25	iPhone 12 Pro Max
+p0695	/home/claude/janet/mid/p0695.jpg	2021-07-25	iPhone 12 Pro Max
+p0696	/home/claude/janet/mid/p0696.jpg	2021-07-25	iPhone 12 Pro Max
+p0697	/home/claude/janet/mid/p0697.jpg	2021-07-25	iPhone 12 Pro Max
+p0698	/home/claude/janet/mid/p0698.jpg	2021-07-25	iPhone 12 Pro Max
+p0700	/home/claude/janet/mid/p0700.jpg	2022-07-10	iPhone 12
+p0701	/home/claude/janet/mid/p0701.jpg	2020-07-10	iPhone XS
+p0702	/home/claude/janet/mid/p0702.jpg	2020-07-10	iPhone XS
+p0703	/home/claude/janet/mid/p0703.jpg	2021-07-26	iPhone 12 Pro Max
+p0704	/home/claude/janet/mid/p0704.jpg	2021-07-26	iPhone 12 Pro Max
+p0705	/home/claude/janet/mid/p0705.jpg	2024-08-24	iPhone 13 Pro
+p0706	/home/claude/janet/mid/p0706.jpg	2024-08-24	iPhone 13 Pro
+p0707	/home/claude/janet/mid/p0707.jpg	2024-08-24	iPhone 13 Pro
+p0708	/home/claude/janet/mid/p0708.jpg	2024-08-24	iPhone 13 Pro
+p0709	/home/claude/janet/mid/p0709.jpg	2024-08-24	iPhone 13 Pro
+p0710	/home/claude/janet/mid/p0710.jpg	2024-08-24	iPhone 13 Pro
+p0711	/home/claude/janet/mid/p0711.jpg	2024-08-24	iPhone 13 Pro
+p0712	/home/claude/janet/mid/p0712.jpg	2024-08-24	iPhone 13 Pro
+p0713	/home/claude/janet/mid/p0713.jpg	2024-08-24	iPhone 13 Pro
+p0715	/home/claude/janet/mid/p0715.jpg	2024-08-24	iPhone 13 Pro
+p0716	/home/claude/janet/mid/p0716.jpg	2018-12-20	iPhone X
+p0717	/home/claude/janet/mid/p0717.jpg	2024-08-17	iPhone 14 Plus
+p0718	/home/claude/janet/mid/p0718.jpg	2024-08-17	iPhone 14 Plus
+p0719	/home/claude/janet/mid/p0719.jpg	2018-12-21	iPhone X
+p0720	/home/claude/janet/mid/p0720.jpg	2018-12-21	iPhone X
+p0722	/home/claude/janet/mid/p0722.jpg	2018-12-21	iPhone X
+p0723	/home/claude/janet/mid/p0723.jpg	2018-12-21	iPhone X
+p0724	/home/claude/janet/mid/p0724.jpg	2018-12-21	iPhone X
+p0725	/home/claude/janet/mid/p0725.jpg		
+p0726	/home/claude/janet/mid/p0726.jpg	2018-12-24	iPhone X
+p0727	/home/claude/janet/mid/p0727.jpg		
+p0729	/home/claude/janet/mid/p0729.jpg		
+p0730	/home/claude/janet/mid/p0730.jpg		
+p0732	/home/claude/janet/mid/p0732.jpg		
+p0733	/home/claude/janet/mid/p0733.jpg		
+p0734	/home/claude/janet/mid/p0734.jpg		
+p0735	/home/claude/janet/mid/p0735.jpg		
+p0736	/home/claude/janet/mid/p0736.jpg		
+p0737	/home/claude/janet/mid/p0737.jpg		
+p0739	/home/claude/janet/mid/p0739.jpg		

@@ -1,0 +1,40 @@
+p0647	/home/claude/janet/mid/p0647.jpg	2019-12-25	iPhone 7 Plus
+p0648	/home/claude/janet/mid/p0648.jpg	2018-07-18	iPhone X
+p0649	/home/claude/janet/mid/p0649.jpg	2018-07-18	iPhone X
+p0650	/home/claude/janet/mid/p0650.jpg	2024-07-31	iPhone 14 Pro
+p0651	/home/claude/janet/mid/p0651.jpg	2024-07-31	iPhone 14 Pro
+p0652	/home/claude/janet/mid/p0652.jpg		
+p0653	/home/claude/janet/mid/p0653.jpg	2024-07-31	iPhone 14 Pro
+p0654	/home/claude/janet/mid/p0654.jpg	2013-09-07	iPhone 4S
+p0655	/home/claude/janet/mid/p0655.jpg	2013-09-07	iPhone 4S
+p0656	/home/claude/janet/mid/p0656.jpg	2013-09-07	iPhone 4S
+p0657	/home/claude/janet/mid/p0657.jpg	2018-07-19	iPhone X
+p0658	/home/claude/janet/mid/p0658.jpg		
+p0660	/home/claude/janet/mid/p0660.jpg	2024-08-17	iPhone 14 Pro
+p0661	/home/claude/janet/mid/p0661.jpg	2024-08-17	iPhone 14 Pro
+p0662	/home/claude/janet/mid/p0662.jpg	2024-08-17	iPhone 14 Pro
+p0663	/home/claude/janet/mid/p0663.jpg	2024-08-17	iPhone 14 Pro
+p0665	/home/claude/janet/mid/p0665.jpg	2015-12-31	iPhone 6
+p0666	/home/claude/janet/mid/p0666.jpg		
+p0667	/home/claude/janet/mid/p0667.jpg		
+p0668	/home/claude/janet/mid/p0668.jpg	2015-12-31	iPhone 6
+p0669	/home/claude/janet/mid/p0669.jpg	2015-12-31	iPhone 6
+p0670	/home/claude/janet/mid/p0670.jpg		
+p0671	/home/claude/janet/mid/p0671.jpg	2015-07-11	iPhone 5s
+p0672	/home/claude/janet/mid/p0672.jpg	2017-08-05	iPhone 7 Plus
+p0675	/home/claude/janet/mid/p0675.jpg		
+p0676	/home/claude/janet/mid/p0676.jpg	2017-08-08	iPhone 7 Plus
+p0677	/home/claude/janet/mid/p0677.jpg	2017-08-08	iPhone 7 Plus
+p0678	/home/claude/janet/mid/p0678.jpg	2017-08-08	
+p0679	/home/claude/janet/mid/p0679.jpg	2017-08-08	
+p0681	/home/claude/janet/mid/p0681.jpg	2022-07-03	iPhone 12
+p0682	/home/claude/janet/mid/p0682.jpg	2017-08-08	iPhone 7 Plus
+p0685	/home/claude/janet/mid/p0685.jpg	2020-05-16	iPhone 11 Pro
+p0686	/home/claude/janet/mid/p0686.jpg	2016-05-14	iPhone 6s
+p0687	/home/claude/janet/mid/p0687.jpg		
+p0688	/home/claude/janet/mid/p0688.jpg		
+p0689	/home/claude/janet/mid/p0689.jpg	2017-08-19	iPhone 7 Plus
+p0690	/home/claude/janet/mid/p0690.jpg	2017-08-19	iPhone 7 Plus
+p0691	/home/claude/janet/mid/p0691.jpg	2017-08-19	iPhone 7 Plus
+p0692	/home/claude/janet/mid/p0692.jpg	2017-08-19	iPhone 7 Plus
+p0693	/home/claude/janet/mid/p0693.jpg	2017-08-23	iPhone 7 Plus

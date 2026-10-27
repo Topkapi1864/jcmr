@@ -1,0 +1,40 @@
+p0952	/home/claude/janet/mid/p0952.jpg	2014-09-27	iPhone 5s
+p0953	/home/claude/janet/mid/p0953.jpg	2014-09-27	iPhone 5s
+p0954	/home/claude/janet/mid/p0954.jpg	2014-09-27	iPhone 5s
+p0955	/home/claude/janet/mid/p0955.jpg	2017-07-02	iPhone 6
+p0956	/home/claude/janet/mid/p0956.jpg	2014-09-28	iPhone 5s
+p0957	/home/claude/janet/mid/p0957.jpg	2017-07-04	iPhone 6
+p0958	/home/claude/janet/mid/p0958.jpg	2022-04-19	iPhone 13 Pro
+p0959	/home/claude/janet/mid/p0959.jpg	2022-04-19	iPhone 13 Pro
+p0960	/home/claude/janet/mid/p0960.jpg	2022-04-19	iPhone 13 Pro
+p0961	/home/claude/janet/mid/p0961.jpg	2022-08-21	iPhone 13 Pro
+p0962	/home/claude/janet/mid/p0962.jpg	2022-08-21	iPhone 13 Pro
+p0963	/home/claude/janet/mid/p0963.jpg	2022-08-21	iPhone 13 Pro
+p0964	/home/claude/janet/mid/p0964.jpg	2022-08-21	iPhone 13 Pro
+p0965	/home/claude/janet/mid/p0965.jpg	2017-07-05	iPhone 6
+p0966	/home/claude/janet/mid/p0966.jpg	2017-07-05	iPhone 6
+p0967	/home/claude/janet/mid/p0967.jpg	2017-07-06	iPhone 6
+p0968	/home/claude/janet/mid/p0968.jpg	2017-07-07	iPhone 6
+p0969	/home/claude/janet/mid/p0969.jpg	2022-04-13	iPhone 11 Pro
+p0970	/home/claude/janet/mid/p0970.jpg	2017-07-08	iPhone 6
+p0971	/home/claude/janet/mid/p0971.jpg	2017-07-03	iPhone 7 Plus
+p0972	/home/claude/janet/mid/p0972.jpg	2023-09-15	iPhone 13 Pro
+p0973	/home/claude/janet/mid/p0973.jpg	2017-07-25	iPhone 7 Plus
+p0974	/home/claude/janet/mid/p0974.jpg	2023-09-19	iPhone 13 Pro
+p0975	/home/claude/janet/mid/p0975.jpg	2023-09-19	iPhone 13 Pro
+p0976	/home/claude/janet/mid/p0976.jpg	2023-07-27	iPhone 12 Pro
+p0977	/home/claude/janet/mid/p0977.jpg	2023-09-21	iPhone 13 Pro
+p0978	/home/claude/janet/mid/p0978.jpg	2021-06-16	iPhone 11 Pro
+p0979	/home/claude/janet/mid/p0979.jpg	2021-06-16	iPhone 11 Pro
+p0980	/home/claude/janet/mid/p0980.jpg	2021-06-16	iPhone 11 Pro
+p0981	/home/claude/janet/mid/p0981.jpg	2020-12-25	iPhone XS
+p0982	/home/claude/janet/mid/p0982.jpg	2021-06-16	iPhone 11 Pro
+p0983	/home/claude/janet/mid/p0983.jpg	2022-12-24	iPhone 12
+p0984	/home/claude/janet/mid/p0984.jpg	2016-08-03	iPhone 6s Plus
+p0985	/home/claude/janet/mid/p0985.jpg	2016-08-03	iPhone 6s Plus
+p0986	/home/claude/janet/mid/p0986.jpg	2016-08-03	iPhone 6s Plus
+p0988	/home/claude/janet/mid/p0988.jpg	2016-08-04	iPhone 6s Plus
+p0989	/home/claude/janet/mid/p0989.jpg	2016-08-04	iPhone 6s Plus
+p0990	/home/claude/janet/mid/p0990.jpg	2022-06-03	iPhone 11 Pro
+p0991	/home/claude/janet/mid/p0991.jpg	2022-12-25	iPhone 12
+p0992	/home/claude/janet/mid/p0992.jpg	2022-06-04	iPhone 11 Pro

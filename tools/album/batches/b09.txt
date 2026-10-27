@@ -1,0 +1,40 @@
+p0414	/home/claude/janet/mid/p0414.jpg		
+p0415	/home/claude/janet/mid/p0415.jpg		
+p0416	/home/claude/janet/mid/p0416.jpg		
+p0418	/home/claude/janet/mid/p0418.jpg		
+p0419	/home/claude/janet/mid/p0419.jpg		
+p0420	/home/claude/janet/mid/p0420.jpg		
+p0421	/home/claude/janet/mid/p0421.jpg		
+p0422	/home/claude/janet/mid/p0422.jpg		
+p0423	/home/claude/janet/mid/p0423.jpg		
+p0424	/home/claude/janet/mid/p0424.jpg		
+p0425	/home/claude/janet/mid/p0425.jpg		
+p0426	/home/claude/janet/mid/p0426.jpg		
+p0427	/home/claude/janet/mid/p0427.jpg		
+p0428	/home/claude/janet/mid/p0428.jpg		
+p0429	/home/claude/janet/mid/p0429.jpg		
+p0430	/home/claude/janet/mid/p0430.jpg		
+p0431	/home/claude/janet/mid/p0431.jpg		
+p0432	/home/claude/janet/mid/p0432.jpg		
+p0433	/home/claude/janet/mid/p0433.jpg		
+p0435	/home/claude/janet/mid/p0435.jpg		
+p0437	/home/claude/janet/mid/p0437.jpg	2017-12-31	iPhone X
+p0438	/home/claude/janet/mid/p0438.jpg	2012-02-15	iPhone 4S
+p0439	/home/claude/janet/mid/p0439.jpg	2011-12-10	iPhone 4S
+p0440	/home/claude/janet/mid/p0440.jpg		
+p0441	/home/claude/janet/mid/p0441.jpg		
+p0442	/home/claude/janet/mid/p0442.jpg	2017-08-08	iPhone 7 Plus
+p0443	/home/claude/janet/mid/p0443.jpg		
+p0444	/home/claude/janet/mid/p0444.jpg		
+p0445	/home/claude/janet/mid/p0445.jpg		
+p0446	/home/claude/janet/mid/p0446.jpg		
+p0448	/home/claude/janet/mid/p0448.jpg	2017-11-19	iPhone 7 Plus
+p0449	/home/claude/janet/mid/p0449.jpg		
+p0450	/home/claude/janet/mid/p0450.jpg	2013-09-08	iPhone 5
+p0452	/home/claude/janet/mid/p0452.jpg	2008-08-03	D-LUX2
+p0453	/home/claude/janet/mid/p0453.jpg	2008-08-03	D-LUX2
+p0454	/home/claude/janet/mid/p0454.jpg	2008-08-08	D-LUX2
+p0455	/home/claude/janet/mid/p0455.jpg	2010-04-02	D-LUX2
+p0456	/home/claude/janet/mid/p0456.jpg	2010-04-03	D-LUX2
+p0457	/home/claude/janet/mid/p0457.jpg	2004-01-26	DSC-T3
+p0458	/home/claude/janet/mid/p0458.jpg	2004-01-26	DSC-T3

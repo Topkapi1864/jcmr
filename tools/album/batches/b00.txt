@@ -1,0 +1,40 @@
+p0001	/home/claude/janet/mid/p0001.jpg	2024-11-17	iPhone 14 Pro
+p0002	/home/claude/janet/mid/p0002.jpg	2014-09-28	iPhone 5s
+p0003	/home/claude/janet/mid/p0003.jpg		
+p0005	/home/claude/janet/mid/p0005.jpg	2012-06-03	iPhone 4S
+p0006	/home/claude/janet/mid/p0006.jpg		
+p0007	/home/claude/janet/mid/p0007.jpg	2017-09-30	iPhone 7 Plus
+p0008	/home/claude/janet/mid/p0008.jpg		
+p0010	/home/claude/janet/mid/p0010.jpg	2004-06-25	DSC-T3
+p0011	/home/claude/janet/mid/p0011.jpg	2004-01-23	DSC-T3
+p0012	/home/claude/janet/mid/p0012.jpg	2005-12-29	D-LUX2
+p0013	/home/claude/janet/mid/p0013.jpg		
+p0014	/home/claude/janet/mid/p0014.jpg		
+p0015	/home/claude/janet/mid/p0015.jpg	2007-06-09	N95
+p0016	/home/claude/janet/mid/p0016.jpg		
+p0017	/home/claude/janet/mid/p0017.jpg		
+p0018	/home/claude/janet/mid/p0018.jpg		
+p0019	/home/claude/janet/mid/p0019.jpg		
+p0020	/home/claude/janet/mid/p0020.jpg		
+p0021	/home/claude/janet/mid/p0021.jpg		
+p0024	/home/claude/janet/mid/p0024.jpg		
+p0025	/home/claude/janet/mid/p0025.jpg		
+p0026	/home/claude/janet/mid/p0026.jpg	2004-08-17	DSC-T3
+p0027	/home/claude/janet/mid/p0027.jpg	2004-08-17	DSC-T3
+p0028	/home/claude/janet/mid/p0028.jpg	2004-08-17	DSC-T3
+p0029	/home/claude/janet/mid/p0029.jpg	2004-08-17	DSC-T3
+p0030	/home/claude/janet/mid/p0030.jpg	2004-08-17	DSC-T3
+p0031	/home/claude/janet/mid/p0031.jpg	2004-08-17	DSC-T3
+p0032	/home/claude/janet/mid/p0032.jpg	2004-08-17	DSC-T3
+p0033	/home/claude/janet/mid/p0033.jpg	2004-08-17	DSC-T3
+p0034	/home/claude/janet/mid/p0034.jpg	2004-08-17	DSC-T3
+p0035	/home/claude/janet/mid/p0035.jpg	2004-08-17	DSC-T3
+p0036	/home/claude/janet/mid/p0036.jpg	2004-08-17	DSC-T3
+p0037	/home/claude/janet/mid/p0037.jpg	2004-08-17	DSC-T3
+p0038	/home/claude/janet/mid/p0038.jpg	2004-08-17	DSC-T3
+p0039	/home/claude/janet/mid/p0039.jpg	2004-08-17	DSC-T3
+p0040	/home/claude/janet/mid/p0040.jpg	2004-08-18	DSC-T3
+p0041	/home/claude/janet/mid/p0041.jpg	2004-08-18	DSC-T3
+p0042	/home/claude/janet/mid/p0042.jpg	2004-08-18	DSC-T3
+p0043	/home/claude/janet/mid/p0043.jpg	2004-08-18	DSC-T3
+p0044	/home/claude/janet/mid/p0044.jpg	2004-08-20	DSC-T3

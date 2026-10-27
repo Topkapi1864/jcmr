@@ -1,0 +1,40 @@
+p1074	/home/claude/janet/mid/p1074.jpg	2023-05-21	iPhone 12
+p1075	/home/claude/janet/mid/p1075.jpg	2023-05-21	iPhone 12
+p1076	/home/claude/janet/mid/p1076.jpg	2017-07-25	iPhone 6s Plus
+p1078	/home/claude/janet/mid/p1078.jpg	2023-08-12	iPhone 14 Pro
+p1079	/home/claude/janet/mid/p1079.jpg	2023-08-12	iPhone 14 Pro
+p1080	/home/claude/janet/mid/p1080.jpg	2023-08-16	iPhone 14 Pro
+p1081	/home/claude/janet/mid/p1081.jpg	2023-08-16	iPhone 14 Pro
+p1082	/home/claude/janet/mid/p1082.jpg	2023-08-16	iPhone 14 Pro
+p1083	/home/claude/janet/mid/p1083.jpg	2023-08-16	iPhone 14 Pro
+p1084	/home/claude/janet/mid/p1084.jpg	2017-08-05	iPhone 6s Plus
+p1085	/home/claude/janet/mid/p1085.jpg	2017-08-06	iPhone 6s Plus
+p1086	/home/claude/janet/mid/p1086.jpg	2017-08-06	iPhone 6s Plus
+p1087	/home/claude/janet/mid/p1087.jpg	2024-08-23	iPhone 12
+p1088	/home/claude/janet/mid/p1088.jpg	2024-08-24	iPhone 12
+p1089	/home/claude/janet/mid/p1089.jpg		
+p1090	/home/claude/janet/mid/p1090.jpg		
+p1091	/home/claude/janet/mid/p1091.jpg	2023-06-22	iPhone 12
+p1092	/home/claude/janet/mid/p1092.jpg	2023-05-21	iPhone 12
+p1093	/home/claude/janet/mid/p1093.jpg	2023-07-07	iPhone 12
+p1094	/home/claude/janet/mid/p1094.jpg	2006-12-17	D-LUX2
+p1095	/home/claude/janet/mid/p1095.jpg	2007-07-25	D-LUX2
+p1096	/home/claude/janet/mid/p1096.jpg	2007-07-25	D-LUX2
+p1097	/home/claude/janet/mid/p1097.jpg	2007-07-25	D-LUX2
+p1098	/home/claude/janet/mid/p1098.jpg	2007-07-25	D-LUX2
+p1099	/home/claude/janet/mid/p1099.jpg	2007-07-26	D-LUX2
+p1100	/home/claude/janet/mid/p1100.jpg	2007-07-26	D-LUX2
+p1101	/home/claude/janet/mid/p1101.jpg	2007-07-26	D-LUX2
+p1102	/home/claude/janet/mid/p1102.jpg	2007-07-30	D-LUX2
+p1103	/home/claude/janet/mid/p1103.jpg	2007-07-30	D-LUX2
+p1104	/home/claude/janet/mid/p1104.jpg	2009-04-18	D-LUX2
+p1105	/home/claude/janet/mid/p1105.jpg	2009-04-18	D-LUX2
+p1106	/home/claude/janet/mid/p1106.jpg	2011-05-30	D-LUX2
+p1107	/home/claude/janet/mid/p1107.jpg	2009-05-28	D-LUX2
+p1108	/home/claude/janet/mid/p1108.jpg	2009-05-28	D-LUX2
+p1109	/home/claude/janet/mid/p1109.jpg	2009-05-28	D-LUX2
+p1110	/home/claude/janet/mid/p1110.jpg	2009-05-29	D-LUX2
+p1111	/home/claude/janet/mid/p1111.jpg	2009-05-29	D-LUX2
+p1112	/home/claude/janet/mid/p1112.jpg	2009-05-29	D-LUX2
+p1113	/home/claude/janet/mid/p1113.jpg		
+p1114	/home/claude/janet/mid/p1114.jpg	2008-12-31	DSC-W170

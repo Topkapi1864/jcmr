@@ -1,0 +1,40 @@
+p0993	/home/claude/janet/mid/p0993.jpg	2022-12-25	iPhone 12
+p0994	/home/claude/janet/mid/p0994.jpg	2022-06-04	iPhone 11 Pro
+p0995	/home/claude/janet/mid/p0995.jpg		
+p0996	/home/claude/janet/mid/p0996.jpg	2022-06-04	iPhone 11 Pro
+p0997	/home/claude/janet/mid/p0997.jpg		
+p0998	/home/claude/janet/mid/p0998.jpg		
+p0999	/home/claude/janet/mid/p0999.jpg		
+p1000	/home/claude/janet/mid/p1000.jpg		
+p1001	/home/claude/janet/mid/p1001.jpg	2021-01-08	iPhone XS
+p1002	/home/claude/janet/mid/p1002.jpg	2017-09-30	iPhone 7 Plus
+p1003	/home/claude/janet/mid/p1003.jpg	2017-09-30	iPhone 7 Plus
+p1004	/home/claude/janet/mid/p1004.jpg		
+p1005	/home/claude/janet/mid/p1005.jpg		
+p1006	/home/claude/janet/mid/p1006.jpg		
+p1007	/home/claude/janet/mid/p1007.jpg	2024-08-24	iPhone 14 Pro
+p1008	/home/claude/janet/mid/p1008.jpg	2024-08-24	iPhone 14 Pro
+p1009	/home/claude/janet/mid/p1009.jpg		
+p1010	/home/claude/janet/mid/p1010.jpg		
+p1011	/home/claude/janet/mid/p1011.jpg	2024-05-14	iPhone 12
+p1012	/home/claude/janet/mid/p1012.jpg		
+p1013	/home/claude/janet/mid/p1013.jpg	2015-04-04	iPhone 6 Plus
+p1014	/home/claude/janet/mid/p1014.jpg	2015-04-04	iPhone 6 Plus
+p1015	/home/claude/janet/mid/p1015.jpg	2015-04-04	iPhone 6 Plus
+p1016	/home/claude/janet/mid/p1016.jpg	2022-09-07	iPhone 11 Pro
+p1017	/home/claude/janet/mid/p1017.jpg	2015-04-04	iPhone 6 Plus
+p1018	/home/claude/janet/mid/p1018.jpg		
+p1019	/home/claude/janet/mid/p1019.jpg	2015-04-04	iPhone 6 Plus
+p1020	/home/claude/janet/mid/p1020.jpg		
+p1021	/home/claude/janet/mid/p1021.jpg	2024-11-16	
+p1022	/home/claude/janet/mid/p1022.jpg	2024-11-16	
+p1023	/home/claude/janet/mid/p1023.jpg	2024-11-16	
+p1024	/home/claude/janet/mid/p1024.jpg	2024-11-16	
+p1025	/home/claude/janet/mid/p1025.jpg	2024-11-16	
+p1026	/home/claude/janet/mid/p1026.jpg	2024-11-16	
+p1027	/home/claude/janet/mid/p1027.jpg	2024-11-16	
+p1028	/home/claude/janet/mid/p1028.jpg		
+p1029	/home/claude/janet/mid/p1029.jpg		
+p1030	/home/claude/janet/mid/p1030.jpg	2017-12-16	iPhone 7 Plus
+p1031	/home/claude/janet/mid/p1031.jpg	2017-12-16	iPhone 7 Plus
+p1032	/home/claude/janet/mid/p1032.jpg	2024-11-17	iPhone 14 Pro

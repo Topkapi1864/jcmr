@@ -1,0 +1,40 @@
+p0740	/home/claude/janet/mid/p0740.jpg		
+p0741	/home/claude/janet/mid/p0741.jpg		
+p0742	/home/claude/janet/mid/p0742.jpg		
+p0743	/home/claude/janet/mid/p0743.jpg		
+p0744	/home/claude/janet/mid/p0744.jpg		
+p0745	/home/claude/janet/mid/p0745.jpg		
+p0746	/home/claude/janet/mid/p0746.jpg		
+p0747	/home/claude/janet/mid/p0747.jpg		
+p0748	/home/claude/janet/mid/p0748.jpg		
+p0749	/home/claude/janet/mid/p0749.jpg		
+p0750	/home/claude/janet/mid/p0750.jpg		
+p0751	/home/claude/janet/mid/p0751.jpg		
+p0752	/home/claude/janet/mid/p0752.jpg		
+p0753	/home/claude/janet/mid/p0753.jpg		
+p0754	/home/claude/janet/mid/p0754.jpg	2022-07-16	iPhone 12
+p0755	/home/claude/janet/mid/p0755.jpg	2020-07-25	iPhone XS
+p0756	/home/claude/janet/mid/p0756.jpg	2020-07-25	iPhone XS
+p0757	/home/claude/janet/mid/p0757.jpg	2020-07-25	iPhone XS
+p0758	/home/claude/janet/mid/p0758.jpg		
+p0759	/home/claude/janet/mid/p0759.jpg	2020-07-25	iPhone 11 Pro
+p0760	/home/claude/janet/mid/p0760.jpg	2020-07-25	iPhone XS
+p0761	/home/claude/janet/mid/p0761.jpg	2016-04-23	EK-GC100
+p0762	/home/claude/janet/mid/p0762.jpg	2016-04-23	EK-GC100
+p0763	/home/claude/janet/mid/p0763.jpg	2020-07-25	iPhone 11 Pro
+p0764	/home/claude/janet/mid/p0764.jpg	2020-07-25	iPhone XS
+p0765	/home/claude/janet/mid/p0765.jpg	2020-07-25	iPhone 11 Pro
+p0766	/home/claude/janet/mid/p0766.jpg	2020-07-25	iPhone 11 Pro
+p0767	/home/claude/janet/mid/p0767.jpg	2020-07-25	iPhone 11 Pro
+p0768	/home/claude/janet/mid/p0768.jpg	2020-07-25	iPhone XS
+p0769	/home/claude/janet/mid/p0769.jpg	2020-07-25	iPhone XS
+p0770	/home/claude/janet/mid/p0770.jpg	2024-11-28	iPhone 14 Pro
+p0771	/home/claude/janet/mid/p0771.jpg	2017-09-30	iPhone 7 Plus
+p0772	/home/claude/janet/mid/p0772.jpg	2024-11-28	iPhone 14 Pro
+p0773	/home/claude/janet/mid/p0773.jpg	2020-07-25	iPhone 11 Pro
+p0774	/home/claude/janet/mid/p0774.jpg	2024-11-28	iPhone 14 Pro
+p0775	/home/claude/janet/mid/p0775.jpg	2024-11-28	iPhone 14 Pro
+p0776	/home/claude/janet/mid/p0776.jpg	2024-11-28	iPhone 14 Pro
+p0777	/home/claude/janet/mid/p0777.jpg	2024-11-28	iPhone 14 Pro
+p0778	/home/claude/janet/mid/p0778.jpg	2024-11-28	iPhone 14 Pro
+p0779	/home/claude/janet/mid/p0779.jpg	2024-11-28	iPhone 14 Pro

@@ -1,0 +1,40 @@
+p0511	/home/claude/janet/mid/p0511.jpg	2023-07-08	iPhone 12
+p0512	/home/claude/janet/mid/p0512.jpg	2023-07-08	iPhone 12
+p0513	/home/claude/janet/mid/p0513.jpg	2023-07-08	iPhone 12
+p0514	/home/claude/janet/mid/p0514.jpg	2019-06-03	iPhone 7 Plus
+p0515	/home/claude/janet/mid/p0515.jpg	2019-06-03	iPhone 7 Plus
+p0516	/home/claude/janet/mid/p0516.jpg	2019-06-03	iPhone 7 Plus
+p0517	/home/claude/janet/mid/p0517.jpg	2011-12-18	iPhone 4S
+p0518	/home/claude/janet/mid/p0518.jpg	2011-12-18	iPhone 4S
+p0519	/home/claude/janet/mid/p0519.jpg	2021-03-06	iPhone 12 Pro Max
+p0520	/home/claude/janet/mid/p0520.jpg	2014-08-21	iPhone 5s
+p0521	/home/claude/janet/mid/p0521.jpg	2014-08-21	iPhone 5s
+p0522	/home/claude/janet/mid/p0522.jpg	2014-08-21	iPhone 5s
+p0525	/home/claude/janet/mid/p0525.jpg	2015-07-10	iPhone 6 Plus
+p0526	/home/claude/janet/mid/p0526.jpg	2018-07-17	iPhone X
+p0527	/home/claude/janet/mid/p0527.jpg	2018-07-17	iPhone X
+p0528	/home/claude/janet/mid/p0528.jpg	2018-07-17	iPhone X
+p0530	/home/claude/janet/mid/p0530.jpg	2014-08-23	iPhone 5s
+p0531	/home/claude/janet/mid/p0531.jpg	2014-08-23	iPhone 5s
+p0532	/home/claude/janet/mid/p0532.jpg	2012-02-15	iPhone 4S
+p0533	/home/claude/janet/mid/p0533.jpg	2012-02-15	iPhone 4S
+p0534	/home/claude/janet/mid/p0534.jpg	2012-02-15	iPhone 4S
+p0535	/home/claude/janet/mid/p0535.jpg	2017-12-29	iPhone X
+p0536	/home/claude/janet/mid/p0536.jpg	2017-12-29	iPhone X
+p0537	/home/claude/janet/mid/p0537.jpg	2017-12-29	iPhone X
+p0538	/home/claude/janet/mid/p0538.jpg	2017-03-26	iPhone 7 Plus
+p0539	/home/claude/janet/mid/p0539.jpg	2017-03-26	iPhone 7 Plus
+p0540	/home/claude/janet/mid/p0540.jpg	2017-12-31	iPhone X
+p0541	/home/claude/janet/mid/p0541.jpg	2017-12-31	iPhone X
+p0542	/home/claude/janet/mid/p0542.jpg	2017-03-26	
+p0543	/home/claude/janet/mid/p0543.jpg	2017-03-26	
+p0544	/home/claude/janet/mid/p0544.jpg	2017-03-26	
+p0546	/home/claude/janet/mid/p0546.jpg	2017-12-31	iPhone X
+p0547	/home/claude/janet/mid/p0547.jpg	2017-12-31	iPhone X
+p0548	/home/claude/janet/mid/p0548.jpg	2012-03-18	iPhone 4S
+p0549	/home/claude/janet/mid/p0549.jpg	2012-03-18	iPhone 4S
+p0551	/home/claude/janet/mid/p0551.jpg	2012-03-18	iPhone 4S
+p0552	/home/claude/janet/mid/p0552.jpg		
+p0554	/home/claude/janet/mid/p0554.jpg	2012-03-18	iPhone 4S
+p0555	/home/claude/janet/mid/p0555.jpg	2012-03-18	iPhone 4S
+p0556	/home/claude/janet/mid/p0556.jpg	2012-03-18	iPhone 4S

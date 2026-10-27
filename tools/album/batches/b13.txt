@@ -1,0 +1,40 @@
+p0607	/home/claude/janet/mid/p0607.jpg	2023-07-27	iPhone 13 Pro
+p0608	/home/claude/janet/mid/p0608.jpg	2015-07-11	Canon EOS 1200D
+p0609	/home/claude/janet/mid/p0609.jpg		
+p0610	/home/claude/janet/mid/p0610.jpg	2015-11-07	iPhone 6
+p0611	/home/claude/janet/mid/p0611.jpg	2023-09-11	iPhone 13 Pro
+p0612	/home/claude/janet/mid/p0612.jpg		
+p0613	/home/claude/janet/mid/p0613.jpg	2015-07-11	Canon EOS 1200D
+p0614	/home/claude/janet/mid/p0614.jpg		
+p0615	/home/claude/janet/mid/p0615.jpg		
+p0616	/home/claude/janet/mid/p0616.jpg	2016-04-02	iPhone 6s Plus
+p0617	/home/claude/janet/mid/p0617.jpg	2016-04-02	iPhone 6s Plus
+p0618	/home/claude/janet/mid/p0618.jpg	2023-09-20	iPhone 13 Pro
+p0619	/home/claude/janet/mid/p0619.jpg	2023-09-20	iPhone 13 Pro
+p0620	/home/claude/janet/mid/p0620.jpg	2023-09-20	iPhone 13 Pro
+p0621	/home/claude/janet/mid/p0621.jpg	2023-09-20	iPhone 13 Pro
+p0622	/home/claude/janet/mid/p0622.jpg	2023-09-20	iPhone 13 Pro
+p0623	/home/claude/janet/mid/p0623.jpg		
+p0624	/home/claude/janet/mid/p0624.jpg	2023-09-20	iPhone 13 Pro
+p0625	/home/claude/janet/mid/p0625.jpg		
+p0626	/home/claude/janet/mid/p0626.jpg	2016-04-03	iPhone 6s Plus
+p0627	/home/claude/janet/mid/p0627.jpg	2016-04-03	iPhone 6s Plus
+p0628	/home/claude/janet/mid/p0628.jpg	2016-04-03	iPhone 6s Plus
+p0629	/home/claude/janet/mid/p0629.jpg		
+p0630	/home/claude/janet/mid/p0630.jpg	2016-04-03	iPhone 6s Plus
+p0631	/home/claude/janet/mid/p0631.jpg		
+p0632	/home/claude/janet/mid/p0632.jpg		
+p0633	/home/claude/janet/mid/p0633.jpg		
+p0634	/home/claude/janet/mid/p0634.jpg	2016-04-03	iPhone 6s Plus
+p0635	/home/claude/janet/mid/p0635.jpg	2020-05-20	iPhone XS
+p0636	/home/claude/janet/mid/p0636.jpg	2018-02-25	iPhone X
+p0637	/home/claude/janet/mid/p0637.jpg	2018-02-25	iPhone X
+p0638	/home/claude/janet/mid/p0638.jpg	2024-06-15	Canon EOS R5
+p0639	/home/claude/janet/mid/p0639.jpg	2024-06-15	Canon EOS 5D
+p0640	/home/claude/janet/mid/p0640.jpg		
+p0641	/home/claude/janet/mid/p0641.jpg		
+p0642	/home/claude/janet/mid/p0642.jpg		
+p0643	/home/claude/janet/mid/p0643.jpg	2019-11-16	iPhone 7 Plus
+p0644	/home/claude/janet/mid/p0644.jpg	2013-01-26	iPhone 4S
+p0645	/home/claude/janet/mid/p0645.jpg	2013-01-26	iPhone 4S
+p0646	/home/claude/janet/mid/p0646.jpg	2020-03-22	iPhone 11 Pro

@@ -1,0 +1,7 @@
+p1208	/home/claude/janet/mid/p1208.jpg	2011-01-06	
+p1209	/home/claude/janet/mid/p1209.jpg	2011-01-07	
+p1210	/home/claude/janet/mid/p1210.jpg	2012-01-08	iPhone 4S
+p1211	/home/claude/janet/mid/p1211.jpg	2012-03-30	HP Scanjet G4050
+p1212	/home/claude/janet/mid/p1212.jpg	2012-03-29	HP Scanjet G4050
+p1213	/home/claude/janet/mid/p1213.jpg	2012-03-30	HP Scanjet G4050
+p1214	/home/claude/janet/mid/p1214.jpg	2012-03-30	HP Scanjet G4050

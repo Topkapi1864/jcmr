@@ -1,0 +1,40 @@
+p0313	/home/claude/janet/mid/p0313.jpg	2012-09-10	iPhone 4S
+p0318	/home/claude/janet/mid/p0318.jpg		
+p0320	/home/claude/janet/mid/p0320.jpg		
+p0321	/home/claude/janet/mid/p0321.jpg		
+p0322	/home/claude/janet/mid/p0322.jpg		
+p0323	/home/claude/janet/mid/p0323.jpg		
+p0324	/home/claude/janet/mid/p0324.jpg		
+p0327	/home/claude/janet/mid/p0327.jpg	2017-12-31	iPhone X
+p0328	/home/claude/janet/mid/p0328.jpg		
+p0329	/home/claude/janet/mid/p0329.jpg	2018-07-19	iPhone X
+p0330	/home/claude/janet/mid/p0330.jpg	2021-12-19	iPhone 12 Pro Max
+p0331	/home/claude/janet/mid/p0331.jpg		
+p0333	/home/claude/janet/mid/p0333.jpg		
+p0336	/home/claude/janet/mid/p0336.jpg		
+p0337	/home/claude/janet/mid/p0337.jpg	2017-08-19	iPhone 7 Plus
+p0339	/home/claude/janet/mid/p0339.jpg		
+p0340	/home/claude/janet/mid/p0340.jpg		
+p0341	/home/claude/janet/mid/p0341.jpg	2021-04-04	iPhone 12 Pro Max
+p0343	/home/claude/janet/mid/p0343.jpg		
+p0344	/home/claude/janet/mid/p0344.jpg		
+p0345	/home/claude/janet/mid/p0345.jpg		
+p0346	/home/claude/janet/mid/p0346.jpg	2018-07-19	iPhone X
+p0347	/home/claude/janet/mid/p0347.jpg		
+p0349	/home/claude/janet/mid/p0349.jpg		
+p0350	/home/claude/janet/mid/p0350.jpg		
+p0351	/home/claude/janet/mid/p0351.jpg		
+p0353	/home/claude/janet/mid/p0353.jpg		
+p0356	/home/claude/janet/mid/p0356.jpg		
+p0357	/home/claude/janet/mid/p0357.jpg		
+p0359	/home/claude/janet/mid/p0359.jpg	2014-09-28	iPhone 5s
+p0361	/home/claude/janet/mid/p0361.jpg		
+p0362	/home/claude/janet/mid/p0362.jpg	2014-09-27	iPhone 5s
+p0363	/home/claude/janet/mid/p0363.jpg		
+p0364	/home/claude/janet/mid/p0364.jpg	2011-12-18	iPhone 4S
+p0365	/home/claude/janet/mid/p0365.jpg		
+p0366	/home/claude/janet/mid/p0366.jpg	2017-12-29	iPhone X
+p0367	/home/claude/janet/mid/p0367.jpg		
+p0368	/home/claude/janet/mid/p0368.jpg		
+p0369	/home/claude/janet/mid/p0369.jpg	2011-12-10	iPhone 4S
+p0370	/home/claude/janet/mid/p0370.jpg		

@@ -1,0 +1,40 @@
+p0821	/home/claude/janet/mid/p0821.jpg	2020-08-22	iPhone XS
+p0822	/home/claude/janet/mid/p0822.jpg		
+p0823	/home/claude/janet/mid/p0823.jpg	2020-08-22	iPhone XS
+p0824	/home/claude/janet/mid/p0824.jpg	2020-08-22	iPhone XS
+p0825	/home/claude/janet/mid/p0825.jpg	2019-07-15	iPhone X
+p0826	/home/claude/janet/mid/p0826.jpg	2019-07-15	iPhone X
+p0827	/home/claude/janet/mid/p0827.jpg		
+p0828	/home/claude/janet/mid/p0828.jpg		
+p0829	/home/claude/janet/mid/p0829.jpg	2020-08-24	iPhone XS
+p0830	/home/claude/janet/mid/p0830.jpg	2022-08-17	iPhone 12
+p0831	/home/claude/janet/mid/p0831.jpg	2022-08-18	iPhone 12
+p0832	/home/claude/janet/mid/p0832.jpg	2022-08-18	iPhone 12
+p0834	/home/claude/janet/mid/p0834.jpg		
+p0835	/home/claude/janet/mid/p0835.jpg		
+p0836	/home/claude/janet/mid/p0836.jpg		
+p0838	/home/claude/janet/mid/p0838.jpg	2016-06-04	iPhone 6s
+p0840	/home/claude/janet/mid/p0840.jpg	2016-06-04	iPhone 6s
+p0841	/home/claude/janet/mid/p0841.jpg	2016-09-05	iPhone 6
+p0842	/home/claude/janet/mid/p0842.jpg	2022-08-19	iPhone 12
+p0843	/home/claude/janet/mid/p0843.jpg	2016-09-07	iPhone 6
+p0844	/home/claude/janet/mid/p0844.jpg	2022-08-19	iPhone 12
+p0845	/home/claude/janet/mid/p0845.jpg	2016-09-07	iPhone 6
+p0846	/home/claude/janet/mid/p0846.jpg	2016-09-07	iPhone 6
+p0847	/home/claude/janet/mid/p0847.jpg	2016-09-07	iPhone 6
+p0848	/home/claude/janet/mid/p0848.jpg	2016-09-07	iPhone 6
+p0849	/home/claude/janet/mid/p0849.jpg	2022-08-20	iPhone 12
+p0850	/home/claude/janet/mid/p0850.jpg	2021-06-17	iPhone 12
+p0851	/home/claude/janet/mid/p0851.jpg	2022-08-20	iPhone 12
+p0852	/home/claude/janet/mid/p0852.jpg	2022-08-21	iPhone 12
+p0853	/home/claude/janet/mid/p0853.jpg	2016-09-08	iPhone 6
+p0854	/home/claude/janet/mid/p0854.jpg	2021-03-31	iPhone 11 Pro
+p0855	/home/claude/janet/mid/p0855.jpg	2023-12-21	iPhone 12
+p0856	/home/claude/janet/mid/p0856.jpg	2023-12-21	iPhone 12
+p0857	/home/claude/janet/mid/p0857.jpg	2021-03-31	iPhone 11 Pro
+p0858	/home/claude/janet/mid/p0858.jpg	2016-09-10	iPhone 6
+p0859	/home/claude/janet/mid/p0859.jpg	2017-09-30	Canon EOS 1200D
+p0860	/home/claude/janet/mid/p0860.jpg	2017-09-30	Canon EOS 1200D
+p0861	/home/claude/janet/mid/p0861.jpg	2021-04-12	iPhone 11 Pro
+p0862	/home/claude/janet/mid/p0862.jpg	2016-09-10	iPhone 6
+p0863	/home/claude/janet/mid/p0863.jpg	2021-04-12	iPhone 11 Pro

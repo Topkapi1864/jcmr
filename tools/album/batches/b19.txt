@@ -1,0 +1,40 @@
+p0864	/home/claude/janet/mid/p0864.jpg	2016-09-10	iPhone 6
+p0865	/home/claude/janet/mid/p0865.jpg	2016-07-30	iPhone 6s
+p0866	/home/claude/janet/mid/p0866.jpg	2017-09-30	Canon EOS 1200D
+p0867	/home/claude/janet/mid/p0867.jpg	2017-09-30	Canon EOS 1200D
+p0868	/home/claude/janet/mid/p0868.jpg		
+p0870	/home/claude/janet/mid/p0870.jpg	2017-09-30	Canon EOS 1200D
+p0871	/home/claude/janet/mid/p0871.jpg	2021-06-01	
+p0872	/home/claude/janet/mid/p0872.jpg	2017-09-30	Canon EOS 1200D
+p0873	/home/claude/janet/mid/p0873.jpg	2021-06-01	
+p0874	/home/claude/janet/mid/p0874.jpg	2016-09-09	EK-GC100
+p0875	/home/claude/janet/mid/p0875.jpg	2016-09-11	EK-GC100
+p0876	/home/claude/janet/mid/p0876.jpg	2016-09-11	EK-GC100
+p0877	/home/claude/janet/mid/p0877.jpg	2018-04-23	iPhone 6s
+p0878	/home/claude/janet/mid/p0878.jpg	2017-09-30	Canon EOS 1200D
+p0879	/home/claude/janet/mid/p0879.jpg	2017-09-30	Canon EOS 1200D
+p0880	/home/claude/janet/mid/p0880.jpg	2017-09-30	Canon EOS 1200D
+p0881	/home/claude/janet/mid/p0881.jpg	2017-09-30	Canon EOS 1200D
+p0882	/home/claude/janet/mid/p0882.jpg	2016-08-11	iPhone 6s Plus
+p0883	/home/claude/janet/mid/p0883.jpg	2017-09-30	Canon EOS 1200D
+p0884	/home/claude/janet/mid/p0884.jpg	2017-09-30	Canon EOS 1200D
+p0885	/home/claude/janet/mid/p0885.jpg	2016-12-30	iPhone 6s
+p0886	/home/claude/janet/mid/p0886.jpg	2016-12-30	iPhone 6s
+p0887	/home/claude/janet/mid/p0887.jpg	2016-12-30	iPhone 6s
+p0888	/home/claude/janet/mid/p0888.jpg	2016-12-30	iPhone 6s
+p0889	/home/claude/janet/mid/p0889.jpg	2016-12-30	iPhone 6s
+p0890	/home/claude/janet/mid/p0890.jpg	2016-12-30	iPhone 6s
+p0891	/home/claude/janet/mid/p0891.jpg	2016-12-30	iPhone 6s
+p0892	/home/claude/janet/mid/p0892.jpg	2016-12-30	iPhone 6s
+p0893	/home/claude/janet/mid/p0893.jpg	2016-12-30	iPhone 6s
+p0894	/home/claude/janet/mid/p0894.jpg	2019-07-24	iPhone XS
+p0895	/home/claude/janet/mid/p0895.jpg	2019-07-24	iPhone XS
+p0896	/home/claude/janet/mid/p0896.jpg	2019-07-24	iPhone XS
+p0897	/home/claude/janet/mid/p0897.jpg	2019-07-24	iPhone XS
+p0898	/home/claude/janet/mid/p0898.jpg	2019-07-24	iPhone XS
+p0899	/home/claude/janet/mid/p0899.jpg	2020-08-24	iPhone XS
+p0900	/home/claude/janet/mid/p0900.jpg	2019-07-25	iPhone XS
+p0901	/home/claude/janet/mid/p0901.jpg	2020-08-24	iPhone XS
+p0902	/home/claude/janet/mid/p0902.jpg	2020-08-24	iPhone XS
+p0903	/home/claude/janet/mid/p0903.jpg	2020-08-24	iPhone XS
+p0904	/home/claude/janet/mid/p0904.jpg	2020-08-24	iPhone XS

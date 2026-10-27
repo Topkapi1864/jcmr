@@ -1,0 +1,40 @@
+p1115	/home/claude/janet/mid/p1115.jpg	2008-12-31	DSC-W170
+p1116	/home/claude/janet/mid/p1116.jpg	2022-06-25	Pixel 6 Pro
+p1117	/home/claude/janet/mid/p1117.jpg	2022-06-25	Pixel 6 Pro
+p1118	/home/claude/janet/mid/p1118.jpg	2022-06-25	Pixel 6 Pro
+p1119	/home/claude/janet/mid/p1119.jpg	2022-06-25	Pixel 6 Pro
+p1120	/home/claude/janet/mid/p1120.jpg	2007-12-16	D-LUX2
+p1121	/home/claude/janet/mid/p1121.jpg	2007-12-16	D-LUX2
+p1122	/home/claude/janet/mid/p1122.jpg	2007-12-16	D-LUX2
+p1123	/home/claude/janet/mid/p1123.jpg	2007-12-25	D-LUX2
+p1124	/home/claude/janet/mid/p1124.jpg	2007-12-25	D-LUX2
+p1125	/home/claude/janet/mid/p1125.jpg	2007-12-25	D-LUX2
+p1126	/home/claude/janet/mid/p1126.jpg	2007-12-25	D-LUX2
+p1127	/home/claude/janet/mid/p1127.jpg	2007-12-25	D-LUX2
+p1128	/home/claude/janet/mid/p1128.jpg	2007-12-27	D-LUX2
+p1129	/home/claude/janet/mid/p1129.jpg	2007-12-31	D-LUX2
+p1130	/home/claude/janet/mid/p1130.jpg	2007-12-31	D-LUX2
+p1131	/home/claude/janet/mid/p1131.jpg	2007-12-31	D-LUX2
+p1132	/home/claude/janet/mid/p1132.jpg	2007-12-31	D-LUX2
+p1133	/home/claude/janet/mid/p1133.jpg	2008-12-31	DSC-W170
+p1134	/home/claude/janet/mid/p1134.jpg	2008-12-31	DSC-W170
+p1135	/home/claude/janet/mid/p1135.jpg	2008-12-31	DSC-W170
+p1136	/home/claude/janet/mid/p1136.jpg		
+p1137	/home/claude/janet/mid/p1137.jpg	2014-01-12	SAMSUNG PL55/ VLUU PL55/ SAMSUNG SL502/ SAMSUNG PL57
+p1138	/home/claude/janet/mid/p1138.jpg	2014-03-16	SAMSUNG PL55/ VLUU PL55/ SAMSUNG SL502/ SAMSUNG PL57
+p1139	/home/claude/janet/mid/p1139.jpg	2014-03-16	SAMSUNG PL55/ VLUU PL55/ SAMSUNG SL502/ SAMSUNG PL57
+p1140	/home/claude/janet/mid/p1140.jpg	2007-07-30	D-LUX2
+p1141	/home/claude/janet/mid/p1141.jpg	2003-01-01	DSC-P12
+p1142	/home/claude/janet/mid/p1142.jpg	2003-02-21	DSC-P12
+p1143	/home/claude/janet/mid/p1143.jpg	2003-02-21	DSC-P12
+p1144	/home/claude/janet/mid/p1144.jpg		
+p1147	/home/claude/janet/mid/p1147.jpg		
+p1148	/home/claude/janet/mid/p1148.jpg		
+p1149	/home/claude/janet/mid/p1149.jpg		
+p1151	/home/claude/janet/mid/p1151.jpg		
+p1152	/home/claude/janet/mid/p1152.jpg		
+p1153	/home/claude/janet/mid/p1153.jpg		
+p1154	/home/claude/janet/mid/p1154.jpg		
+p1157	/home/claude/janet/mid/p1157.jpg		
+p1159	/home/claude/janet/mid/p1159.jpg		
+p1161	/home/claude/janet/mid/p1161.jpg		

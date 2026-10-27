@@ -1,0 +1,40 @@
+p0371	/home/claude/janet/mid/p0371.jpg		
+p0372	/home/claude/janet/mid/p0372.jpg		
+p0373	/home/claude/janet/mid/p0373.jpg		
+p0374	/home/claude/janet/mid/p0374.jpg	2021-07-25	iPhone 12 Pro Max
+p0375	/home/claude/janet/mid/p0375.jpg	2013-12-29	iPhone 5s
+p0376	/home/claude/janet/mid/p0376.jpg	2011-12-18	iPhone 4S
+p0377	/home/claude/janet/mid/p0377.jpg	2017-09-30	iPhone 7 Plus
+p0379	/home/claude/janet/mid/p0379.jpg	2012-02-15	iPhone 4S
+p0381	/home/claude/janet/mid/p0381.jpg	2012-06-03	iPhone 4S
+p0382	/home/claude/janet/mid/p0382.jpg		
+p0383	/home/claude/janet/mid/p0383.jpg	2011-07-26	DSC-WX7                
+p0384	/home/claude/janet/mid/p0384.jpg	2011-07-26	DSC-WX7                
+p0385	/home/claude/janet/mid/p0385.jpg	2011-07-26	DSC-WX7                
+p0386	/home/claude/janet/mid/p0386.jpg	2011-07-26	DSC-WX7                
+p0387	/home/claude/janet/mid/p0387.jpg	2011-07-26	DSC-WX7                
+p0388	/home/claude/janet/mid/p0388.jpg	2011-07-26	DSC-WX7                
+p0389	/home/claude/janet/mid/p0389.jpg	2011-07-27	DSC-WX7                
+p0390	/home/claude/janet/mid/p0390.jpg	2007-12-31	DSC-T50
+p0391	/home/claude/janet/mid/p0391.jpg	2008-03-21	DSC-T50
+p0392	/home/claude/janet/mid/p0392.jpg	2008-03-21	DSC-T50
+p0393	/home/claude/janet/mid/p0393.jpg	2008-11-29	DSC-W170
+p0394	/home/claude/janet/mid/p0394.jpg	2010-07-25	DSC-W170
+p0395	/home/claude/janet/mid/p0395.jpg	2010-07-26	DSC-W170
+p0396	/home/claude/janet/mid/p0396.jpg	2010-07-26	DSC-W170
+p0397	/home/claude/janet/mid/p0397.jpg	2009-04-18	DSC-W7
+p0398	/home/claude/janet/mid/p0398.jpg	2009-04-18	DSC-W7
+p0399	/home/claude/janet/mid/p0399.jpg	2009-04-18	DSC-W7
+p0400	/home/claude/janet/mid/p0400.jpg		
+p0401	/home/claude/janet/mid/p0401.jpg		
+p0402	/home/claude/janet/mid/p0402.jpg		
+p0403	/home/claude/janet/mid/p0403.jpg		
+p0404	/home/claude/janet/mid/p0404.jpg		
+p0405	/home/claude/janet/mid/p0405.jpg		
+p0406	/home/claude/janet/mid/p0406.jpg		
+p0408	/home/claude/janet/mid/p0408.jpg		
+p0409	/home/claude/janet/mid/p0409.jpg		
+p0410	/home/claude/janet/mid/p0410.jpg		
+p0411	/home/claude/janet/mid/p0411.jpg		
+p0412	/home/claude/janet/mid/p0412.jpg		
+p0413	/home/claude/janet/mid/p0413.jpg		

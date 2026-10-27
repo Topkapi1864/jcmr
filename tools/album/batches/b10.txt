@@ -1,0 +1,40 @@
+p0459	/home/claude/janet/mid/p0459.jpg	2004-01-26	DSC-T3
+p0460	/home/claude/janet/mid/p0460.jpg	2004-01-26	DSC-T3
+p0461	/home/claude/janet/mid/p0461.jpg	2004-01-26	DSC-T3
+p0462	/home/claude/janet/mid/p0462.jpg	2004-01-26	DSC-T3
+p0463	/home/claude/janet/mid/p0463.jpg	2004-01-28	DSC-T3
+p0464	/home/claude/janet/mid/p0464.jpg	2004-01-28	DSC-T3
+p0465	/home/claude/janet/mid/p0465.jpg	2003-11-22	DCR-PC330E
+p0466	/home/claude/janet/mid/p0466.jpg	2004-05-30	DCR-PC330E
+p0467	/home/claude/janet/mid/p0467.jpg	2004-05-30	DCR-PC330E
+p0468	/home/claude/janet/mid/p0468.jpg	2004-05-30	DCR-PC330E
+p0469	/home/claude/janet/mid/p0469.jpg	2004-05-30	DCR-PC330E
+p0470	/home/claude/janet/mid/p0470.jpg	2004-05-30	DCR-PC330E
+p0471	/home/claude/janet/mid/p0471.jpg	2004-05-30	DCR-PC330E
+p0472	/home/claude/janet/mid/p0472.jpg	2010-06-12	BlackBerry 9700
+p0473	/home/claude/janet/mid/p0473.jpg	2010-06-12	BlackBerry 9700
+p0474	/home/claude/janet/mid/p0474.jpg	2010-06-23	BlackBerry 9700
+p0475	/home/claude/janet/mid/p0475.jpg	2010-07-25	BlackBerry 9700
+p0476	/home/claude/janet/mid/p0476.jpg	2010-07-25	BlackBerry 9700
+p0477	/home/claude/janet/mid/p0477.jpg	2010-07-25	BlackBerry 9700
+p0478	/home/claude/janet/mid/p0478.jpg	2010-07-25	BlackBerry 9700
+p0479	/home/claude/janet/mid/p0479.jpg	2010-07-25	BlackBerry 9700
+p0480	/home/claude/janet/mid/p0480.jpg	2010-07-25	BlackBerry 9700
+p0481	/home/claude/janet/mid/p0481.jpg	2010-07-25	BlackBerry 9700
+p0482	/home/claude/janet/mid/p0482.jpg	2010-07-26	BlackBerry 9700
+p0483	/home/claude/janet/mid/p0483.jpg	2010-07-26	BlackBerry 9700
+p0484	/home/claude/janet/mid/p0484.jpg	2010-08-22	BlackBerry 9700
+p0485	/home/claude/janet/mid/p0485.jpg	2016-12-30	iPhone 7 Plus
+p0486	/home/claude/janet/mid/p0486.jpg		
+p0493	/home/claude/janet/mid/p0493.jpg	2015-10-03	iPhone 6s
+p0494	/home/claude/janet/mid/p0494.jpg	2015-10-03	iPhone 6s
+p0501	/home/claude/janet/mid/p0501.jpg	2024-05-14	iPhone 15 Pro Max
+p0502	/home/claude/janet/mid/p0502.jpg	2024-05-14	iPhone 15 Pro Max
+p0503	/home/claude/janet/mid/p0503.jpg		
+p0504	/home/claude/janet/mid/p0504.jpg	2017-12-31	iPhone X
+p0505	/home/claude/janet/mid/p0505.jpg	2018-06-30	iPhone X
+p0506	/home/claude/janet/mid/p0506.jpg	2018-06-30	iPhone X
+p0507	/home/claude/janet/mid/p0507.jpg	2024-06-25	iPhone 15 Pro Max
+p0508	/home/claude/janet/mid/p0508.jpg	2022-06-25	iPhone 13 Pro
+p0509	/home/claude/janet/mid/p0509.jpg	2023-07-08	iPhone 12
+p0510	/home/claude/janet/mid/p0510.jpg	2011-12-10	iPhone 4S

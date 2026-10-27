@@ -1,0 +1,40 @@
+p0557	/home/claude/janet/mid/p0557.jpg	2012-03-18	iPhone 4S
+p0558	/home/claude/janet/mid/p0558.jpg	2012-03-18	iPhone 4S
+p0559	/home/claude/janet/mid/p0559.jpg	2023-07-30	iPhone 12
+p0560	/home/claude/janet/mid/p0560.jpg	2023-07-08	iPhone 14 Pro Max
+p0561	/home/claude/janet/mid/p0561.jpg	2017-12-25	iPhone 6s Plus
+p0562	/home/claude/janet/mid/p0562.jpg	2017-12-25	iPhone 6s Plus
+p0563	/home/claude/janet/mid/p0563.jpg		
+p0564	/home/claude/janet/mid/p0564.jpg	2022-05-21	iPhone 12
+p0565	/home/claude/janet/mid/p0565.jpg	2022-05-21	iPhone 12
+p0566	/home/claude/janet/mid/p0566.jpg	2022-05-21	iPhone 12
+p0567	/home/claude/janet/mid/p0567.jpg	2022-05-21	iPhone 12
+p0568	/home/claude/janet/mid/p0568.jpg	2022-05-21	iPhone 12
+p0569	/home/claude/janet/mid/p0569.jpg	2022-05-21	iPhone 12
+p0570	/home/claude/janet/mid/p0570.jpg	2022-05-21	iPhone 12
+p0571	/home/claude/janet/mid/p0571.jpg	2022-05-21	iPhone 12
+p0573	/home/claude/janet/mid/p0573.jpg	2012-06-03	iPhone 4S
+p0574	/home/claude/janet/mid/p0574.jpg		
+p0575	/home/claude/janet/mid/p0575.jpg	2022-05-22	iPhone 12
+p0576	/home/claude/janet/mid/p0576.jpg		
+p0579	/home/claude/janet/mid/p0579.jpg		
+p0583	/home/claude/janet/mid/p0583.jpg		
+p0584	/home/claude/janet/mid/p0584.jpg	2016-12-17	iPhone 7 Plus
+p0585	/home/claude/janet/mid/p0585.jpg	2021-02-15	iPhone 12
+p0586	/home/claude/janet/mid/p0586.jpg	2016-12-19	iPhone 7 Plus
+p0587	/home/claude/janet/mid/p0587.jpg	2016-12-19	iPhone 7 Plus
+p0588	/home/claude/janet/mid/p0588.jpg	2016-12-19	iPhone 7 Plus
+p0589	/home/claude/janet/mid/p0589.jpg	2024-05-22	iPhone 14 Pro
+p0590	/home/claude/janet/mid/p0590.jpg	2024-05-22	iPhone 14 Pro
+p0591	/home/claude/janet/mid/p0591.jpg	2024-05-22	iPhone 14 Pro
+p0592	/home/claude/janet/mid/p0592.jpg	2023-05-05	iPhone 13 Pro
+p0593	/home/claude/janet/mid/p0593.jpg	2023-05-05	iPhone 13 Pro
+p0594	/home/claude/janet/mid/p0594.jpg	2023-05-05	iPhone 13 Pro
+p0595	/home/claude/janet/mid/p0595.jpg	2019-01-08	iPhone XS
+p0597	/home/claude/janet/mid/p0597.jpg	2012-08-08	iPhone 4S
+p0600	/home/claude/janet/mid/p0600.jpg	2016-12-28	
+p0601	/home/claude/janet/mid/p0601.jpg	2015-07-11	Canon EOS 1200D
+p0602	/home/claude/janet/mid/p0602.jpg	2015-11-01	EK-GC100
+p0603	/home/claude/janet/mid/p0603.jpg	2012-09-10	iPhone 4S
+p0604	/home/claude/janet/mid/p0604.jpg	2013-07-21	iPhone 5
+p0605	/home/claude/janet/mid/p0605.jpg	2023-07-27	iPhone 13 Pro

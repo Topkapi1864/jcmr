@@ -1,0 +1,40 @@
+p1162	/home/claude/janet/mid/p1162.jpg		
+p1164	/home/claude/janet/mid/p1164.jpg		
+p1166	/home/claude/janet/mid/p1166.jpg		
+p1167	/home/claude/janet/mid/p1167.jpg		
+p1168	/home/claude/janet/mid/p1168.jpg		
+p1169	/home/claude/janet/mid/p1169.jpg		
+p1173	/home/claude/janet/mid/p1173.jpg		
+p1174	/home/claude/janet/mid/p1174.jpg		
+p1175	/home/claude/janet/mid/p1175.jpg		
+p1176	/home/claude/janet/mid/p1176.jpg		
+p1177	/home/claude/janet/mid/p1177.jpg		
+p1178	/home/claude/janet/mid/p1178.jpg		
+p1179	/home/claude/janet/mid/p1179.jpg		
+p1180	/home/claude/janet/mid/p1180.jpg		
+p1182	/home/claude/janet/mid/p1182.jpg		
+p1183	/home/claude/janet/mid/p1183.jpg		
+p1184	/home/claude/janet/mid/p1184.jpg		
+p1185	/home/claude/janet/mid/p1185.jpg		
+p1186	/home/claude/janet/mid/p1186.jpg		
+p1187	/home/claude/janet/mid/p1187.jpg		
+p1188	/home/claude/janet/mid/p1188.jpg		
+p1189	/home/claude/janet/mid/p1189.jpg		
+p1190	/home/claude/janet/mid/p1190.jpg		
+p1191	/home/claude/janet/mid/p1191.jpg		
+p1192	/home/claude/janet/mid/p1192.jpg	0000-00-00	u20D,S400D,u400D
+p1193	/home/claude/janet/mid/p1193.jpg	0000-00-00	u20D,S400D,u400D
+p1194	/home/claude/janet/mid/p1194.jpg	0000-00-00	u20D,S400D,u400D
+p1195	/home/claude/janet/mid/p1195.jpg	0000-00-00	u20D,S400D,u400D
+p1196	/home/claude/janet/mid/p1196.jpg	0000-00-00	u20D,S400D,u400D
+p1197	/home/claude/janet/mid/p1197.jpg	0000-00-00	u20D,S400D,u400D
+p1198	/home/claude/janet/mid/p1198.jpg	0000-00-00	u20D,S400D,u400D
+p1199	/home/claude/janet/mid/p1199.jpg	2010-12-22	
+p1200	/home/claude/janet/mid/p1200.jpg		
+p1201	/home/claude/janet/mid/p1201.jpg	2010-12-22	
+p1202	/home/claude/janet/mid/p1202.jpg	2010-12-22	
+p1203	/home/claude/janet/mid/p1203.jpg	2011-01-06	
+p1204	/home/claude/janet/mid/p1204.jpg	2011-01-06	
+p1205	/home/claude/janet/mid/p1205.jpg		
+p1206	/home/claude/janet/mid/p1206.jpg		
+p1207	/home/claude/janet/mid/p1207.jpg	2011-01-06	
