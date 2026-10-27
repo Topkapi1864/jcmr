@@ -18,7 +18,7 @@ export default async function LivePage({ searchParams }: { searchParams: Promise
       <div className="stack section">
         <FollowLive initial={initial} showLinks />
         <section className="two-col">
-          <div>
+          <div className="messages-panel">
             <h2 style={{ marginBottom: 6 }}>Messages from the crew</h2>
             <Updates initial={initial} fold={12} />
           </div>

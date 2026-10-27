@@ -1624,6 +1624,31 @@ details.done-group summary {
 .update[data-pinned] .time {
   color: var(--color-brand);
 }
+/* The board on the public site (home page and Live): a duck egg panel like the
+   hero band, the pair to the navy donate card beside it. */
+.messages-panel {
+  background: var(--color-bg-band);
+  color: var(--color-fg);
+  border-radius: var(--radius-xl);
+  padding: 24px 26px 22px;
+  align-self: start;
+  --color-fg-muted: var(--color-fg-on-band);
+  --color-fg-faint: var(--color-fg-on-band);
+}
+[data-shell="public"] .messages-panel {
+  /* On duck egg the cream shell's teal, deep duck egg and soft duck egg go faint: darken them. */
+  --color-link: var(--teal-hover);
+  --color-link-hover: var(--navy);
+  --color-brand: var(--teal-hover);
+  --color-border: var(--egg-rule);
+  --color-border-strong: var(--border-on-light-strong);
+  --color-accent-soft: var(--egg-wash);
+}
+@media (max-width: 560px) {
+  .messages-panel {
+    padding: 20px 18px 18px;
+  }
+}
 /* Crew → Messages: the board as the crew see it */
 .message-row {
   padding: 14px 16px;

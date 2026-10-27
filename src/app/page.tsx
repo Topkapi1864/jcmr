@@ -86,7 +86,7 @@ export default async function HomePage({ searchParams }: { searchParams: Promise
       </section>
 
       <section className="section two-col" id="messages">
-        <div>
+        <div className="messages-panel">
           <h2 style={{ marginBottom: 6 }}>Messages from the crew</h2>
           <Updates initial={live} />
         </div>
