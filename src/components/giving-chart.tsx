@@ -72,10 +72,8 @@ export function GivingChart({ total, target, donations, opened, today }: { total
       {/* The blocks */}
       {blocks.map((b, i) => (
         <rect key={i} x={b.x} y={b.y} width={Math.max(2, nowX - b.x)} height={Math.max(0, b.y2 - b.y)} className="gc-block">
-          <title>
-            {b.d.name}
-            {b.d.amount !== null ? ` gave ${pounds(b.d.amount)}` : " gave"} on {fmtDate(b.d.at)} · {pounds(b.cum)} so far
-          </title>
+          {/* One string: the browser parses an SVG title's content as a single text node, so several fragments would not hydrate. */}
+          <title>{`${b.d.name}${b.d.amount !== null ? ` gave ${pounds(b.d.amount)}` : " gave"} on ${fmtDate(b.d.at)} · ${pounds(b.cum)} so far`}</title>
         </rect>
       ))}
       {extra > 0 && <rect x={lastX} y={py(total)} width={Math.max(2, nowX - lastX)} height={py(cum) - py(total)} className="gc-block gc-block-extra" />}
