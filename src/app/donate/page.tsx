@@ -8,7 +8,7 @@ import { fmtPounds, getDonateTotal, getDonations, PAGE_OPENED } from "@/lib/dona
 import { fmtTime, londonDate, TZ } from "@/lib/time";
 
 export const dynamic = "force-dynamic";
-export const generateMetadata = () => publicMetadata("Give");
+export const generateMetadata = () => publicMetadata("Charity");
 
 const DEFAULT_TARGET = 5000;
 const fmtDate = (iso: string) => new Intl.DateTimeFormat("en-GB", { timeZone: TZ, day: "numeric", month: "short" }).format(new Date(iso));
@@ -27,7 +27,7 @@ export default async function DonatePage({ searchParams }: { searchParams: Promi
     <PublicShell preview={g.preview} liveActive={g.liveActive}>
       <header className="section">
         <div className="dates">In Janet’s name</div>
-        <h1 className="page-title">Give</h1>
+        <h1 className="page-title">Charity</h1>
         <p className="prose">
           We are riding for the Royal British Legion, in Mum&rsquo;s name. Every gift goes straight to them through JustGiving, and your message sits on
           the donor wall there.

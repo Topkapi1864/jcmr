@@ -2,7 +2,7 @@ import type { Donation } from "@/lib/donate";
 import { RIDE_DAYS } from "@/lib/constants";
 import { TZ } from "@/lib/time";
 
-// The giving chart (Give page). One solid block per gift, each stacked on
+// The giving chart (Charity page). One solid block per gift, each stacked on
 // the one before, so the total builds up gift by gift from the day the
 // JustGiving page opened to the ride days. Pure SVG, server-rendered, no
 // script; hover a block for who gave and when.

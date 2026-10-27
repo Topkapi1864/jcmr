@@ -15,7 +15,7 @@ const PUBLIC_NAV = [
   { href: "/support-crew", label: "The crew" },
   { href: "/route", label: "The route" },
   { href: "/weather", label: "Weather" },
-  { href: "/donate", label: "Give" },
+  { href: "/donate", label: "Charity" },
 ];
 
 export function PublicShell({

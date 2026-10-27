@@ -4254,7 +4254,7 @@ select.st option {
   left: 0;
 }
 
-/* ---- Give: the charity, the chart, the words -------------------------- */
+/* ---- Charity: the Legion, the chart, the words -------------------------- */
 .give-grid {
   display: grid;
   grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);

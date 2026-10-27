@@ -96,7 +96,7 @@ Admin → Import CSV. Columns: `title,area,owner,due,status,waiting_on,note,last
 
 ## Facts recorded by the first build
 
-- JustGiving refuses framing (`x-frame-options: SAMEORIGIN`, 12 Oct 2026). The Give page uses a button plus a total fetched from the page's embedded data (hourly cache, admin override).
+- JustGiving refuses framing (`x-frame-options: SAMEORIGIN`, 12 Oct 2026). The Charity page uses a button plus a total fetched from the page's embedded data (hourly cache, admin override).
 - Live-map links are checked for framing server-side (`x-frame-options` / `frame-ancestors`) each time `/api/live` is read; `/live` frames what it can and shows a big button otherwise.
 
 ## Scripts

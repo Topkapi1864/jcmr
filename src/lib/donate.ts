@@ -8,7 +8,7 @@ import { nowIso } from "./time";
 //
 // The page is also served by JustGiving's public GraphQL endpoint (the same
 // one the page itself calls, no key needed, checked 26 Oct 2026). That gives
-// every gift with its date, which draws the bridge on the Give page. It is
+// every gift with its date, which draws the bridge on the Charity page. It is
 // cached for an hour alongside the total; if the endpoint ever changes shape
 // the page simply falls back to the total alone.
 
