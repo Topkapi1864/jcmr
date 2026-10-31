@@ -50,20 +50,36 @@ export async function savePlace(row: { id?: number; name: string; town: string; 
   else await db.insert(schema.sleepingPlaces).values(v);
 }
 
-/** Seed the places we already know about (idempotent by name). */
+/**
+ * Seed the places we already know about (idempotent by name), and carry old
+ * names forward: a place renamed here keeps its id, so nobody's nights move.
+ */
 export async function seedPlaces() {
   await ready();
   const want: { name: string; town: string; beds?: number; notes?: string; sort: number }[] = [
     { name: "Own home", town: "", notes: "Sleeping in your own bed", sort: 1 },
-    { name: "32 Castelnau (Gary's)", town: "London", notes: "Where Mum died and where the ride starts", sort: 10 },
-    { name: "Hotel in Barnes (TBC)", town: "London", notes: "If the house is full", sort: 11 },
+    { name: "Hammersmith (Gary's)", town: "London", notes: "Where Mum died and where the ride starts", sort: 10 },
+    { name: "The Bridge (Barnes)", town: "London", notes: "If the house is full", sort: 11 },
     { name: "Robyn (camper)", town: "", beds: 6, notes: "Six-berth motorhome — wherever she is parked that night", sort: 12 },
     { name: "Link Hotel", town: "Loughborough", notes: "Saturday night, provisional — 5am breakfast, bike storage", sort: 20 },
     { name: "Yasmin's Airbnb", town: "Loughborough", notes: "8 minutes from the Link Hotel", sort: 21 },
     { name: "Family in Yeadon", town: "Yeadon", notes: "Sunday night after the finish", sort: 30 },
-    { name: "Hotel in Yeadon / Leeds (TBC)", town: "Yeadon", sort: 31 },
+    { name: "The White Swan (Yeadon)", town: "Yeadon", sort: 31 },
     { name: "Not there that night", town: "", notes: "Not with the group", sort: 90 },
   ];
+  // Earlier names for places in the list above (old → current). Added 31 Oct 2026.
+  const renames: [string, string][] = [
+    ["32 Castelnau (Gary's)", "Hammersmith (Gary's)"],
+    ["Hotel in Barnes (TBC)", "The Bridge (Barnes)"],
+    ["Hotel in Yeadon / Leeds (TBC)", "The White Swan (Yeadon)"],
+  ];
+  for (const [from, to] of renames) {
+    const old = await db.select().from(schema.sleepingPlaces).where(eq(schema.sleepingPlaces.name, from)).get();
+    if (!old) continue;
+    const taken = await db.select().from(schema.sleepingPlaces).where(eq(schema.sleepingPlaces.name, to)).get();
+    if (taken) await db.update(schema.sleepingPlaces).set({ active: false }).where(eq(schema.sleepingPlaces.id, old.id));
+    else await db.update(schema.sleepingPlaces).set({ name: to }).where(eq(schema.sleepingPlaces.id, old.id));
+  }
   let added = 0;
   for (const w of want) {
     const ex = await db.select().from(schema.sleepingPlaces).where(eq(schema.sleepingPlaces.name, w.name)).get();

@@ -58,11 +58,9 @@ export default async function SleepingPage({ searchParams }: { searchParams: Pro
   const s = await requireCrew();
   const sp = await searchParams;
   const admin = s.role === "admin";
-  let placeList = await places();
-  if (placeList.length === 0) {
-    await seedPlaces();
-    placeList = await places();
-  }
+  // Idempotent and cheap: adds any place new to the known list and carries renames forward.
+  await seedPlaces();
+  const placeList = await places();
   const allPlaces = await places(true);
   const placeById = new Map(allPlaces.map((p) => [p.id, p]));
   // Fiona is an AI and does not need a bed.
