@@ -80,6 +80,20 @@ export const MIGRATIONS: string[] = [
      pinned INTEGER NOT NULL DEFAULT 0,
      deleted INTEGER NOT NULL DEFAULT 0
    )`,
+  `CREATE TABLE IF NOT EXISTS night_jobs (
+     id INTEGER PRIMARY KEY AUTOINCREMENT,
+     night TEXT NOT NULL,
+     person_id INTEGER NOT NULL REFERENCES people(id),
+     name TEXT NOT NULL,
+     note TEXT NOT NULL DEFAULT '',
+     checked INTEGER NOT NULL DEFAULT 0,
+     checked_by TEXT NOT NULL DEFAULT '',
+     checked_at TEXT NOT NULL DEFAULT '',
+     sort_order INTEGER NOT NULL DEFAULT 100,
+     added_by TEXT NOT NULL DEFAULT '',
+     added_at TEXT NOT NULL DEFAULT ''
+   )`,
+  `CREATE INDEX IF NOT EXISTS night_jobs_person_idx ON night_jobs(person_id, night)`,
   `CREATE TABLE IF NOT EXISTS items (
      id INTEGER PRIMARY KEY AUTOINCREMENT,
      title TEXT NOT NULL,

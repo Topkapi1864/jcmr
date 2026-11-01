@@ -4910,3 +4910,22 @@ select.st option {
   letter-spacing: var(--tracking-label);
   text-transform: uppercase;
 }
+
+/* ---- Night jobs (Crew → Jobs) ------------------------------------------- */
+/* The lists borrow the vehicle checklist's rows; --vc is the tick colour. */
+.jobs-list {
+  --vc: var(--color-ok);
+}
+.jobs-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 19rem), 1fr));
+  gap: 12px;
+  align-items: start;
+}
+.jobs-cell[data-done="true"] {
+  opacity: 0.75;
+}
+.jobs-cell .veh-checklist li {
+  padding-top: 2px;
+  padding-bottom: 2px;
+}

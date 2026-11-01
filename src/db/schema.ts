@@ -155,6 +155,34 @@ export const messages = sqliteTable("messages", {
   deleted: integer("deleted", { mode: "boolean" }).notNull().default(false),
 });
 
+// Night jobs: each rider's and crew member's own checklist of things to do on
+// the Friday night (before day 1) and the Saturday night (before day 2) —
+// charge the lights, charge the computer, and so on. One list per person per
+// night; the crew chief sees everyone's together.
+export const JOB_NIGHTS = ["fri", "sat"] as const;
+export type JobNight = (typeof JOB_NIGHTS)[number];
+
+export const nightJobs = sqliteTable(
+  "night_jobs",
+  {
+    id: integer("id").primaryKey({ autoIncrement: true }),
+    night: text("night", { enum: JOB_NIGHTS }).notNull(),
+    personId: integer("person_id")
+      .notNull()
+      .references(() => people.id),
+    name: text("name").notNull(),
+    note: text("note").notNull().default(""),
+    checked: integer("checked", { mode: "boolean" }).notNull().default(false),
+    checkedBy: text("checked_by").notNull().default(""),
+    checkedAt: text("checked_at").notNull().default(""),
+    sortOrder: integer("sort_order").notNull().default(100),
+    addedBy: text("added_by").notNull().default(""),
+    addedAt: text("added_at").notNull().default(""),
+  },
+  (t) => [index("night_jobs_person_idx").on(t.personId, t.night)],
+);
+export type NightJob = typeof nightJobs.$inferSelect;
+
 export const items = sqliteTable(
   "items",
   {

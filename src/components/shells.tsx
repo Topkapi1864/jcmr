@@ -83,6 +83,7 @@ const CREW_NAV = [
   { href: "/crew/due", label: "By due" },
   { href: "/crew/people", label: "Crew" },
   { href: "/crew/kit", label: "Kit" },
+  { href: "/crew/jobs", label: "Jobs" },
   { href: "/crew/sleeping", label: "Sleeping" },
   { href: "/crew/vehicles", label: "Vehicles" },
   { href: "/crew/route", label: "Route" },
@@ -92,7 +93,7 @@ const CREW_NAV = [
 ];
 // Phone tab bar: four fixed tabs, then "More" for every section.
 const TAB_FEATURED = ["/crew", "/crew/kit", "/crew/people", "/crew/route"];
-const SECTION_ROOTS = ["/crew/admin", "/crew/people", "/crew/kit", "/crew/sleeping", "/crew/vehicles", "/crew/route", "/crew/messages"];
+const SECTION_ROOTS = ["/crew/admin", "/crew/people", "/crew/kit", "/crew/jobs", "/crew/sleeping", "/crew/vehicles", "/crew/route", "/crew/messages"];
 
 export function CrewShell({
   children,
