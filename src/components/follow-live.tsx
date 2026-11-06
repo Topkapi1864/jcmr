@@ -114,11 +114,11 @@ export function FollowLive({ initial, showLinks }: { initial: LivePayload; showL
             <span>{data.labels.finish}</span>
           </div>
         </div>
-        {framed ? (
+        {framed && !data.tracking.riders.length ? (
           <iframe key={frameKey} className="live-frame" src={framed.url} title={`Live map — ${framed.label}`} />
         ) : data.hasRoute ? (
           <div className="live-frame live-map">
-            <RouteMap />
+            <RouteMap riders={data.tracking.riders} />
           </div>
         ) : (
           <div className="live-frame live-map-empty">
@@ -141,8 +141,12 @@ export function FollowLive({ initial, showLinks }: { initial: LivePayload; showL
         )}
       </section>
       <p className="xs muted" style={{ marginTop: 10 }}>
-        {data.links.length ? "Positions come from the riders’ own live-tracking links. " : ""}
-        The crew post a line and the miles at every stop.
+        {data.tracking.riders.length
+          ? `The riders’ positions come from their phones, about once a minute${data.tracking.shown && data.mileFrom === "phones" ? ", and so do the miles" : ""}. `
+          : data.links.length
+            ? "Positions come from the riders’ own live-tracking links. "
+            : ""}
+        The crew post a line{data.mileFrom === "phones" ? "" : " and the miles"} at every stop.
       </p>
     </>
   );

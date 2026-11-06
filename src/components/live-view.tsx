@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import type { LivePayload } from "@/lib/live";
+import { RouteMap } from "./route-map";
 import { JUSTGIVING_URL } from "@/lib/constants";
 
 // §4.6. One component, two forms: the phone page and the TV page. It polls
@@ -99,8 +100,14 @@ export function LiveView({ initial, tv }: { initial: LivePayload; tv: boolean })
               {hhmm(data.status.postedAt)} · {data.status.postedBy}
             </div>
           )}
-          {framed && <iframe key={frameKey} className="tv-frame" src={framed.url} title={`Live map — ${framed.label}`} />}
-          {!framed && primary && (
+          {data.tracking.riders.length > 0 ? (
+            <div className="tv-frame live-map">
+              <RouteMap riders={data.tracking.riders} />
+            </div>
+          ) : (
+            framed && <iframe key={frameKey} className="tv-frame" src={framed.url} title={`Live map — ${framed.label}`} />
+          )}
+          {!framed && primary && !data.tracking.riders.length && (
             <div className="tv-sub">
               Live map (won&rsquo;t frame — open in another tab): <a href={primary.url}>{primary.label}</a>
             </div>

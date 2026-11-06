@@ -67,7 +67,10 @@ export default async function CrewLivePage({ searchParams }: { searchParams: Pro
 
       <section className="card stack-sm">
         <h2>Today&rsquo;s live-map link</h2>
-        <p className="small muted">Paste the LiveTrack / Wahoo / Beacon link from the rider&rsquo;s phone. Yesterday&rsquo;s links can be switched off below.</p>
+        <p className="small muted">
+          The riders&rsquo; positions on the public map come from their phones (<Link href="/crew/track">Tracking</Link>). A LiveTrack / Wahoo / Beacon link pasted here is the fallback, and the link people can open for
+          speed and heart rate. Yesterday&rsquo;s links can be switched off below.
+        </p>
         <form action={addTrackerLink} className="stack-sm">
           <label className="field">
             <span>Link</span>

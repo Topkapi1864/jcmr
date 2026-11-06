@@ -3773,6 +3773,90 @@ select.st option {
   opacity: 0.55;
   border-style: dashed;
 }
+/* People: riders are navy discs with a coloured ring, crew the ring alone. */
+.veh-pin-inner[data-kind="rider"] {
+  background: var(--navy);
+  color: var(--cream-ink);
+  border-color: var(--vc);
+  font-size: var(--text-xs);
+  letter-spacing: 0.02em;
+}
+.veh-pin-inner[data-kind="crew"] {
+  background: var(--white);
+  color: var(--navy);
+  border-color: var(--vc);
+  font-size: var(--text-xs);
+  width: 26px;
+  height: 26px;
+}
+
+.rider-pin {
+  --vc: var(--duck-egg);
+}
+.tv-frame.live-map {
+  height: 50vh;
+}
+
+/* Tracking page */
+.track-url {
+  display: block;
+  padding: 10px 12px;
+  border-radius: var(--radius-md);
+  background: var(--color-bg-sunken);
+  border: 1px solid var(--color-border);
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  word-break: break-all;
+  user-select: all;
+}
+.track-steps {
+  margin: 0;
+  padding-left: 1.2em;
+}
+.track-steps li {
+  margin: 6px 0;
+}
+.track-steps b {
+  font-weight: var(--weight-bold);
+}
+.track-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--text-sm);
+}
+.track-table th,
+.track-table td {
+  text-align: left;
+  padding: 7px 8px;
+  border-bottom: 1px solid var(--color-border);
+  vertical-align: top;
+}
+.track-table th {
+  font-size: var(--text-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--color-fg-muted);
+  font-weight: var(--weight-bold);
+}
+.track-dot {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: var(--radius-pill);
+  background: var(--vc);
+  margin-right: 6px;
+  vertical-align: middle;
+}
+.track-live {
+  color: var(--color-live);
+  font-weight: var(--weight-bold);
+}
+.track-stale {
+  color: var(--color-amber);
+}
+.track-none {
+  color: var(--color-fg-muted);
+}
 
 /* Who's in which */
 .veh-warn {

@@ -6,6 +6,8 @@ import { RIDE_DAYS } from "./public";
 import { londonDate } from "./time";
 import { gpxExists } from "./gpx";
 import { listMessages } from "./messages";
+import { ridersLive, trackingPublic, type RiderLive } from "./tracking";
+import { getSession } from "./auth";
 
 export type LivePayload = {
   now: string;
@@ -27,6 +29,10 @@ export type LivePayload = {
   // lines (Crew → Live) in one feed, pinned first, then newest first.
   updates: LiveUpdate[];
   riders: { id: number; name: string; bio: string; link: string | null }[];
+  // The riders' phones (Crew → Tracking). Empty for the public until the admin turns the public map on;
+  // crew sessions always get them. `mileFrom` says where the headline mile came from.
+  tracking: { riders: RiderLive[]; at: string | null; shown: boolean };
+  mileFrom: "phones" | "status" | "none";
 };
 
 /** How a poster is tagged on the public site: "Gary, rider" or "Yasmin, crew". */
@@ -110,7 +116,14 @@ export async function livePayload(): Promise<LivePayload> {
   const overnightMile = d1?.miles ?? Math.round(totalMiles / 2);
   const recent = await db.select().from(schema.liveStatus).orderBy(desc(schema.liveStatus.id)).limit(20).all();
   const withMile = recent.find((r) => r.mile != null);
-  const mile = Math.min(totalMiles, Math.max(0, withMile?.mile ?? 0));
+  // On the ride days the riders' phones give the mile when they have a fresh fix on the route;
+  // the crew's typed mile is the fallback, and the only source before the day.
+  const phones = await ridersLive();
+  const crew = await getSession().then((x) => !!x).catch(() => false);
+  const showPhones = crew || (await trackingPublic());
+  const phoneMile = day && phones.mile != null && (!withMile || !phones.at || phones.at >= withMile.postedAt) ? phones.mile : null;
+  const mileFrom: LivePayload["mileFrom"] = phoneMile != null ? "phones" : withMile ? "status" : "none";
+  const mile = Math.min(totalMiles, Math.max(0, phoneMile ?? withMile?.mile ?? 0));
   const msPerDay = 86_400_000;
   const daysToGo = Math.max(0, Math.ceil((Date.parse(RIDE_DAYS[0] + "T07:00:00Z") - Date.now()) / msPerDay));
   const phase: LivePayload["phase"] = today < RIDE_DAYS[0] ? "pre" : today > RIDE_DAYS[1] || mile >= totalMiles ? "finished" : day === 1 && mile >= overnightMile && recent[0]?.text ? "overnight" : "riding";
@@ -141,6 +154,8 @@ export async function livePayload(): Promise<LivePayload> {
     hasRoute: gpxExists(1) || gpxExists(2),
     updates,
     riders: riderRows.map((r) => ({ id: r.id, name: r.displayName, bio: r.bioMd.split(/\n/)[0].replace(/[*_#]/g, "").slice(0, 90), link: linkFor(r.id) })),
+    tracking: { riders: showPhones ? phones.riders : [], at: phones.at, shown: showPhones },
+    mileFrom,
     now: new Date().toISOString(),
     day,
     mode: s["tracker.mode"] === "all" ? "all" : "single",

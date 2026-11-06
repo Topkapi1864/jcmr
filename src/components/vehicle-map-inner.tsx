@@ -4,17 +4,14 @@ import { useEffect, useRef, useState } from "react";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 
+type Last = { lat: number; lng: number; at: string; accuracy: number | null; speed: number | null; battery: number | null; source: string; by: string };
 type Feed = {
   now: string;
-  vehicles: {
-    id: number;
-    name: string;
-    colour: string;
-    registration: string;
-    last: { lat: number; lng: number; at: string; accuracy: number | null; speed: number | null; battery: number | null; source: string; by: string } | null;
-    trail: [number, number][];
-  }[];
+  vehicles: { id: number; name: string; colour: string; registration: string; last: Last | null; trail: [number, number][] }[];
+  people: { id: number; name: string; isRider: boolean; colour: string; last: Last | null; mile: number | null; trail: [number, number][] }[];
 };
+
+const STALE_MS = 20 * 60_000;
 
 const REFRESH_MS = 30_000;
 
@@ -73,32 +70,46 @@ export default function VehicleMapInner({ vehicleId }: { vehicleId?: number }) {
 
     async function load() {
       try {
-        const r = await fetch(`/api/vehicles/positions${vehicleId ? `?vehicle=${vehicleId}` : ""}`, { cache: "no-store" });
+        const r = await fetch(`/api/positions${vehicleId ? `?vehicle=${vehicleId}` : ""}`, { cache: "no-store" });
         if (!r.ok) throw new Error(String(r.status));
         const feed = (await r.json()) as Feed;
         if (stopped) return;
         live.clearLayers();
         const pts: L.LatLngExpression[] = [];
-        for (const v of feed.vehicles) {
-          if (!v.last) continue;
+        type Thing = { kind: "vehicle" | "rider" | "crew"; name: string; colour: string; last: Last; trail: [number, number][]; sub: string; mile: number | null };
+        const things: Thing[] = [
+          ...feed.vehicles.filter((v) => v.last).map((v) => ({ kind: "vehicle" as const, name: v.name, colour: v.colour, last: v.last!, trail: v.trail, sub: v.registration, mile: null })),
+          ...(feed.people ?? []).filter((p) => p.last).map((p) => ({ kind: p.isRider ? ("rider" as const) : ("crew" as const), name: p.name, colour: p.colour, last: p.last!, trail: p.trail, sub: p.isRider ? "rider" : "crew", mile: p.mile })),
+        ];
+        // Stale ones first so the live pins draw on top.
+        things.sort((a, b) => Date.parse(a.last.at) - Date.parse(b.last.at));
+        for (const v of things) {
           const col = resolve(v.colour, el!);
-          if (v.trail.length > 1) L.polyline(v.trail, { color: col, weight: 4, opacity: 0.75 }).addTo(live);
+          if (v.trail.length > 1) L.polyline(v.trail, { color: col, weight: v.kind === "vehicle" ? 4 : 3, opacity: 0.7 }).addTo(live);
           if (v.last.accuracy && v.last.accuracy > 30 && v.last.accuracy < 5000) {
             L.circle([v.last.lat, v.last.lng], { radius: v.last.accuracy, color: col, weight: 1, fillOpacity: 0.08 }).addTo(live);
           }
-          const stale = Date.now() - Date.parse(v.last.at) > 15 * 60_000;
+          const stale = Date.now() - Date.parse(v.last.at) > STALE_MS;
+          const initials = v.kind === "vehicle" ? v.name.slice(0, 1).toUpperCase() : v.name.slice(0, 2);
           const icon = L.divIcon({
             className: "veh-pin",
-            html: `<span class="veh-pin-inner" data-stale="${stale}" style="--vc:${esc(v.colour)}">${esc(v.name.slice(0, 1).toUpperCase())}</span>`,
+            html: `<span class="veh-pin-inner" data-kind="${v.kind}" data-stale="${stale}" style="--vc:${esc(v.colour)}">${esc(initials)}</span>`,
             iconSize: [30, 30],
             iconAnchor: [15, 15],
           });
-          const extra = [v.last.speed != null ? `${Math.round(v.last.speed * 2.237)} mph` : "", v.last.battery != null ? `battery ${Math.round(v.last.battery)}%` : ""].filter(Boolean).join(" · ");
-          L.marker([v.last.lat, v.last.lng], { icon, zIndexOffset: stale ? 0 : 500 })
+          const extra = [
+            v.mile != null ? `mile ${v.mile}` : "",
+            v.last.speed != null && v.last.speed > 0.5 ? `${Math.round(v.last.speed * 2.237)} mph` : "",
+            v.last.battery != null ? `battery ${Math.round(v.last.battery)}%` : "",
+          ]
+            .filter(Boolean)
+            .join(" · ");
+          const via = v.kind === "vehicle" ? (v.last.source === "pasted" ? `pasted by ${v.last.by}` : v.last.source === "phone" ? `${v.last.by}'s phone` : "tracker") : "phone";
+          L.marker([v.last.lat, v.last.lng], { icon, zIndexOffset: stale ? 0 : v.kind === "vehicle" ? 500 : 600 })
             .bindTooltip(`<b>${esc(v.name)}</b> · ${ago(v.last.at)}`, { direction: "top", offset: [0, -14] })
             .bindPopup(
-              `<div class="stop-popup"><span class="stop-popup-title">${esc(v.name)}${v.registration ? ` · ${esc(v.registration)}` : ""}</span>` +
-                `<span>${ago(v.last.at)} · ${esc(v.last.source === "pasted" ? `pasted by ${v.last.by}` : v.last.source === "phone" ? `${v.last.by}'s phone` : "tracker")}</span>` +
+              `<div class="stop-popup"><span class="stop-popup-title">${esc(v.name)}${v.sub ? ` · ${esc(v.sub)}` : ""}</span>` +
+                `<span>${ago(v.last.at)} · ${esc(via)}</span>` +
                 (extra ? `<span class="stop-popup-notes">${esc(extra)}</span>` : "") +
                 `<a href="https://www.google.com/maps/dir/?api=1&destination=${v.last.lat},${v.last.lng}" target="_blank" rel="noopener">Directions to here</a></div>`,
             )

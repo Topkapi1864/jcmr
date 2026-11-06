@@ -255,6 +255,19 @@ export const MIGRATIONS: string[] = [
      at TEXT NOT NULL
    )`,
   `CREATE INDEX IF NOT EXISTS vehicle_positions_vehicle_idx ON vehicle_positions(vehicle_id, at)`,
+  `CREATE TABLE IF NOT EXISTS people_positions (
+     id INTEGER PRIMARY KEY AUTOINCREMENT,
+     person_id INTEGER NOT NULL REFERENCES people(id),
+     lat REAL NOT NULL,
+     lng REAL NOT NULL,
+     accuracy REAL,
+     speed REAL,
+     battery REAL,
+     source TEXT NOT NULL DEFAULT 'tracker',
+     by TEXT NOT NULL DEFAULT '',
+     at TEXT NOT NULL
+   )`,
+  `CREATE INDEX IF NOT EXISTS people_positions_person_idx ON people_positions(person_id, at)`,
   `CREATE TABLE IF NOT EXISTS audit (
      id INTEGER PRIMARY KEY AUTOINCREMENT,
      actor TEXT NOT NULL,
@@ -264,4 +277,4 @@ export const MIGRATIONS: string[] = [
 ];
 
 // Columns added after first release. Each is tried once; "duplicate column" is fine.
-export const ALTERS: string[] = [`ALTER TABLE live_status ADD COLUMN mile REAL`, `ALTER TABLE kit_catalogue ADD COLUMN link TEXT NOT NULL DEFAULT ''`, `ALTER TABLE kit_catalogue ADD COLUMN recommended TEXT NOT NULL DEFAULT ''`];
+export const ALTERS: string[] = [`ALTER TABLE live_status ADD COLUMN mile REAL`, `ALTER TABLE kit_catalogue ADD COLUMN link TEXT NOT NULL DEFAULT ''`, `ALTER TABLE kit_catalogue ADD COLUMN recommended TEXT NOT NULL DEFAULT ''`, `ALTER TABLE people ADD COLUMN tracker_token TEXT NOT NULL DEFAULT ''`];

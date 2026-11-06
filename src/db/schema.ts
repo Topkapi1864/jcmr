@@ -66,6 +66,8 @@ export const people = sqliteTable("people", {
   email: text("email"),
   active: integer("active", { mode: "boolean" }).notNull().default(true),
   sortOrder: integer("sort_order").notNull().default(100),
+  /** The secret in this person's own tracking address (/api/track/<token>); blank until first asked for. */
+  trackerToken: text("tracker_token").notNull().default(""),
 });
 
 export const riders = sqliteTable("riders", {
@@ -476,6 +478,28 @@ export const vehiclePositions = sqliteTable(
   },
   (t) => [index("vehicle_positions_vehicle_idx").on(t.vehicleId, t.at)],
 );
+
+/** A rider's or crew member's phone positions (OwnTracks and the like), newest last. Pruned to a trail per person. */
+export const peoplePositions = sqliteTable(
+  "people_positions",
+  {
+    id: integer("id").primaryKey({ autoIncrement: true }),
+    personId: integer("person_id")
+      .notNull()
+      .references(() => people.id),
+    lat: real("lat").notNull(),
+    lng: real("lng").notNull(),
+    accuracy: real("accuracy"), // metres
+    speed: real("speed"), // m/s
+    battery: real("battery"), // 0–100, if the phone says
+    source: text("source", { enum: POSITION_SOURCES }).notNull().default("tracker"),
+    by: text("by").notNull().default(""),
+    at: text("at").notNull(),
+  },
+  (t) => [index("people_positions_person_idx").on(t.personId, t.at)],
+);
+
+export type PersonPosition = typeof peoplePositions.$inferSelect;
 
 export type Vehicle = typeof vehicles.$inferSelect;
 export type VehicleCrewRow = typeof vehicleCrew.$inferSelect;
