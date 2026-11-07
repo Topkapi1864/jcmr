@@ -39,3 +39,12 @@ function withLinks(para: string): ReactNode[] {
   });
   return out;
 }
+
+/** The picture on a message: fills the column, tap to open it full size. */
+export function MessagePhoto({ src, className = "message-photo" }: { src: string; className?: string }) {
+  return (
+    <a href={src} target="_blank" rel="noopener" className={className}>
+      <img src={src} alt="A picture posted with this message" loading="lazy" decoding="async" />
+    </a>
+  );
+}

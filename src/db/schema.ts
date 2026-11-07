@@ -155,6 +155,7 @@ export const messages = sqliteTable("messages", {
   editedAt: text("edited_at"),
   pinned: integer("pinned", { mode: "boolean" }).notNull().default(false),
   deleted: integer("deleted", { mode: "boolean" }).notNull().default(false),
+  photo: text("photo"), // one picture, a resized JPEG as a data: URL — served by /api/messages/photo/<id>
 });
 
 // Night jobs: each rider's and crew member's own checklist of things to do on

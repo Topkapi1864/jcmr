@@ -15,10 +15,15 @@ function bump() {
 
 export async function postMessageAction(form: FormData) {
   const s = await requireCrew();
-  const id = await postMessage(s, String(form.get("body") ?? ""));
+  let id: number | null;
+  try {
+    id = await postMessage(s, String(form.get("body") ?? ""), String(form.get("photo") ?? ""));
+  } catch {
+    redirect("/crew/messages?badphoto=1");
+  }
   if (id === null) redirect("/crew/messages?empty=1");
   const m = await getMessage(id);
-  await journal(s.name, `messages: posted #${id} "${messageSummary(m?.body ?? "")}"`);
+  await journal(s.name, `messages: posted #${id}${m?.hasPhoto ? " with a picture" : ""} "${messageSummary(m?.body ?? "")}"`);
   bump();
   redirect("/crew/messages?posted=1");
 }
@@ -26,9 +31,17 @@ export async function postMessageAction(form: FormData) {
 export async function updateMessageAction(form: FormData) {
   const s = await requireCrew();
   const id = Number(form.get("id"));
-  const ok = await updateMessage(s, id, String(form.get("body") ?? ""));
-  if (!ok) redirect(`/crew/messages/${id}?denied=1`);
-  await journal(s.name, `messages: edited #${id}`);
+  const newPhoto = String(form.get("photo") ?? "");
+  const photo = form.get("removePhoto") === "on" ? null : newPhoto ? newPhoto : undefined;
+  let r: Awaited<ReturnType<typeof updateMessage>>;
+  try {
+    r = await updateMessage(s, id, String(form.get("body") ?? ""), photo);
+  } catch {
+    redirect(`/crew/messages/${id}?badphoto=1`);
+  }
+  if (r === "denied") redirect(`/crew/messages/${id}?denied=1`);
+  if (r === "empty") redirect(`/crew/messages/${id}?empty=1`);
+  await journal(s.name, `messages: edited #${id}${photo === null ? " (picture removed)" : photo ? " (new picture)" : ""}`);
   bump();
   redirect("/crew/messages?saved=1");
 }

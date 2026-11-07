@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import type { LivePayload } from "@/lib/live";
 import { RouteMap } from "./route-map";
-import { MessageBody } from "./message-body";
+import { MessageBody, MessagePhoto } from "./message-body";
 
 // The "Follow the Ride" live card from the design handoff: status line, big
 // miles, where they are, next stop + ETA, progress bar with the overnight
@@ -177,7 +177,10 @@ export function Updates({ initial, fold = 6 }: { initial: LivePayload; fold?: nu
           </div>
           <div>
             {m.kind === "message" ? (
-              <MessageBody text={m.text} className="text" />
+              <>
+                {m.text && <MessageBody text={m.text} className="text" />}
+                {m.photo && <MessagePhoto src={m.photo} />}
+              </>
             ) : (
               <div className="text">
                 {m.place && <b>{m.place} — </b>}

@@ -1687,6 +1687,26 @@ details.done-group summary {
 .message-text a {
   overflow-wrap: anywhere;
 }
+/* A picture posted with a message, on the public board and in Crew → Messages */
+.message-photo {
+  display: block;
+  margin-top: 10px;
+  margin-bottom: 6px;
+}
+.message-photo img {
+  display: block;
+  width: auto;
+  height: auto;
+  max-width: min(100%, 34rem);
+  max-height: 32rem;
+  border-radius: var(--radius-md);
+}
+.message-photo-preview {
+  display: block;
+  max-width: 100%;
+  max-height: 20rem;
+  border-radius: var(--radius-md);
+}
 .family-words {
   border: 1px dashed var(--color-border-strong);
   border-radius: var(--radius-lg);

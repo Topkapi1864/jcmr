@@ -1,8 +1,9 @@
 import Link from "next/link";
 import { requireCrew } from "@/lib/auth";
-import { canEditMessage, listMessages, MESSAGE_MAX } from "@/lib/messages";
+import { canEditMessage, listMessages, MESSAGE_MAX, messagePhotoUrl } from "@/lib/messages";
 import { fmtWhen } from "@/lib/time";
-import { MessageBody } from "@/components/message-body";
+import { MessageBody, MessagePhoto } from "@/components/message-body";
+import { MessagePhotoInput } from "@/components/message-photo-input";
 import { postMessageAction } from "./actions";
 
 export default async function CrewMessagesPage({ searchParams }: { searchParams: Promise<Record<string, string | undefined>> }) {
@@ -22,17 +23,20 @@ export default async function CrewMessagesPage({ searchParams }: { searchParams:
       </div>
 
       {notice && <p className="notice">{notice}</p>}
-      {sp.empty && <p className="error">Nothing to post — the message was empty.</p>}
+      {sp.empty && <p className="error">Nothing to post. Write something, add a picture, or both.</p>}
+      {sp.badphoto && <p className="error">That picture didn&rsquo;t come through. Try again, or try a different one.</p>}
 
       <section className="card stack-sm">
         <h2>Post a message</h2>
         <form action={postMessageAction} className="stack-sm">
           <label className="field">
             <span>Your message</span>
-            <textarea name="body" required rows={7} maxLength={MESSAGE_MAX} placeholder="A blank line starts a new paragraph. Web addresses become links." />
+            <textarea name="body" rows={7} maxLength={MESSAGE_MAX} placeholder="A blank line starts a new paragraph. Web addresses become links." />
           </label>
+          {/* Keyed on the newest post, so the picker clears once a message has gone up. */}
+          <MessagePhotoInput key={posts.reduce((n, m) => Math.max(n, m.id), 0)} />
           <p className="xs muted" style={{ margin: 0 }}>
-            Up to {MESSAGE_MAX.toLocaleString("en-GB")} characters. You can edit or remove it afterwards.
+            Words, a picture, or both. Up to {MESSAGE_MAX.toLocaleString("en-GB")} characters and one picture. You can edit or remove it afterwards.
           </p>
           <button className="btn btn-primary" type="submit" style={{ width: "100%" }}>
             Post as {s.name}
@@ -59,7 +63,8 @@ export default async function CrewMessagesPage({ searchParams }: { searchParams:
                     </Link>
                   )}
                 </div>
-                <MessageBody text={m.body} className="message-text" />
+                {m.body && <MessageBody text={m.body} className="message-text" />}
+                {m.hasPhoto && <MessagePhoto src={messagePhotoUrl(m)!} />}
               </li>
             ))}
           </ul>

@@ -78,7 +78,8 @@ export const MIGRATIONS: string[] = [
      edited_by TEXT,
      edited_at TEXT,
      pinned INTEGER NOT NULL DEFAULT 0,
-     deleted INTEGER NOT NULL DEFAULT 0
+     deleted INTEGER NOT NULL DEFAULT 0,
+     photo TEXT
    )`,
   `CREATE TABLE IF NOT EXISTS night_jobs (
      id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -277,4 +278,4 @@ export const MIGRATIONS: string[] = [
 ];
 
 // Columns added after first release. Each is tried once; "duplicate column" is fine.
-export const ALTERS: string[] = [`ALTER TABLE live_status ADD COLUMN mile REAL`, `ALTER TABLE kit_catalogue ADD COLUMN link TEXT NOT NULL DEFAULT ''`, `ALTER TABLE kit_catalogue ADD COLUMN recommended TEXT NOT NULL DEFAULT ''`, `ALTER TABLE people ADD COLUMN tracker_token TEXT NOT NULL DEFAULT ''`];
+export const ALTERS: string[] = [`ALTER TABLE live_status ADD COLUMN mile REAL`, `ALTER TABLE kit_catalogue ADD COLUMN link TEXT NOT NULL DEFAULT ''`, `ALTER TABLE kit_catalogue ADD COLUMN recommended TEXT NOT NULL DEFAULT ''`, `ALTER TABLE people ADD COLUMN tracker_token TEXT NOT NULL DEFAULT ''`, `ALTER TABLE messages ADD COLUMN photo TEXT`];
