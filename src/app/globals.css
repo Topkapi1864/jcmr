@@ -486,6 +486,24 @@ select {
   font-size: var(--text-sm);
   line-height: var(--leading-normal);
 }
+/* Crew list (Crew → People): a small avatar beside each name, and the picture on a person's page. */
+.avatar-sm {
+  width: 34px;
+  height: 34px;
+  font-size: 12px;
+}
+.crew-who {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.crew-photo {
+  display: block;
+  width: min(100%, 18rem);
+  height: auto;
+  border-radius: var(--radius-lg);
+  margin-bottom: 10px;
+}
 
 /* The riders page: four profiles in a 2×2, each with a photo slot.
    The photo floats top-left and the bio wraps round it, so the text gets

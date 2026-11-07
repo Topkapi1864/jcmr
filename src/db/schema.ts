@@ -352,6 +352,19 @@ export const crewDetails = sqliteTable("crew_details", {
 });
 export type CrewDetails = typeof crewDetails.$inferSelect;
 
+/** A picture of each rider or crew member (one per person), kept apart from
+ *  people and crew_details so the lists never carry the image. A resized JPEG
+ *  as a data: URL, served by /api/people/photo/<id>. */
+export const peoplePhotos = sqliteTable("people_photos", {
+  personId: integer("person_id")
+    .primaryKey()
+    .references(() => people.id),
+  photo: text("photo").notNull(),
+  updatedBy: text("updated_by").notNull(),
+  updatedAt: text("updated_at").notNull(),
+});
+export type PersonPhoto = typeof peoplePhotos.$inferSelect;
+
 // ---- Sleeping arrangements -----------------------------------------------
 
 export const NIGHTS = ["thu", "fri", "sat", "sun"] as const;

@@ -4,6 +4,7 @@ import { requireCrew } from "@/lib/auth";
 import { canEditMember, crewMember } from "@/lib/people";
 import { trackerTokenFor } from "@/lib/tracking";
 import { trackUrlBase } from "@/lib/track-url";
+import { possessive } from "@/lib/util";
 import { TrackerSetup } from "@/components/tracker-setup";
 import { VehicleMap } from "@/components/vehicle-map";
 
@@ -21,7 +22,7 @@ export default async function TrackPersonPage({ params, searchParams }: { params
         <Link href="/crew/track" className="small">
           ← Tracking
         </Link>
-        <p className="muted">Only {who.shortName} or an admin can see {who.shortName}&rsquo;s tracking address.</p>
+        <p className="muted">Only {who.shortName} or an admin can see {possessive(who.shortName)} tracking address.</p>
       </div>
     );
   }

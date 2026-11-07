@@ -57,6 +57,10 @@ The board on the home page (`#messages`) and on `/live`. Anyone with a crew sess
 
 `/support-crew`, "The crew" in the top nav (`/crew` is the board's door, so the public page lives here). For now a holding card, "To be announced"; the names and roles replace it once the crew is finalised. The footer's link to the board reads "Crew sign-in" so the two don't collide.
 
+## The crew (the board)
+
+**Crew → People** (`/crew/people`): one record per rider and crew member — role on the ride, agreed/briefed, mobile, first aid, emergency contact and so on, in `crew_details`. Each person can add a **picture** of themselves on their own page (admins for anyone): shrunk in the browser like a message picture, kept in `people_photos`, served by `/api/people/photo/<id>?v=<updated at>` to crew sessions only, shown as the avatar on the roster and at the top of their page. Nothing public uses the pictures yet; opening that route up is a decision for when the public crew page is built. Who can sign in at all, and who is an admin, is Admin → People; someone who leaves the crew is made inactive there, not deleted.
+
 ## Vehicles
 
 **Crew → Vehicles** (`/crew/vehicles`). Seeded with the Follow vehicle, the Motorhome, the Crew chief vehicle and an Extra; admins add or retire more.

@@ -1,8 +1,19 @@
 import Link from "next/link";
 import { AGREED, AGREED_LABELS } from "@/db/schema";
 import { requireCrew } from "@/lib/auth";
-import { crewMembers } from "@/lib/people";
+import { crewMembers, photoUrl } from "@/lib/people";
 import { quickCrewFlag } from "./actions";
+
+/** "Steve Brook (Brooky)" → "SB"; "The Dogs (Finn, Pluto and Eris)" → "TD". */
+function initials(name: string) {
+  return name
+    .replace(/\(.*?\)/g, "")
+    .split(/\s+/)
+    .filter(Boolean)
+    .slice(0, 2)
+    .map((w) => w[0].toUpperCase())
+    .join("");
+}
 
 export const dynamic = "force-dynamic";
 
@@ -70,10 +81,21 @@ export default async function PeopleRoster() {
             {crew.map((p) => (
               <tr key={p.id} id={`p-${p.id}`} style={p.id === s.pid ? { background: "var(--color-bg-sunken)" } : undefined}>
                 <td>
-                  <Link href={`/crew/people/${p.id}`}>
-                    <b>{p.name}</b>
-                  </Link>
-                  {p.d.availability && <div className="xs muted">{p.d.availability}</div>}
+                  <div className="crew-who">
+                    {photoUrl(p) ? (
+                      <img className="avatar avatar-sm" src={photoUrl(p)!} alt="" />
+                    ) : (
+                      <div className="avatar avatar-sm" aria-hidden="true">
+                        {initials(p.name)}
+                      </div>
+                    )}
+                    <div>
+                      <Link href={`/crew/people/${p.id}`}>
+                        <b>{p.name}</b>
+                      </Link>
+                      {p.d.availability && <div className="xs muted">{p.d.availability}</div>}
+                    </div>
+                  </div>
                 </td>
                 <td>{p.isRider ? <span className="badge">Rider</span> : p.d.crewRole || <span className="muted">—</span>}</td>
                 <td>

@@ -2,8 +2,10 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { AGREED, AGREED_LABELS, CREW_ROLE_SUGGESTIONS } from "@/db/schema";
 import { requireCrew } from "@/lib/auth";
-import { ageOnRide, canEditMember, crewMember } from "@/lib/people";
+import { ageOnRide, canEditMember, crewMember, photoUrl } from "@/lib/people";
 import { fmtWhen } from "@/lib/time";
+import { possessive } from "@/lib/util";
+import { MessagePhotoInput } from "@/components/message-photo-input";
 import { saveCrewDetails } from "../actions";
 
 export const dynamic = "force-dynamic";
@@ -52,6 +54,7 @@ export default async function PersonPage({
   const editable = canEditMember(s, p.id);
   const d = p.d;
   const age = ageOnRide(d.dob);
+  const photo = photoUrl(p);
 
   return (
     <div className="stack" style={{ maxWidth: "44rem" }}>
@@ -71,6 +74,7 @@ export default async function PersonPage({
       {sp.saved && <p className="notice">Saved.</p>}
 
       <section className="card">
+        {photo && <img className="crew-photo" src={photo} alt={`Picture of ${p.shortName}`} />}
         <Row
           label="Role on the ride"
           value={p.isRider ? "Rider" : d.crewRole}
@@ -111,7 +115,7 @@ export default async function PersonPage({
         <form action={saveCrewDetails} className="card stack-sm">
           <input type="hidden" name="personId" value={p.id} />
           <h3>
-            {p.id === s.pid ? "Your details" : `Edit ${p.shortName}'s details`}
+            {p.id === s.pid ? "Your details" : `Edit ${possessive(p.shortName)} details`}
           </h3>
           {p.isRider && (
             <p className="muted small">
@@ -252,6 +256,13 @@ export default async function PersonPage({
             <span>Anything else we should know</span>
             <textarea name="notes" defaultValue={d.notes} rows={3} />
           </label>
+          <div className="stack-sm">
+            <div className="label">{p.id === s.pid ? "A picture of you" : `A picture of ${p.shortName}`}</div>
+            <p className="xs muted" style={{ margin: 0 }}>
+              Shown beside the name on the crew list. Crew only for now; nothing on the public site uses it yet.
+            </p>
+            <MessagePhotoInput current={photo} />
+          </div>
           <div>
             <button className="btn btn-primary" type="submit">
               Save

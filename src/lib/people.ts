@@ -1,10 +1,14 @@
 import { eq } from "drizzle-orm";
 import { db, ready, schema } from "@/db/client";
-import { AGREED, type Agreed, type CrewDetails, type Person } from "@/db/schema";
+import { AGREED, type Agreed, type CrewDetails, type Person, type PersonPhoto } from "@/db/schema";
 import { nowIso } from "./time";
 import type { Actor } from "./kit";
 
-export type CrewMember = Person & { d: CrewDetails; isRider: boolean };
+/** photoAt: when their picture was last changed (null = no picture); goes in the ?v= of the picture's URL so it can be cached. */
+export type CrewMember = Person & { d: CrewDetails; isRider: boolean; photoAt: string | null };
+
+/** The picture's address for an <img>, or null when there is none. */
+export const photoUrl = (p: { id: number; photoAt: string | null }) => (p.photoAt ? `/api/people/photo/${p.id}?v=${encodeURIComponent(p.photoAt)}` : null);
 
 const EMPTY: Omit<CrewDetails, "personId"> = {
   crewRole: "",
@@ -34,6 +38,9 @@ export async function crewMembers(): Promise<CrewMember[]> {
   const byId = new Map(details.map((d) => [d.personId, d]));
   const riders = await db.select().from(schema.riders).all();
   const riderPids = new Set(riders.map((r) => r.personId));
+  // Only when each picture changed, never the pictures themselves (a list page would be megabytes).
+  const photos = await db.select({ personId: schema.peoplePhotos.personId, updatedAt: schema.peoplePhotos.updatedAt }).from(schema.peoplePhotos).all();
+  const photoAt = new Map(photos.map((r) => [r.personId, r.updatedAt]));
   return people
     .filter((p) => p.shortName !== "Fiona")
     .map((p) => {
@@ -45,8 +52,33 @@ export async function crewMembers(): Promise<CrewMember[]> {
         d.agreed = "yes";
         d.briefed = false;
       }
-      return { ...p, d, isRider };
+      return { ...p, d, isRider, photoAt: photoAt.get(p.id) ?? null };
     });
+}
+
+// ---- Pictures -------------------------------------------------------------
+
+const PHOTO_PREFIX = "data:image/jpeg;base64,";
+
+/** The stored picture (a JPEG data: URL) for the API route. */
+export async function personPhoto(personId: number): Promise<PersonPhoto | undefined> {
+  await ready();
+  return db.select().from(schema.peoplePhotos).where(eq(schema.peoplePhotos.personId, personId)).get();
+}
+
+/** Keep (photo = a JPEG data: URL from the picker) or remove (photo = null) someone's picture. Returns what was done. */
+export async function savePersonPhoto(actor: Actor, personId: number, photo: string | null): Promise<"kept" | "removed" | "unchanged"> {
+  await ready();
+  if (photo === null) {
+    const r = await db.delete(schema.peoplePhotos).where(eq(schema.peoplePhotos.personId, personId)).returning({ personId: schema.peoplePhotos.personId }).all();
+    return r.length ? "removed" : "unchanged";
+  }
+  if (!photo.startsWith(PHOTO_PREFIX) || photo.length > 2_000_000) throw new Error("That picture didn't come through — try again");
+  const vals = { photo, updatedBy: actor.name, updatedAt: nowIso() };
+  const ex = await db.select({ personId: schema.peoplePhotos.personId }).from(schema.peoplePhotos).where(eq(schema.peoplePhotos.personId, personId)).get();
+  if (ex) await db.update(schema.peoplePhotos).set(vals).where(eq(schema.peoplePhotos.personId, personId));
+  else await db.insert(schema.peoplePhotos).values({ personId, ...vals });
+  return "kept";
 }
 
 export async function crewMember(id: number): Promise<CrewMember | undefined> {

@@ -44,3 +44,8 @@ export function autoLink(text: string): string {
   const esc = text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
   return esc.replace(/(https?:\/\/[^\s<]+)/g, (u) => `<a href="${u}" target="_blank" rel="noopener">${u}</a>`);
 }
+
+/** "Yasmin" → "Yasmin’s", "Chris" → "Chris’s"; a plural name ("The Dogs") → "The Dogs’". */
+export function possessive(name: string): string {
+  return /^the\b.*s$/i.test(name.trim()) ? `${name}’` : `${name}’s`;
+}

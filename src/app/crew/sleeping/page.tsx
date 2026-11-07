@@ -3,6 +3,7 @@ import { NIGHTS, NIGHT_DATES, NIGHT_LABELS, NIGHT_WHERE, type Night, type Sleepi
 import { activePeople, requireCrew } from "@/lib/auth";
 import { allSleeping, canEditPerson, places, seedPlaces } from "@/lib/sleeping";
 import { fmtWhen } from "@/lib/time";
+import { possessive } from "@/lib/util";
 import { saveSleeping } from "./actions";
 
 export const dynamic = "force-dynamic";
@@ -47,7 +48,7 @@ function RowForm({ p, rows, placeList }: { p: Person; rows: Record<Night, Sleepi
       ))}
       <div>
         <button className="btn btn-sm btn-primary" type="submit">
-          Save {p.shortName}&rsquo;s nights
+          Save {possessive(p.shortName)} nights
         </button>
       </div>
     </form>

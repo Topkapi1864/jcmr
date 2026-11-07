@@ -3,7 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { journal, requireAdmin, requireCrew } from "@/lib/auth";
-import { asAgreed, canEditMember, crewMember, saveDetails } from "@/lib/people";
+import { asAgreed, canEditMember, crewMember, saveDetails, savePersonPhoto } from "@/lib/people";
 
 function bump() {
   revalidatePath("/crew/people", "layout");
@@ -30,7 +30,11 @@ export async function saveCrewDetails(form: FormData) {
     availability: str("availability"),
     notes: str("notes"),
   });
-  if (s.pid !== personId) await journal(s.name, `crew details: updated person #${personId}`);
+  // The picture: a new one from the picker, or the "remove" tick; otherwise left alone.
+  const photo = str("photo");
+  const picture = photo ? await savePersonPhoto(s, personId, photo) : form.get("removePhoto") === "on" ? await savePersonPhoto(s, personId, null) : "unchanged";
+  if (s.pid !== personId) await journal(s.name, `crew details: updated person #${personId}${picture === "unchanged" ? "" : ` (picture ${picture})`}`);
+  else if (picture !== "unchanged") await journal(s.name, `crew details: own picture ${picture}`);
   bump();
   redirect(`/crew/people/${personId}?saved=1`);
 }

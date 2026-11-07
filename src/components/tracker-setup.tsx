@@ -1,12 +1,13 @@
 import { CopyText } from "./copy-text";
 import { clearMine, newAddress } from "@/app/crew/track/actions";
+import { possessive } from "@/lib/util";
 
 /** The card that gets one phone posting to the site: the person's address and the OwnTracks steps. */
 export function TrackerSetup({ url, name, personId, isSelf, sp }: { url: string; name: string; personId: number; isSelf: boolean; sp: Record<string, string | undefined> }) {
-  const whose = isSelf ? "your" : `${name}'s`;
+  const whose = isSelf ? "your" : possessive(name);
   return (
     <section className="card stack-sm" id="setup">
-      <h2>{isSelf ? "Your phone" : `${name}’s phone`}</h2>
+      <h2>{isSelf ? "Your phone" : `${possessive(name)} phone`}</h2>
       {sp.reset && <p className="notice">New address made. The old one no longer works — update the app.</p>}
       {sp.cleared && <p className="notice">Positions cleared.</p>}
       <p className="small muted" style={{ margin: 0 }}>

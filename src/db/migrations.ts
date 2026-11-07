@@ -200,6 +200,12 @@ export const MIGRATIONS: string[] = [
      updated_at TEXT NOT NULL
    )`,
   `CREATE UNIQUE INDEX IF NOT EXISTS sleeping_person_night ON sleeping(person_id, night)`,
+  `CREATE TABLE IF NOT EXISTS people_photos (
+     person_id INTEGER PRIMARY KEY REFERENCES people(id),
+     photo TEXT NOT NULL,
+     updated_by TEXT NOT NULL,
+     updated_at TEXT NOT NULL
+   )`,
   `CREATE TABLE IF NOT EXISTS vehicles (
      id INTEGER PRIMARY KEY AUTOINCREMENT,
      name TEXT NOT NULL,

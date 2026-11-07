@@ -3,6 +3,7 @@ import { JOB_NIGHTS, type JobNight } from "@/db/schema";
 import type { Session } from "@/lib/session";
 import { canEditJobs, jobsFor, NIGHT_DATES, NIGHT_LABELS, STANDARD_JOBS } from "@/lib/jobs";
 import { crewMembers, type CrewMember } from "@/lib/people";
+import { possessive } from "@/lib/util";
 import { JobsChecklist } from "@/components/job-check";
 import { PersonPicker } from "@/components/person-picker";
 import { addJobs, addStandardJobs, copyNightJobs, resetNightJobs, saveJobItem } from "@/app/crew/jobs/actions";
@@ -34,7 +35,7 @@ export async function JobsList({ s, who, night, sp }: { s: Session; who: CrewMem
     <div className="stack" style={{ maxWidth: "40rem" }}>
       <div className="row-between" style={{ alignItems: "start", flexWrap: "wrap", gap: 8 }}>
         <div>
-          <h1 style={{ margin: 0 }}>{mine ? "My jobs" : `${who.shortName}'s jobs`}</h1>
+          <h1 style={{ margin: 0 }}>{mine ? "My jobs" : `${possessive(who.shortName)} jobs`}</h1>
           <p className="small muted" style={{ margin: "4px 0 0" }}>
             What to get done the night before each day. Tick as you go; the crew chief sees everyone&apos;s lists on <Link href="/crew/jobs/everyone">Everyone</Link>.
           </p>
