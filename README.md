@@ -74,6 +74,16 @@ The board on the home page (`#messages`) and on `/live`. Anyone with a crew sess
   3. *Paste* — a Google / Apple Maps link (what you get from a WhatsApp location) or "lat, lng". Short links are followed.
   WhatsApp's live location can't be read by another app. A bought tracker's own share link can be stored on the vehicle.
 
+## Stops (the real places)
+
+**Crew → Stops** (`/crew/stops`): the planner in Crew → Route puts a 60 min stop every riding hour and the longer stops at Simon's rendezvous; this is where the crew pin the actual places for them, scouted on Street View or the map. The page lists every planned stop of the saved plan by day (mile, nearest town, planned time, a "Street View here" link at the plan's position) with the spots pinned for it, and a map of both. Crew only; nothing public.
+
+- **Pin a spot** (`/crew/stops/new`, or from a planned stop with `?day=&n=`, which shows where the plan puts it as a star and a one-mile ring): paste a Google Maps / Street View link, a `maps.app.goo.gl` share link (followed on the server), or the numbers from a long-press ("52.63, -1.12"); or tap the map and drag the pin; or "Where I am". Satellite view in the map's layer switch. The pin's day, mile, distance off the route and nearest town are worked out from the GPX as it moves.
+- Name, kind (60 min / longer / other), notes, and up to 12 pictures a stop (several at once, shrunk in the browser like message pictures, each with a caption). Anyone on the crew can add, change or remove; all in the audit journal.
+- A spot belongs to the nearest planned stop on its day within 8 miles; others are listed as "Other spots". Spots don't change the timetable.
+- Tables `stop_spots` (soft delete) and `stop_spot_photos` (data URLs), created on first use, in the full backup. Pictures served by `/api/stops/photo/<id>` to crew sessions only.
+- Code: `src/lib/stops.ts` (placing on the route, link resolving, matching to the plan), `src/lib/stop-place.ts` (link parsing, Street View / directions URLs), `src/app/crew/stops/`, `src/components/stop-spot-editor.tsx`, `stops-map*.tsx`, `spot-photos.tsx`.
+
 ## Weather
 
 **Crew → Weather** (`/crew/weather`; JSON at `/api/weather`, `?fresh=1` to force a fetch). The route is cut into 10-mile stretches; each gets the hour of weather at the time the saved crew plan (Crew → Route) has the riders passing it. Two views per day: the cross-section — temperature as a heat band with a key, rain as marks, wind as arrows drawn relative to the direction of travel (you ride left → right; red = headwind, green = tailwind, amber = crosswind) over the elevation profile with the timetable along the top — and the point-by-point table.

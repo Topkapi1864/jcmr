@@ -520,6 +520,45 @@ export type VehicleCrewRow = typeof vehicleCrew.$inferSelect;
 export type VehicleChecklistRow = typeof vehicleChecklist.$inferSelect;
 export type VehiclePosition = typeof vehiclePositions.$inferSelect;
 
+// ---- Stop spots (Crew → Stops): real places scouted for the planned stops ----
+
+export const STOP_SPOT_KINDS = ["hourly", "long", "other"] as const;
+export type StopSpotKind = (typeof STOP_SPOT_KINDS)[number];
+
+export const stopSpots = sqliteTable("stop_spots", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
+  day: integer("day").notNull(),
+  kind: text("kind", { enum: STOP_SPOT_KINDS }).notNull().default("hourly"),
+  name: text("name").notNull(),
+  lat: real("lat").notNull(),
+  lon: real("lon").notNull(),
+  /** Mile along that day's route, and how far the spot is off the line. */
+  mile: real("mile"),
+  offMi: real("off_mi"),
+  notes: text("notes").notNull().default(""),
+  createdBy: text("created_by").notNull(),
+  createdAt: text("created_at").notNull(),
+  updatedBy: text("updated_by"),
+  updatedAt: text("updated_at"),
+  deleted: integer("deleted", { mode: "boolean" }).notNull().default(false),
+});
+export type StopSpot = typeof stopSpots.$inferSelect;
+
+export const stopSpotPhotos = sqliteTable(
+  "stop_spot_photos",
+  {
+    id: integer("id").primaryKey({ autoIncrement: true }),
+    spotId: integer("spot_id")
+      .notNull()
+      .references(() => stopSpots.id),
+    photo: text("photo").notNull(),
+    caption: text("caption").notNull().default(""),
+    addedBy: text("added_by").notNull(),
+    addedAt: text("added_at").notNull(),
+  },
+  (t) => [index("stop_spot_photos_spot_idx").on(t.spotId)],
+);
+
 export const audit = sqliteTable("audit", {
   id: integer("id").primaryKey({ autoIncrement: true }),
   actor: text("actor").notNull(),

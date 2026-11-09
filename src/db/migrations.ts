@@ -200,6 +200,31 @@ export const MIGRATIONS: string[] = [
      updated_at TEXT NOT NULL
    )`,
   `CREATE UNIQUE INDEX IF NOT EXISTS sleeping_person_night ON sleeping(person_id, night)`,
+  `CREATE TABLE IF NOT EXISTS stop_spots (
+     id INTEGER PRIMARY KEY AUTOINCREMENT,
+     day INTEGER NOT NULL,
+     kind TEXT NOT NULL DEFAULT 'hourly',
+     name TEXT NOT NULL,
+     lat REAL NOT NULL,
+     lon REAL NOT NULL,
+     mile REAL,
+     off_mi REAL,
+     notes TEXT NOT NULL DEFAULT '',
+     created_by TEXT NOT NULL,
+     created_at TEXT NOT NULL,
+     updated_by TEXT,
+     updated_at TEXT,
+     deleted INTEGER NOT NULL DEFAULT 0
+   )`,
+  `CREATE TABLE IF NOT EXISTS stop_spot_photos (
+     id INTEGER PRIMARY KEY AUTOINCREMENT,
+     spot_id INTEGER NOT NULL REFERENCES stop_spots(id),
+     photo TEXT NOT NULL,
+     caption TEXT NOT NULL DEFAULT '',
+     added_by TEXT NOT NULL,
+     added_at TEXT NOT NULL
+   )`,
+  `CREATE INDEX IF NOT EXISTS stop_spot_photos_spot_idx ON stop_spot_photos(spot_id)`,
   `CREATE TABLE IF NOT EXISTS people_photos (
      person_id INTEGER PRIMARY KEY REFERENCES people(id),
      photo TEXT NOT NULL,
