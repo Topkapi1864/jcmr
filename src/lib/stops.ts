@@ -141,9 +141,12 @@ export async function saveSpot(actor: Actor, id: number, input: SpotInput): Prom
     notes: input.notes.replace(/\r\n?/g, "\n").trim().slice(0, SPOT_NOTES_MAX),
   };
   if (id > 0) {
+    // Moved off the route or onto the other day: no longer the stop it replaced.
+    const was = await getSpot(id);
+    const unplug = was?.inPlan && (vals.mile == null || vals.day !== was.day) ? { inPlan: false, replacesKey: null } : {};
     await db
       .update(schema.stopSpots)
-      .set({ ...vals, updatedBy: actor.name, updatedAt: nowIso() })
+      .set({ ...vals, ...unplug, updatedBy: actor.name, updatedAt: nowIso() })
       .where(eq(schema.stopSpots.id, id));
     return id;
   }
@@ -191,7 +194,7 @@ export const spotPhotoUrl = (id: number) => `/api/stops/photo/${id}`;
 
 // ---- The planned stops the spots are for -------------------------------------
 
-export type PlannedStop = Pick<PlanEvent, "kind" | "day" | "name" | "mile" | "arrive" | "depart" | "durMin" | "lat" | "lon" | "dark"> & { n: number; town: string | null };
+export type PlannedStop = Pick<PlanEvent, "kind" | "day" | "name" | "mile" | "arrive" | "depart" | "durMin" | "lat" | "lon" | "dark" | "key" | "role"> & { n: number; town: string | null };
 
 /** The stops in the crew's saved plan (the hourly and three-hourly ones, the named rendezvous, the halfway break), numbered per day. */
 export async function plannedStops(): Promise<{ days: { day: number; miles: number; stops: PlannedStop[] }[]; savedBy: string | null }> {
@@ -217,7 +220,7 @@ export async function plannedStops(): Promise<{ days: { day: number; miles: numb
                 town = t.name;
               }
             }
-            return { kind: e.kind, day: e.day, name: e.name, mile: e.mile, arrive: e.arrive, depart: e.depart, durMin: e.durMin, lat: e.lat, lon: e.lon, dark: e.dark, n: ++n, town };
+            return { kind: e.kind, day: e.day, name: e.name, mile: e.mile, arrive: e.arrive, depart: e.depart, durMin: e.durMin, lat: e.lat, lon: e.lon, dark: e.dark, key: e.key, role: e.role, n: ++n, town };
           }),
       };
     }),
@@ -240,12 +243,58 @@ export function matchSpots<S extends { id: number; day: number; mile: number | n
 
 export const plannedKey = (p: Pick<PlannedStop, "day" | "n">) => p.day * 1000 + p.n;
 
+export const spotKey = (id: number) => `spot:${id}`;
+
+export type DeployResult = { ok: true; replaced: string; n: number; day: number } | { ok: false; why: string };
+
+/** Make a spot the actual stop: it replaces the nearest planned stop on its day (within
+ *  8 miles), takes on that stop's kind, and the timetable is worked out from its mile.
+ *  A rendezvous it replaces is switched off; another deployed spot it replaces goes back
+ *  to being just a pin. */
+export async function deploySpot(id: number): Promise<DeployResult> {
+  const spot = await getSpot(id);
+  if (!spot) return { ok: false, why: "That stop has been removed." };
+  if (spot.mile == null) return { ok: false, why: "It is too far from the route to be a stop on it. Move the pin closer first." };
+  const { days } = await plannedStops();
+  const mine = spotKey(spot.id);
+  const stops = (days.find((d) => d.day === spot.day)?.stops ?? []).filter((p) => p.key !== mine);
+  let target: PlannedStop | null = null;
+  for (const p of stops) if (!target || Math.abs(p.mile - spot.mile) < Math.abs(target.mile - spot.mile)) target = p;
+  if (target && Math.abs(target.mile - spot.mile) > 8) target = null;
+
+  let replacesKey: string | null = null;
+  let kind = spot.kind;
+  if (target) {
+    kind = target.role === "short" || target.kind === "short" ? "hourly" : target.kind === "halfway" ? spot.kind : "long";
+    const other = target.key?.startsWith("spot:") ? Number(target.key.slice(5)) : null;
+    if (other) {
+      const o = await getSpot(other);
+      replacesKey = o?.replacesKey ?? null;
+      await db.update(schema.stopSpots).set({ inPlan: false, replacesKey: null }).where(eq(schema.stopSpots.id, other));
+    } else if (target.kind === "named" && target.key) replacesKey = target.key;
+  }
+  await db.update(schema.stopSpots).set({ inPlan: true, replacesKey, kind }).where(eq(schema.stopSpots.id, spot.id));
+  // The replaced rendezvous' planned time would otherwise linger on Live as "next stop".
+  const row = /^db:(\d+)$/.exec(replacesKey ?? "");
+  if (row) await db.update(schema.routeStops).set({ plannedTime: null }).where(eq(schema.routeStops.id, Number(row[1])));
+  return target ? { ok: true, replaced: `${plannedLabel(target)} at mile ${target.mile.toFixed(0)}`, n: target.n, day: target.day } : { ok: true, replaced: "", n: 0, day: spot.day };
+}
+
+/** Back to being just a pin; the plan's own stop comes back. */
+export async function undeploySpot(id: number): Promise<boolean> {
+  await ready();
+  const r = await db.update(schema.stopSpots).set({ inPlan: false, replacesKey: null }).where(eq(schema.stopSpots.id, id)).returning({ id: schema.stopSpots.id }).get();
+  return !!r;
+}
+
 export function spotKindFor(kind: PlanEvent["kind"]): StopSpotKind {
   return kind === "short" ? "hourly" : kind === "long" || kind === "named" ? "long" : "other";
 }
 
 /** How a planned stop reads on the page: the crew's names for the routine stops, Simon's for the rendezvous. */
-export function plannedLabel(p: Pick<PlannedStop, "kind" | "name">): string {
+export function plannedLabel(p: Pick<PlannedStop, "kind" | "name" | "role">): string {
+  if (p.role === "short") return "60 min stop";
+  if (p.role === "long") return "Longer stop";
   if (p.kind === "short") return "60 min stop";
   if (p.kind === "long") return "180 min stop";
   if (p.kind === "halfway") return "Halfway break";

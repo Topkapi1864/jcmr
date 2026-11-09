@@ -1,4 +1,5 @@
 import "server-only";
+import { and, eq } from "drizzle-orm";
 import { db, ready, schema } from "@/db/client";
 import { loadProfiles } from "./route";
 import { getSetting } from "./settings";
@@ -43,12 +44,40 @@ function candidateStops(profiles: ReturnType<typeof loadProfiles>, rows: (typeof
 }
 
 
+/** Spots from Crew → Stops that have been made the actual stop. Each does the job of
+ *  the stop it replaced: an hourly one (crew only), or a longer one (public, like
+ *  Simon's rendezvous, taking over the replaced one's length of stop). */
+function spotStops(spots: (typeof schema.stopSpots.$inferSelect)[], base: Plan): NamedStop[] {
+  return spots
+    .filter((s) => s.mile != null)
+    .map((s) => {
+      const role = s.kind === "hourly" ? ("short" as const) : ("long" as const);
+      const was = s.replacesKey ? base.namedStops.find((n) => n.key === s.replacesKey) : undefined;
+      return {
+        key: `spot:${s.id}`,
+        day: s.day,
+        name: s.name,
+        mile: s.mile!,
+        durMin: role === "short" ? base.shortStop.durMin : (was?.durMin ?? 25),
+        enabled: true,
+        kind: "spot",
+        role,
+        isPublic: role === "long",
+        notes: `Pinned on Crew → Stops by ${s.updatedBy ?? s.createdBy}`,
+      };
+    });
+}
+
 export async function loadRoutePlan(): Promise<{ profiles: ReturnType<typeof loadProfiles>; days: (typeof schema.routeDays.$inferSelect)[]; saved: SavedPlan; initial: Plan }> {
   await ready();
   const profiles = loadProfiles();
   const days = await db.select().from(schema.routeDays).orderBy(schema.routeDays.day).all();
   const rows = await db.select().from(schema.routeStops).orderBy(schema.routeStops.dayId, schema.routeStops.sortOrder).all();
-  const candidates = candidateStops(profiles, rows, days);
+  const deployed = await db
+    .select()
+    .from(schema.stopSpots)
+    .where(and(eq(schema.stopSpots.inPlan, true), eq(schema.stopSpots.deleted, false)))
+    .all();
 
   let saved: SavedPlan = null;
   const raw = await getSetting("route.plan");
@@ -61,9 +90,14 @@ export async function loadRoutePlan(): Promise<{ profiles: ReturnType<typeof loa
     }
   }
   const base: Plan = saved ? saved.plan : { ...DEFAULT_PLAN, namedStops: [] };
+  const candidates = [...candidateStops(profiles, rows, days), ...spotStops(deployed, base)].sort((a, b) => a.day - b.day || a.mile - b.mile);
+  const replaced = new Map(deployed.filter((d) => d.replacesKey).map((d) => [d.replacesKey!, d.name]));
   const merged: NamedStop[] = candidates.map((c) => {
     const prev = base.namedStops.find((p) => p.key === c.key);
-    return prev ? { ...c, durMin: prev.durMin, enabled: prev.enabled } : c;
+    const m = prev ? { ...c, durMin: prev.durMin, enabled: prev.enabled } : c;
+    // A rendezvous a scouted spot has replaced is off, whatever the saved plan says.
+    const by = replaced.get(c.key);
+    return by ? { ...m, enabled: false, replacedBy: by } : m;
   });
   return { profiles, days, saved, initial: { ...base, namedStops: merged } };
 }

@@ -309,4 +309,4 @@ export const MIGRATIONS: string[] = [
 ];
 
 // Columns added after first release. Each is tried once; "duplicate column" is fine.
-export const ALTERS: string[] = [`ALTER TABLE live_status ADD COLUMN mile REAL`, `ALTER TABLE kit_catalogue ADD COLUMN link TEXT NOT NULL DEFAULT ''`, `ALTER TABLE kit_catalogue ADD COLUMN recommended TEXT NOT NULL DEFAULT ''`, `ALTER TABLE people ADD COLUMN tracker_token TEXT NOT NULL DEFAULT ''`, `ALTER TABLE messages ADD COLUMN photo TEXT`];
+export const ALTERS: string[] = [`ALTER TABLE live_status ADD COLUMN mile REAL`, `ALTER TABLE kit_catalogue ADD COLUMN link TEXT NOT NULL DEFAULT ''`, `ALTER TABLE kit_catalogue ADD COLUMN recommended TEXT NOT NULL DEFAULT ''`, `ALTER TABLE people ADD COLUMN tracker_token TEXT NOT NULL DEFAULT ''`, `ALTER TABLE messages ADD COLUMN photo TEXT`, `ALTER TABLE stop_spots ADD COLUMN in_plan INTEGER NOT NULL DEFAULT 0`, `ALTER TABLE stop_spots ADD COLUMN replaces_key TEXT`];

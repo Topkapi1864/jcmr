@@ -325,10 +325,12 @@ export function RoutePlanner({ profiles, initial, saved: savedIn, me }: Props) {
                   .map((s) => (
                     <div key={s.key} className="named">
                       <label className="check">
-                        <input type="checkbox" checked={s.enabled} onChange={(e) => update((p) => ({ ...p, namedStops: p.namedStops.map((x) => (x.key === s.key ? { ...x, enabled: e.target.checked } : x)) }))} />
+                        <input type="checkbox" checked={s.enabled} disabled={!!s.replacedBy} onChange={(e) => update((p) => ({ ...p, namedStops: p.namedStops.map((x) => (x.key === s.key ? { ...x, enabled: e.target.checked } : x)) }))} />
                         <span>
                           {s.name}
                           {s.optional && <em className="xs muted"> optional</em>}
+                          {s.role && <em className="xs muted"> {s.role === "short" ? "60 min stop, crew only" : "longer stop"} · from Stops</em>}
+                          {s.replacedBy && <em className="xs muted"> replaced by {s.replacedBy}</em>}
                         </span>
                       </label>
                       <span className="rule-fields">
@@ -340,7 +342,7 @@ export function RoutePlanner({ profiles, initial, saved: savedIn, me }: Props) {
               </div>
             ))}
             <p className="xs muted" style={{ margin: 0 }}>
-              Add or move a rendezvous in Admin → Route; the miles come from Simon&rsquo;s pins.
+              Add or move a rendezvous in Admin → Route; the miles come from Simon&rsquo;s pins. Real places scouted in Crew → Stops can be made the stop there, and show here.
             </p>
           </section>
 
@@ -606,7 +608,8 @@ function withCandidates(p: Plan, current: Plan): Plan {
     ...p,
     namedStops: current.namedStops.map((c) => {
       const prev = p.namedStops.find((x) => x.key === c.key);
-      return prev ? { ...c, durMin: prev.durMin, enabled: prev.enabled } : c;
+      const m = prev ? { ...c, durMin: prev.durMin, enabled: prev.enabled } : c;
+      return c.replacedBy ? { ...m, enabled: false } : m;
     }),
   };
 }

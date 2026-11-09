@@ -16,7 +16,17 @@ export type NamedStop = {
   optional?: boolean;
   kind?: string;
   notes?: string;
+  /** A scouted spot standing in for a routine stop: it does that stop's job (absorbs
+   *  the routine stop due shortly before it, resets that stop's clock). */
+  role?: "short" | "long";
+  /** false → crew only; left off the public timetable. */
+  isPublic?: boolean;
+  /** Set when a scouted spot has replaced this stop: it is off, and says by what. */
+  replacedBy?: string;
 };
+
+/** A deployed spot swallows the routine stop due up to this many riding minutes before it. */
+export const ABSORB_MIN = 40;
 
 export type DayPlan = {
   start: string; // "07:00"
@@ -71,6 +81,9 @@ export type PlanEvent = {
   dark: boolean;
   notes?: string;
   key?: string;
+  role?: "short" | "long";
+  /** Crew only: not on the public timetable. */
+  hidden?: boolean;
 };
 
 export type TownEta = { name: string; mile: number; eta: number; dark: boolean; offMi: number };
@@ -267,16 +280,27 @@ export function planDay(plan: Plan, profile: RouteProfile): DayResult {
       break;
     }
     if (next.kind === "named" && nextNamed) {
-      push("named", nextNamed.name, nextNamed.mile, nextNamed.durMin, { notes: nextNamed.notes, key: nextNamed.key });
+      push("named", nextNamed.name, nextNamed.mile, nextNamed.durMin, { notes: nextNamed.notes, key: nextNamed.key, role: nextNamed.role, hidden: nextNamed.isPublic === false });
       ni++;
-      sinceShort = plan.namedResetsClock || mergedShort ? 0 : sinceShort + next.inMin;
-      sinceLong = plan.namedResetsClock || mergedLong ? 0 : sinceLong + next.inMin;
+      if (nextNamed.role === "short") {
+        // An hourly stop in a real place: the hourly clock restarts; the three-hourly one runs on.
+        sinceShort = 0;
+        sinceLong = mergedLong ? 0 : sinceLong + next.inMin;
+      } else if (nextNamed.role === "long") {
+        sinceShort = 0;
+        sinceLong = 0;
+      } else {
+        sinceShort = plan.namedResetsClock || mergedShort ? 0 : sinceShort + next.inMin;
+        sinceLong = plan.namedResetsClock || mergedLong ? 0 : sinceLong + next.inMin;
+      }
       mergedShort = false;
       mergedLong = false;
       continue;
     }
     // A routine stop: skip it if a named stop or the finish is close.
-    const nearSomething = Math.min(toNamedMin, toFinishMin) - next.inMin <= plan.mergeWithinMin;
+    // A deployed spot reaches further back: it is the stop that was due here.
+    const reach = nextNamed?.role === "long" || (nextNamed?.role === "short" && next.kind === "short") ? Math.max(plan.mergeWithinMin, ABSORB_MIN) : plan.mergeWithinMin;
+    const nearSomething = toNamedMin - next.inMin <= reach || toFinishMin - next.inMin <= plan.mergeWithinMin;
     if (next.kind === "halfway") {
       halfwayDone = true;
       if (nearSomething) continue;
@@ -381,7 +405,7 @@ export function planAll(plan: Plan, profiles: RouteProfile[]): DayResult[] {
 
 /** The events the public pages list: start, rendezvous and finish. The crew's routine stops stay on the crew side. */
 export function publicEvents(events: PlanEvent[]): PlanEvent[] {
-  return events.filter((e) => e.kind === "start" || e.kind === "named" || e.kind === "finish");
+  return events.filter((e) => e.kind === "start" || (e.kind === "named" && !e.hidden) || e.kind === "finish");
 }
 
 /** The town the riders are at or near a mile, if one is within 4 miles along the line. */
@@ -422,6 +446,9 @@ export function normalisePlan(raw: unknown): Plan {
           optional: !!s.optional,
           kind: typeof s.kind === "string" ? s.kind : undefined,
           notes: typeof s.notes === "string" ? s.notes.slice(0, 300) : undefined,
+          role: s.role === "short" || s.role === "long" ? s.role : undefined,
+          isPublic: s.isPublic === false ? false : undefined,
+          replacedBy: typeof s.replacedBy === "string" ? s.replacedBy.slice(0, 80) : undefined,
         }))
     : [];
   return {

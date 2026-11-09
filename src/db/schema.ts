@@ -541,6 +541,10 @@ export const stopSpots = sqliteTable("stop_spots", {
   updatedBy: text("updated_by"),
   updatedAt: text("updated_at"),
   deleted: integer("deleted", { mode: "boolean" }).notNull().default(false),
+  /** Deployed: the planner uses this spot as the stop, in place of the nearest planned one. */
+  inPlan: integer("in_plan", { mode: "boolean" }).notNull().default(false),
+  /** The named stop (Simon's rendezvous, "db:<id>" / "wp:<day>:<mile>") it stands in for, if it replaced one. */
+  replacesKey: text("replaces_key"),
 });
 export type StopSpot = typeof stopSpots.$inferSelect;
 

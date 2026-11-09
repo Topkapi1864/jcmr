@@ -1,11 +1,22 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+import { redirect } from "next/navigation";
 import { journal, requireCrew } from "@/lib/auth";
-import { addSpotPhoto, asSpotKind, getSpot, placeOnRoute, removeSpot, removeSpotPhoto, resolvePlace, saveSpot, setSpotPhotoCaption, type Placed } from "@/lib/stops";
+import { addSpotPhoto, asSpotKind, deploySpot, undeploySpot, getSpot, placeOnRoute, removeSpot, removeSpotPhoto, resolvePlace, saveSpot, setSpotPhotoCaption, type Placed } from "@/lib/stops";
 
 function bump() {
   revalidatePath("/crew/stops", "layout");
+}
+
+/** The plan feeds the planner, the public route, weather and live pages. */
+function bumpPlan() {
+  bump();
+  revalidatePath("/crew/route");
+  revalidatePath("/route");
+  revalidatePath("/weather");
+  revalidatePath("/live");
+  revalidatePath("/");
 }
 
 /** Where a pin is on the route; called as the pin moves. */
@@ -35,7 +46,8 @@ export async function saveSpotAction(f: SpotForm): Promise<{ id: number } | { er
   const saved = await saveSpot(s, id, { name: String(f.name), kind: asSpotKind(String(f.kind)), lat, lon, notes: String(f.notes ?? ""), day: Number(f.day) });
   const spot = await getSpot(saved);
   await journal(s.name, `stops: ${id ? "updated" : "added"} #${saved} "${spot?.name}" (day ${spot?.day}${spot?.mile != null ? `, mile ${spot.mile}` : ""})`);
-  bump();
+  if (spot?.inPlan) bumpPlan();
+  else bump();
   return { id: saved };
 }
 
@@ -44,8 +56,9 @@ export async function removeSpotAction(id: number): Promise<boolean> {
   const spot = await getSpot(Number(id));
   if (!spot) return false;
   await removeSpot(s, spot.id);
-  await journal(s.name, `stops: removed #${spot.id} "${spot.name}"`);
-  bump();
+  await journal(s.name, `stops: removed #${spot.id} "${spot.name}"${spot.inPlan ? " (it was the stop; the plan's own comes back)" : ""}`);
+  if (spot.inPlan) bumpPlan();
+  else bump();
   return true;
 }
 
@@ -74,4 +87,28 @@ export async function captionPhotoAction(photoId: number, caption: string): Prom
   if (spotId == null) return false;
   bump();
   return true;
+}
+
+/** "Make this the stop": the spot replaces the nearest planned stop. Form action. */
+export async function deploySpotAction(form: FormData) {
+  const s = await requireCrew();
+  const id = Number(form.get("id"));
+  const back = String(form.get("back") ?? "") === "list" ? "/crew/stops" : `/crew/stops/${id}`;
+  const r = await deploySpot(id);
+  if (!r.ok) redirect(`${back}?deployErr=${encodeURIComponent(r.why)}`);
+  const spot = await getSpot(id);
+  await journal(s.name, `stops: #${id} "${spot?.name}" made the stop${r.replaced ? `, replacing day ${r.day} ${r.replaced}` : ""}`);
+  bumpPlan();
+  redirect(`${back}?deployed=${id}${r.replaced ? `&replaced=${encodeURIComponent(r.replaced)}` : ""}#spot-${id}`);
+}
+
+export async function undeploySpotAction(form: FormData) {
+  const s = await requireCrew();
+  const id = Number(form.get("id"));
+  const back = String(form.get("back") ?? "") === "list" ? "/crew/stops" : `/crew/stops/${id}`;
+  const spot = await getSpot(id);
+  await undeploySpot(id);
+  await journal(s.name, `stops: #${id} "${spot?.name}" taken out of the plan`);
+  bumpPlan();
+  redirect(`${back}?undeployed=${id}`);
 }
