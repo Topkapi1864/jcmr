@@ -31,7 +31,7 @@ export default async function RouteAdminPage({ searchParams }: { searchParams: P
         Timings live in <Link href="/crew/route">Crew → Route</Link>; saving a plan there fills the planned times below.
       </p>
       <p className="muted small">
-        The GPX files live in the repo at <code>content/route/day1.gpx</code> and <code>day2.gpx</code> (Simon&rsquo;s 5 Oct version). Planned times are optional; the
+        The GPX files live in the repo at <code>content/route/day1.gpx</code> and <code>day2.gpx</code> (V2.0 of 11 Nov: Simon&rsquo;s 5 Oct line with four dead-end spurs taken out and Day 1 taken round Gorhambury by the A4147 and A5183; the files before that are in <code>content/route/v1</code>). Planned times are optional; the
         public page hides the time column until any stop has one.
       </p>
       {days.map((d) => (

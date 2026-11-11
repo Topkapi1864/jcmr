@@ -3,6 +3,7 @@ import { and, eq } from "drizzle-orm";
 import { db, ready, schema } from "@/db/client";
 import { loadProfiles } from "./route";
 import { getSetting } from "./settings";
+import { refreshForRouteVersion, stableWaypointKey } from "./route-version";
 import { DEFAULT_PLAN, normalisePlan, planAll, type DayResult, type NamedStop, type Plan, type SavedPlan } from "./plan";
 
 // The route plan as the server sees it: the stops the planner can use, the saved
@@ -11,7 +12,7 @@ import { DEFAULT_PLAN, normalisePlan, planAll, type DayResult, type NamedStop, t
 
 /** The stops the planner can switch on and off: the route_stops rows with a mile, plus
  *  Simon's GPX waypoints that aren't already one of them. */
-function candidateStops(profiles: ReturnType<typeof loadProfiles>, rows: (typeof schema.routeStops.$inferSelect)[], days: (typeof schema.routeDays.$inferSelect)[]): NamedStop[] {
+function candidateStops(profiles: ReturnType<typeof loadProfiles>, rows: (typeof schema.routeStops.$inferSelect)[], days: (typeof schema.routeDays.$inferSelect)[], knownKeys: string[]): NamedStop[] {
   const out: NamedStop[] = [];
   const dayOf = (dayId: number) => days.find((d) => d.id === dayId)?.day ?? 1;
   for (const r of rows) {
@@ -37,7 +38,7 @@ function candidateStops(profiles: ReturnType<typeof loadProfiles>, rows: (typeof
       if (w.mile <= 0.5 || w.mile >= p.miles - 0.5 || /^(start|finish|overnight)/i.test(w.name)) continue;
       if (out.some((s) => s.day === p.day && Math.abs(s.mile - w.mile) < 4)) continue;
       const optional = /optional/i.test(w.name);
-      out.push({ key: `wp:${p.day}:${w.mile}`, day: p.day, name: w.name, mile: w.mile, durMin: optional ? 10 : 25, enabled: !optional, optional, kind: "long", notes: w.desc || undefined });
+      out.push({ key: stableWaypointKey(p.day, w.mile, knownKeys), day: p.day, name: w.name, mile: w.mile, durMin: optional ? 10 : 25, enabled: !optional, optional, kind: "long", notes: w.desc || undefined });
     }
   }
   return out.sort((a, b) => a.day - b.day || a.mile - b.mile);
@@ -70,6 +71,7 @@ function spotStops(spots: (typeof schema.stopSpots.$inferSelect)[], base: Plan):
 
 export async function loadRoutePlan(): Promise<{ profiles: ReturnType<typeof loadProfiles>; days: (typeof schema.routeDays.$inferSelect)[]; saved: SavedPlan; initial: Plan }> {
   await ready();
+  await refreshForRouteVersion();
   const profiles = loadProfiles();
   const days = await db.select().from(schema.routeDays).orderBy(schema.routeDays.day).all();
   const rows = await db.select().from(schema.routeStops).orderBy(schema.routeStops.dayId, schema.routeStops.sortOrder).all();
@@ -90,7 +92,9 @@ export async function loadRoutePlan(): Promise<{ profiles: ReturnType<typeof loa
     }
   }
   const base: Plan = saved ? saved.plan : { ...DEFAULT_PLAN, namedStops: [] };
-  const candidates = [...candidateStops(profiles, rows, days), ...spotStops(deployed, base)].sort((a, b) => a.day - b.day || a.mile - b.mile);
+  // Waypoint keys already in use (the saved plan, the spots that replaced one) are kept when the line moves.
+  const knownKeys = [...base.namedStops.map((n) => n.key), ...deployed.map((d) => d.replacesKey ?? "")];
+  const candidates = [...candidateStops(profiles, rows, days, knownKeys), ...spotStops(deployed, base)].sort((a, b) => a.day - b.day || a.mile - b.mile);
   const replaced = new Map(deployed.filter((d) => d.replacesKey).map((d) => [d.replacesKey!, d.name]));
   const merged: NamedStop[] = candidates.map((c) => {
     const prev = base.namedStops.find((p) => p.key === c.key);

@@ -4,6 +4,7 @@ import { db, ready, schema } from "@/db/client";
 import { STOP_SPOT_KINDS, type StopSpot, type StopSpotKind } from "@/db/schema";
 import { loadProfiles, nearestOnLine } from "./route";
 import { loadRoutePlan } from "./plan-server";
+import { refreshForRouteVersion } from "./route-version";
 import { planAll, type PlanEvent } from "./plan";
 import { nowIso } from "./time";
 import { isShortMapsLink, parsePlace, type LatLon } from "./stop-place";
@@ -79,6 +80,7 @@ export type SpotLite = StopSpot & { photos: number; firstPhoto: number | null };
 
 export async function listSpots(): Promise<SpotLite[]> {
   await ready();
+  await refreshForRouteVersion();
   const spots = await db.select().from(schema.stopSpots).where(eq(schema.stopSpots.deleted, false)).orderBy(asc(schema.stopSpots.day), asc(schema.stopSpots.mile)).all();
   const counts = await db
     .select({ spotId: schema.stopSpotPhotos.spotId, n: sql<number>`count(*)`, first: sql<number>`min(${schema.stopSpotPhotos.id})` })
@@ -93,6 +95,7 @@ export async function listSpots(): Promise<SpotLite[]> {
 
 export async function getSpot(id: number): Promise<StopSpot | undefined> {
   await ready();
+  await refreshForRouteVersion();
   return db
     .select()
     .from(schema.stopSpots)

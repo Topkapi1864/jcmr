@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import dynamic from "next/dynamic";
 import type { RouteProfile } from "@/lib/route";
+import { ROUTE_VERSION } from "@/lib/constants";
 import { RIDE_DATES, fmtHm, mileAtTime, nearestTown, parseHm, pointAtMile, publicEvents, timeAtMile, type DayResult, type PlanEvent } from "@/lib/plan";
 import { Elevation } from "./elevation";
 import { RideStrip } from "./ride-strip";
@@ -235,7 +236,7 @@ export function PublicRoute({ profiles, results, dayLabels }: Props) {
                   Route on Strava →
                 </a>
               )}
-              <a href={`/api/route-geo?day=${r.day}&format=gpx`}>Download the GPX</a>
+              <a href={`/api/route-geo?day=${r.day}&format=gpx&v=${ROUTE_VERSION}`}>Download the GPX (V{ROUTE_VERSION})</a>
             </p>
             {p.present && <Elevation profile={p} result={r} onHover={hoverAt(r.day)} onPick={(mile) => pickOnMap({ day: r.day, mile })} showRoutine={false} probeMile={probe?.day === r.day ? probe.mile : null} />}
             <div className="table-wrap">

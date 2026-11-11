@@ -3,6 +3,8 @@ import path from "node:path";
 
 // GPX → GeoJSON with no dependency: we only need the track points.
 
+export { ROUTE_VERSION } from "./constants";
+
 export type DayGeo = {
   day: number;
   present: boolean;
