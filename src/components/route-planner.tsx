@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useRef, useState, useTransition } from "react";
 import dynamic from "next/dynamic";
 import type { RouteProfile } from "@/lib/route";
-import { ROUTE_VERSION } from "@/lib/constants";
+import { routeVersion } from "@/lib/constants";
 import {
   DEFAULT_PLAN,
   decodePlan,
@@ -212,8 +212,8 @@ export function RoutePlanner({ profiles, initial, saved: savedIn, me }: Props) {
           <button className="btn btn-primary" onClick={save} disabled={pending || (!dirty && !!saved)} title="Everyone sees this plan; the public route page shows the times">
             {pending ? "Saving…" : dirty || !saved ? "Save as the crew plan" : "Saved"}
           </button>
-          <a className="btn" href="/crew/ride/view.html" title="A street photo every quarter mile, with a time-lapse of the whole ride">
-            Ride the route in photos
+          <a className="btn" href="/crew/ride/view.html" title="A street photo every quarter mile along the 5 October line — not yet the final route; being updated">
+            Ride the route in photos (old line)
           </a>
           <a className="btn" href="/crew/weather" title="The forecast every 10 miles at the hour this plan has us there">
             Weather
@@ -547,8 +547,8 @@ export function RoutePlanner({ profiles, initial, saved: savedIn, me }: Props) {
           <p className="xs muted">
             Sunrise and sunset are computed for the route&rsquo;s midpoint on the day (UK is on GMT by then). Elevation is the GPX&rsquo;s, lightly smoothed, so the climbing total reads lower than Strava&rsquo;s. The riders&rsquo; files:{" "}
             {profiles.filter((p) => p.present).map((p) => (
-              <a key={p.day} href={`/api/route-geo?day=${p.day}&format=gpx&v=${ROUTE_VERSION}`} style={{ marginRight: "var(--space-2)" }}>
-                Day {p.day} GPX (V{ROUTE_VERSION})
+              <a key={p.day} href={`/api/route-geo?day=${p.day}&format=gpx&v=${routeVersion(p.day)}`} style={{ marginRight: "var(--space-2)" }}>
+                Day {p.day} GPX (V {routeVersion(p.day)})
               </a>
             ))}
           </p>

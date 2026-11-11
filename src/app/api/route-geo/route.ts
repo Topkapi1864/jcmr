@@ -1,6 +1,6 @@
 import fs from "node:fs";
 import { gpxExists, gpxPathFor, loadDay } from "@/lib/gpx";
-import { ROUTE_VERSION } from "@/lib/constants";
+import { routeVersion } from "@/lib/constants";
 import { loadProfiles } from "@/lib/route";
 import { isPublicLive } from "@/lib/settings";
 import { getSession } from "@/lib/auth";
@@ -15,7 +15,7 @@ export async function GET(req: Request) {
   if (url.searchParams.get("format") === "gpx") {
     if (!(day === 1 || day === 2) || !gpxExists(day)) return new Response("Not found", { status: 404 });
     return new Response(fs.readFileSync(gpxPathFor(day)), {
-      headers: { "content-type": "application/gpx+xml", "content-disposition": `attachment; filename="jcmr-day${day}-v${ROUTE_VERSION}.gpx"`, "cache-control": "private, no-store" },
+      headers: { "content-type": "application/gpx+xml", "content-disposition": `attachment; filename="jcmr-day${day}-v${routeVersion(day)}.gpx"`, "cache-control": "private, no-store" },
     });
   }
   if (url.searchParams.get("format") === "profile") {

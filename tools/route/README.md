@@ -23,7 +23,24 @@ To rebuild:
         tools/route/garmin-sample-day1.txt tools/route/gorhambury-bypass.txt tools/route/gorhambury-bypass-ele.txt
     python3 tools/route/make_v2.py 2 content/route/v1/day2.gpx content/route/day2.gpx tools/route/garmin-sample-day2.txt
 
-When the line changes again: put the old files in a new `content/route/v<n>/`, bump
-`ROUTE_VERSION` in `src/lib/constants.ts` (the download is named after it and the
-scouted spots' miles are re-placed once, `src/lib/route-version.ts`), then press
+## V2.1 – V2.3 (Day 2 only, 11 Nov 2026, evening)
+
+Built by Cowork from V2.0 point by point, each from the previous, in `Fiona/asarte/ops/`
+(`jcmr-route-V2.{1,2,3}-build-note-2026-11-11.md`, checked by Fiona in
+`Fiona-Workspace/JCMR/route/route-check-V2.{2,3}-2026-11-11.md`):
+
+- **V2.1** — Wharncliffe on the road (A6102, Soughley Lane, Forge Lane) instead of the
+  gravel; 108.7 → 109.5 mi.
+- **V2.2** — Silkstone on the B6449; Woodlesford by Pottery Lane / The Locks / Bullough
+  Lane; 109.52 → 109.77 mi.
+- **V2.3** — Oughtibridge: the one-way loop (Low Road, Forge Hill, Langsett Road South)
+  out, a 70 m walk up Bridge Hill in, from the map's own geometry; 109.77 → 109.22 mi.
+  The riders walk Bridge Hill; the line only shows them where. No waypoint added.
+
+Day 2 V2.0 is kept in `content/route/v2.0/day2.gpx`. Day 1 stays V2.0.
+
+When the line changes again: put the old file in a new `content/route/v<n>/`, set that
+day's entry in `ROUTE_VERSIONS` and bump `ROUTE_VERSION` in `src/lib/constants.ts` (the
+download and its link text are named after the day's version; the scouted spots' miles
+are re-placed once when `ROUTE_VERSION` changes, `src/lib/route-version.ts`), then press
 "Save as the crew plan" in Crew → Route so the planned times on the stops follow.
