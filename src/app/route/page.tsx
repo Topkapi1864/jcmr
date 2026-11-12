@@ -27,8 +27,8 @@ export default async function RoutePage({ searchParams }: { searchParams: Promis
           {startLabel} to Yeadon Cemetery — about {total} miles over two days, the finish on the second anniversary.
         </p>
         <p className="row mt-4">
-          <a className="btn" href="/route/ride/view.html">Ride the route in photos (old line)</a>
-          <span className="muted">A street photo every quarter mile, with the climbs, the stops and a time-lapse of the whole ride — filmed along the 5 October route, not the final line below; being updated. Ride by the map and the GPX files.</span>
+          <a className="btn" href="/route/ride/view.html">Ride the route in photos</a>
+          <span className="muted">A Google Street View picture every quarter mile along the final line below, with the climbs, the stops and a time-lapse of the whole ride.</span>
         </p>
       </header>
       <div className="mt-4">

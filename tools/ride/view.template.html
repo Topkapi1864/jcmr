@@ -1,0 +1,399 @@
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex">
+<title>Ride the Route</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400;6..72,600&family=Public+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: photo-led stage with a route map beside it; the elevation profile underneath is the scrubber. */
+:root{
+  --bg:#eceeea; --panel:#f7f8f5; --ink:#1b2321; --muted:#5d6763; --rule:#cfd4cd;
+  --heather:#7a3e6b; --moss:#4f6b4a; --gapc:#c9cec7; --ok:#4f6b4a; --pass2:#9db08f; --goog:#5b7c99;
+  --photo-bg:#d9ddd6;
+  --display:"Newsreader",Georgia,"Times New Roman",serif;
+  --body:"Public Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#141917; --panel:#1c2220; --ink:#e4e8e3; --muted:#9aa49f; --rule:#2e3633;
+  --heather:#c88bb8; --moss:#8fb08a; --gapc:#3a4340; --ok:#8fb08a; --pass2:#56704f; --goog:#7fa0bd; --photo-bg:#232a28; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#141917; --panel:#1c2220; --ink:#e4e8e3; --muted:#9aa49f; --rule:#2e3633;
+  --heather:#c88bb8; --moss:#8fb08a; --gapc:#3a4340; --ok:#8fb08a; --pass2:#56704f; --goog:#7fa0bd; --photo-bg:#232a28; color-scheme:dark}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:15px;line-height:1.5;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:20px 32px}
+.wrap{max-width:1240px;margin:0 auto;display:grid;gap:16px}
+header{display:flex;flex-wrap:wrap;align-items:end;justify-content:space-between;gap:12px 16px}
+header>div:first-child{margin-right:auto}
+h1{font-family:var(--display);font-weight:600;font-size:clamp(26px,4vw,38px);line-height:1.1;margin:0;text-wrap:balance}
+.sub{color:var(--muted);margin:4px 0 0;font-size:14px}
+.back{color:var(--heather);font-weight:600;text-decoration:none}
+.back:hover{text-decoration:underline}
+.days{display:flex;gap:6px}
+.days button{font:500 13px var(--body);letter-spacing:.04em;text-transform:uppercase;border:1px solid var(--rule);background:transparent;color:var(--ink);padding:8px 14px;border-radius:999px;cursor:pointer}
+.days button[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.stage{display:grid;grid-template-columns:minmax(0,1.7fr) minmax(0,1fr);gap:16px}
+@media (max-width:820px){.stage{grid-template-columns:1fr}}
+.photo{position:relative;background:var(--photo-bg);border-radius:6px;overflow:hidden;aspect-ratio:4/3;max-width:100%}
+.photo img{width:100%;height:100%;object-fit:cover;display:block}
+.photo iframe{position:absolute;inset:0;width:100%;height:100%;border:0;display:block}
+.photo.panning .plate,.photo.panning .prog,.photo.panning .credit,.photo.panning .fshint{display:none}
+.plate{position:absolute;left:12px;top:12px;background:rgba(20,25,23,.78);color:#f1f3ef;padding:8px 12px;border-radius:4px;font-family:var(--mono);font-size:13px;line-height:1.35;font-variant-numeric:tabular-nums}
+.plate b{font-size:20px;font-weight:500;display:block}
+.credit{position:absolute;right:10px;bottom:8px;font-size:11px;color:#f1f3ef;background:rgba(20,25,23,.6);padding:2px 8px;border-radius:3px}
+.credit a{color:inherit}
+.gapcard{position:absolute;inset:0;display:grid;place-content:center;text-align:center;gap:10px;padding:24px;color:var(--muted)}
+.gapcard h2{font-family:var(--display);font-weight:400;font-size:24px;color:var(--ink);margin:0}
+.gapcard a{color:var(--heather);font-weight:600}
+.side{display:grid;gap:12px;align-content:start;min-width:0}
+.panel{background:var(--panel);border:1px solid var(--rule);border-radius:6px;padding:12px 14px}
+.label{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin:0 0 6px}
+#map{width:100%;height:auto;max-height:340px;display:block}
+.facts{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.fact .v{font-family:var(--mono);font-size:18px;font-variant-numeric:tabular-nums}
+.fact .k{font-size:12px;color:var(--muted)}
+.next{font-size:14px}
+.next strong{font-weight:600}
+.controls{display:flex;flex-wrap:wrap;align-items:center;gap:8px}
+.controls button{font:500 14px var(--body);border:1px solid var(--rule);background:var(--panel);color:var(--ink);padding:8px 14px;border-radius:4px;cursor:pointer;min-width:44px}
+.controls button.primary{background:var(--heather);border-color:var(--heather);color:#fff}
+.controls label{display:flex;align-items:center;gap:6px;font-size:14px;color:var(--muted);margin-left:auto}
+button:focus-visible,input:focus-visible,svg:focus-visible{outline:2px solid var(--heather);outline-offset:2px}
+.profile{background:var(--panel);border:1px solid var(--rule);border-radius:6px;padding:10px 10px 4px}
+#prof{width:100%;height:auto;display:block;cursor:pointer;touch-action:none}
+.legend{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:12px;color:var(--muted);padding:4px 4px 6px}
+.sw{display:inline-block;width:10px;height:10px;border-radius:2px;vertical-align:-1px;margin-right:5px}
+.lapse{font:600 14px var(--body);background:var(--heather);color:#fff;border:0;padding:10px 18px;border-radius:999px;cursor:pointer}
+.lapse:hover{filter:brightness(1.08)}
+.controls .speeds{display:inline-flex;border:1px solid var(--rule);border-radius:4px;overflow:hidden}
+.controls .speeds button{border:0;border-radius:0;min-width:0;background:var(--panel)}
+.controls .speeds button+button{border-left:1px solid var(--rule)}
+.controls .speeds button[aria-pressed="true"]{background:var(--ink);color:var(--bg)}
+.prog{position:absolute;left:0;right:0;bottom:0;height:4px;background:rgba(20,25,23,.35)}
+.prog i{display:block;height:100%;width:0;background:var(--heather)}
+.banner{position:absolute;inset:0;display:grid;place-content:center;gap:6px;padding:24px;background:rgba(20,25,23,.6);color:#f1f3ef;text-align:center}
+.banner b{font-family:var(--display);font-weight:400;font-size:clamp(26px,4.5vw,48px);line-height:1.1}
+.banner span{font-family:var(--mono);font-size:14px}
+.photo:fullscreen{aspect-ratio:auto;width:100vw;height:100vh;max-width:none;border-radius:0;background:#000}
+.photo:fullscreen .plate{left:24px;top:24px}
+.fshint{display:none;position:absolute;right:16px;top:16px;font-size:12px;color:#f1f3ef;background:rgba(20,25,23,.55);padding:4px 10px;border-radius:3px}
+.photo:fullscreen .fshint{display:block}
+.photo.playing{cursor:pointer}
+footer{font-size:12px;color:var(--muted);max-width:75ch}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+
+<div class="wrap">
+  <header>
+    <div>
+      <h1>Ride the Route</h1>
+      <p class="sub"><a class="back" href="/crew/route">← Route &amp; timeline</a> · Barnes to Yeadon, 14–15 November · a Street View picture every quarter mile</p>
+      <p class="sub" id="ver"></p>
+    </div>
+    <button id="lapse" class="lapse">▶ Time-lapse the whole ride</button>
+    <div class="days" role="group" aria-label="Day">
+      <button id="d1" aria-pressed="true">Day 1 · Barnes → Loughborough · <span id="d1mi"></span> mi</button>
+      <button id="d2" aria-pressed="false">Day 2 · Loughborough → Yeadon · <span id="d2mi"></span> mi</button>
+    </div>
+  </header>
+
+  <div class="stage">
+    <div class="photo" id="photo">
+      <img id="img" alt="" referrerpolicy="strict-origin-when-cross-origin">
+      <iframe id="pano" title="Google Street View, look around" hidden allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe>
+      <div class="gapcard" id="gap" hidden>
+        <h2>No Street View here</h2>
+        <p id="gapmsg"></p>
+        <p><a id="gmaps" href="#" target="_blank" rel="noopener">See this spot on Google Maps</a></p>
+      </div>
+      <div class="plate" id="plate"></div>
+      <div class="credit" id="credit" hidden></div>
+      <div class="banner" id="banner" hidden></div>
+      <div class="prog" aria-hidden="true"><i id="progbar"></i></div>
+      <div class="fshint" aria-hidden="true">Tap or Space to pause · Esc to leave full screen</div>
+    </div>
+    <div class="side">
+      <div class="panel">
+        <p class="label">Where you are</p>
+        <svg id="map" viewBox="0 0 300 300" role="img" aria-label="Route map"></svg>
+      </div>
+      <div class="panel facts">
+        <div class="fact"><div class="v" id="fEle">–</div><div class="k">metres up</div></div>
+        <div class="fact"><div class="v" id="fLeft">–</div><div class="k">miles to go today</div></div>
+        <div class="fact"><div class="v" id="fTotal">–</div><div class="k" id="kTotal">miles in</div></div>
+      </div>
+      <div class="panel next" id="next"></div>
+    </div>
+  </div>
+
+  <div class="controls">
+    <button id="prev" aria-label="Back a quarter mile">◀</button>
+    <button id="play" class="primary">Ride</button>
+    <button id="nxt" aria-label="Forward a quarter mile">▶</button>
+    <div class="speeds" role="group" aria-label="Speed">
+      <button data-speed="steady" aria-pressed="false">Steady</button>
+      <button data-speed="brisk" aria-pressed="true">Brisk</button>
+      <button data-speed="lapse" aria-pressed="false">Time-lapse</button>
+    </div>
+    <button id="look" hidden>Look around</button>
+    <button id="fs" hidden>Full screen</button>
+    <label><input type="checkbox" id="skip" checked> Skip stretches with no Street View</label>
+  </div>
+
+  <div class="profile">
+    <svg id="prof" viewBox="0 0 1000 170" tabindex="0" role="slider" aria-label="Position along the route"></svg>
+    <div class="legend">
+      <span><span class="sw" style="background:var(--goog)"></span>Google Street View</span>
+      <span><span class="sw" style="background:var(--gapc)"></span>No Street View here</span>
+      <span><span class="sw" style="background:var(--rule)"></span>Not asked yet</span>
+      <span><span class="sw" style="background:var(--heather)"></span>Planned stop</span>
+      <span id="tally" style="margin-left:auto"></span>
+    </div>
+  </div>
+
+  <footer>Every picture is Google Street View (© Google), with the month it was taken shown on it. Some are a few years old, so expect the odd closed shop or new roundabout. Where Google's camera has not been — a path, a towpath, a park — the point says so and shows no picture. The line is the final route: the GPX files on the Route page. <span id="built"></span></footer>
+</div>
+
+<script id="data" type="application/json">__DATA__</script>
+<script>
+(()=>{
+const D=JSON.parse(document.getElementById('data').textContent);
+// Every picture is Google Street View, asked for by this browser under the site's own key. The site puts the
+// key in when it serves this page; anywhere else the placeholder stays and no picture can load.
+// Whether a point HAS a picture is asked of Google too (its free "metadata" check), by this browser, as you ride:
+//   p.g === 1  Google has a Street View picture within reach of the point (p.gd = the month it was taken)
+//   p.g === 0  it has none — the point says so; nothing is put in its place
+//   p.g === undefined  not asked yet
+// If tools/ride/build.mjs was run with --coverage build, p.g is already in the data and nothing is asked here.
+const GKEY='__GMAPS_KEY__';const G=/^AIza[\w-]{30,}$/.test(GKEY);
+const API='https://maps.googleapis.com/maps/api/streetview';
+const at=p=>`location=${p.lat},${p.lon}&radius=${D.radius}&source=outdoor&key=${GKEY}`;
+const gsrc=p=>`${API}?size=640x480&heading=${Math.round(p.heading)}&fov=90&pitch=0&return_error_code=true&${at(p)}`;
+const srcOf=p=>p.img||gsrc(p);
+let metaOff=false,metaWhy='';   // Google refused the check itself: then each picture is simply asked for
+const asking=new Map();
+function ask(p){
+  if(p.g!==undefined||p.img||metaOff||!G)return Promise.resolve();
+  let q=asking.get(p.id);
+  if(!q){
+    q=fetch(`${API}/metadata?${at(p)}`).then(r=>r.json()).then(j=>{
+      if(j.status==='OK'){p.g=1;p.gd=typeof j.date==='string'?j.date:''}
+      else if(j.status==='ZERO_RESULTS'||j.status==='NOT_FOUND')p.g=0;
+      else{metaOff=true;metaWhy=String(j.status||'')}
+    }).catch(()=>{}).finally(()=>{asking.delete(p.id);paint(p)});
+    asking.set(p.id,q);
+  }
+  return q;
+}
+// can a picture be asked for at this point?  (not known yet + the check refused → try the picture itself)
+const has=p=>G&&!p.gf&&(p.g===1||(p.g===undefined&&metaOff))||!!p.img;
+const unknown=p=>G&&!p.img&&p.g===undefined&&!metaOff;
+const css=n=>getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+const $=id=>document.getElementById(id);
+// a stop's name and words come from the crew's plan (typed by people): never put into the page as markup
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>'&#'+c.charCodeAt(0)+';');
+const wait=ms=>new Promise(r=>setTimeout(r,ms));
+let day=1,i=0,playing=false,run=0;
+const byDay={1:D.points.filter(p=>p.day===1),2:D.points.filter(p=>p.day===2)};
+const NS='http://www.w3.org/2000/svg';
+const el=(t,a={})=>{const e=document.createElementNS(NS,t);for(const k in a)e.setAttribute(k,a[k]);return e};
+
+// map projection over whole route
+const all=D.days.flatMap(d=>d.line);
+const lat0=all.reduce((s,p)=>s+p[0],0)/all.length, kx=Math.cos(lat0*Math.PI/180);
+const xs=all.map(p=>p[1]*kx), ys=all.map(p=>p[0]);
+const minx=Math.min(...xs),maxx=Math.max(...xs),miny=Math.min(...ys),maxy=Math.max(...ys);
+const sc=Math.min(260/(maxx-minx),280/(maxy-miny));
+const ox=(300-(maxx-minx)*sc)/2;
+const P=(la,lo)=>[ox+(lo*kx-minx)*sc,10+(maxy-la)*sc];
+function drawMap(){
+  const m=$('map');m.innerHTML='';
+  D.days.forEach(d=>{
+    const pts=d.line.map(p=>P(p[0],p[1]).map(v=>v.toFixed(1)).join(',')).join(' ');
+    m.append(el('polyline',{points:pts,fill:'none',stroke:d.day===day?css('--ink'):css('--gapc'),'stroke-width':d.day===day?2.2:1.6,'stroke-linejoin':'round'}));
+  });
+  const s=P(...D.days[0].line[0]),e=P(...D.days[1].line.at(-1)),mid=P(...D.days[0].line.at(-1));
+  [[s,'Barnes','start'],[mid,'Loughborough','end'],[e,'Yeadon','end']].forEach(([q,t,a])=>{
+    m.append(el('circle',{cx:q[0],cy:q[1],r:3,fill:css('--ink')}));
+    const tx=el('text',{x:q[0]+(a==='start'?6:-6),y:q[1]+4,'text-anchor':a,'font-size':11,fill:css('--muted'),'font-family':css('--body')});tx.textContent=t;m.append(tx);
+  });
+  m.append(el('circle',{id:'me',r:6,fill:css('--heather'),stroke:css('--panel'),'stroke-width':2}));
+}
+
+// elevation profile = scrubber
+const W=1000,H=170,pTop=14,bot=124,band=[132,148];
+let px,eMin,eMax;
+const fillOf=p=>p.g===1||p.img?css('--goog'):p.g===0||p.gf?css('--gapc'):css('--rule');
+function paint(p){const r=document.getElementById('b-'+p.id);if(r)r.setAttribute('fill',fillOf(p));tally()}
+function tally(){
+  const pts=byDay[day],y=pts.filter(p=>p.g===1||p.img).length,n=pts.filter(p=>p.g===0).length,u=pts.length-y-n;
+  $('tally').textContent=G?`Day ${day}: ${y} with Street View, ${n} without${u?`, ${u} not asked yet`:''}`:'';
+}
+function drawProfile(){
+  const pts=byDay[day],n=pts.length,s=$('prof');s.innerHTML='';
+  eMin=0;eMax=Math.max(...D.points.map(p=>p.ele))*1.08;
+  px=k=>8+k/(n-1)*(W-16);
+  const py=e=>bot-(e-eMin)/(eMax-eMin)*(bot-pTop);
+  [100,200,300,400].filter(v=>v<eMax).forEach(v=>{
+    s.append(el('line',{x1:8,x2:W-8,y1:py(v),y2:py(v),stroke:css('--rule'),'stroke-width':1}));
+    const t=el('text',{x:10,y:py(v)-3,'font-size':10,fill:css('--muted'),'font-family':css('--mono')});t.textContent=v+' m';s.append(t);
+  });
+  let d=`M${px(0)},${bot}`;pts.forEach((p,k)=>d+=`L${px(k).toFixed(1)},${py(p.ele).toFixed(1)}`);d+=`L${px(n-1)},${bot}Z`;
+  s.append(el('path',{d,fill:css('--moss'),opacity:.18}));
+  s.append(el('path',{d:'M'+pts.map((p,k)=>`${px(k).toFixed(1)},${py(p.ele).toFixed(1)}`).join('L'),fill:'none',stroke:css('--moss'),'stroke-width':1.6}));
+  const bw=(W-16)/n;
+  const m0=pts[0].day_miles; // a day can start part-way in (the public viewer starts away from the house)
+  pts.forEach((p,k)=>s.append(el('rect',{id:'b-'+p.id,x:px(k)-bw/2,y:band[0],width:bw+.4,height:band[1]-band[0],fill:fillOf(p)})));
+  D.stops.filter(t=>t.day===day&&t.miles>m0+0.5&&t.miles<D.days[day-1].miles-0.5).forEach(t=>{
+    const k=Math.round((t.miles-m0)*4);
+    s.append(el('line',{x1:px(k),x2:px(k),y1:pTop-4,y2:band[1],stroke:css('--heather'),'stroke-width':1.5,'stroke-dasharray':'3 3'}));
+    const tx=el('text',{x:px(k),y:H-6,'text-anchor':'middle','font-size':11,fill:css('--heather'),'font-family':css('--body'),'font-weight':600});
+    tx.textContent=t.name.replace(/^D\d /,'').replace(/ \(.*$/,'').replace('OPTIONAL STOP','Optional').replace('STOP','Stop');s.append(tx);
+  });
+  for(let m=0;m<=D.days[day-1].miles;m+=20){if(m<m0)continue;const t=el('text',{x:px(Math.min(Math.round((m-m0)*4),n-1)),y:H-22,'text-anchor':'middle','font-size':10,fill:css('--muted'),'font-family':css('--mono')});t.textContent=m+' mi';s.append(t);}
+  s.append(el('line',{id:'cur',y1:pTop-6,y2:band[1]+2,stroke:css('--ink'),'stroke-width':2}));
+  s.append(el('circle',{id:'curdot',r:5,fill:css('--heather'),stroke:css('--panel'),'stroke-width':2}));
+  s._py=py;tally();
+}
+
+function card(title,msg,p){
+  $('img').hidden=true;$('img').removeAttribute('src');$('credit').hidden=true;$('gap').hidden=false;
+  $('gap').querySelector('h2').textContent=title;$('gapmsg').textContent=msg;
+  $('gmaps').href=`https://www.google.com/maps/search/?api=1&query=${p.lat},${p.lon}`;
+}
+let fails=0;   // pictures Google refused in a row
+function show(k){
+  const pts=byDay[day];i=Math.max(0,Math.min(pts.length-1,k));const p=pts[i];
+  $('plate').innerHTML=`<b>Mile ${p.day_miles.toFixed(2)}</b>Day ${day} · ${p.total_miles.toFixed(1)} mi in`;
+  closePano();
+  if(has(p)){
+    $('img').hidden=false;$('img').src=srcOf(p);$('img').alt=`Street View at mile ${p.day_miles} of day ${day}`;
+    $('gap').hidden=true;$('credit').hidden=false;
+    $('credit').textContent=`${p.gd?p.gd+' · ':''}Google Street View · © Google`;
+  }else if(unknown(p)){
+    card('Looking for Street View…','Asking Google whether it has a picture at this point.',p);
+    const d0=day,i0=i;ask(p).then(()=>{if(day===d0&&i===i0&&!unknown(p))show(i0)});
+  }else if(!G){
+    card('Street View is not available in this copy','The pictures are fetched from Google by the ride site itself; this copy of the page has no way to ask for them.',p);
+  }else if(p.gf){
+    card('Google did not send this picture',(metaOff?'There may be no Street View at this point, or ':'Google has a Street View picture here but did not send it: ')+"the day's allowance of pictures may be used up, or the connection dropped. Try again later.",p);
+  }else{
+    card('No Street View here',"Google has no Street View picture at this point on the route — its camera has not been along here (often a path, a towpath or a park). Nothing has been put in its place.",p);
+  }
+  const q=P(p.lat,p.lon);const me=$('me');me.setAttribute('cx',q[0]);me.setAttribute('cy',q[1]);
+  const x=px(i);$('cur').setAttribute('x1',x);$('cur').setAttribute('x2',x);
+  $('curdot').setAttribute('cx',x);$('curdot').setAttribute('cy',$('prof')._py(p.ele));
+  $('prof').setAttribute('aria-valuenow',p.day_miles);$('prof').setAttribute('aria-valuetext',`Mile ${p.day_miles} of day ${day}`);
+  $('progbar').style.width=(p.total_miles/TOTAL*100).toFixed(2)+'%';
+  $('fEle').textContent=p.ele;$('fLeft').textContent=(D.days[day-1].miles-p.day_miles).toFixed(1);$('fTotal').textContent=p.total_miles.toFixed(1);$('kTotal').textContent='of '+TOTAL.toFixed(1)+' miles';
+  const nx=D.stops.find(t=>t.day===day&&t.miles>p.day_miles+0.05);
+  $('next').innerHTML=nx?`<p class="label">Next stop</p><strong>${esc(nx.name.replace(/ \(.*$/,'').replace(/^D\d /,'Day '+day+' '))}</strong> in ${(nx.miles-p.day_miles).toFixed(1)} miles<br><span style="color:var(--muted)">${esc(nx.desc)}</span>`:`<p class="label">Next stop</p>End of the day.`;
+  $('look').hidden=!(G&&p.g===1);
+  const nk=pts[i+1];if(nk)ask(nk).then(()=>{if(has(nk))load(srcOf(nk))});
+  try{localStorage.setItem('jcmr-ride-pos',JSON.stringify({day,i,line:D.line_id}))}catch(e){}
+}
+// the next point to show going forward or back, honouring "Skip": asks Google about each point it passes
+async function next(d,k,dir){
+  let pts=byDay[d];k+=dir;
+  for(;;){
+    if(k<0)return null;
+    if(k>=pts.length){if(dir>0&&d===1){d=2;pts=byDay[2];k=0;continue}return null}
+    const p=pts[k];
+    if(!$('skip').checked)return {d,k};
+    await ask(p);
+    if(has(p)||unknown(p))return {d,k};   // still unknown = Google could not be reached: stop here and say so
+    k+=dir;
+  }
+}
+async function step(dir){
+  const tok=run;const t=await next(day,i,dir);
+  if(tok!==run)return;
+  if(!t)return;
+  if(t.d!==day)setDay(t.d,t.k);else show(t.k);
+}
+function setDay(d,k=0){day=d;$('d1').setAttribute('aria-pressed',d===1);$('d2').setAttribute('aria-pressed',d===2);drawMap();drawProfile();show(k);sweep()}
+// ---- playback: steady / brisk / time-lapse, asking and preloading ahead so fast play doesn't flicker
+const SPEED={steady:1300,brisk:550,lapse:140};let speed='brisk';
+const TOTAL=D.days.reduce((a,d)=>a+d.miles,0);
+const cache=new Map();
+function load(src){let im=cache.get(src);if(!im){im=new Image();im.decoding='async';im.referrerPolicy='strict-origin-when-cross-origin';im.src=src;cache.set(src,im)}return im}
+const settled=im=>im.complete?Promise.resolve():new Promise(r=>{im.addEventListener('load',r,{once:true});im.addEventListener('error',r,{once:true});setTimeout(r,5000)});
+function warm(){let d=day,k=i;for(let n=0;n<16;n++){k++;if(k>=byDay[d].length){if(d===1){d=2;k=0}else break}const p=byDay[d][k];ask(p).then(()=>{if(playing&&has(p))load(srcOf(p))})}}
+let bannerT=null;
+function flash(title,line,ms=1800){const b=$('banner');b.innerHTML=`<b>${title}</b>${line?`<span>${line}</span>`:''}`;b.hidden=false;const gapOn=!$('gap').hidden;$('gap').hidden=true;clearTimeout(bannerT);bannerT=setTimeout(()=>{b.hidden=true;if(gapOn&&$('img').hidden)$('gap').hidden=false},ms)}
+async function loop(tok,first){
+  await wait(first);
+  while(tok===run){
+    const t=await next(day,i,1);if(tok!==run)return;
+    if(!t){stop();flash('Yeadon',`${TOTAL.toFixed(1)} miles · for Janet`,6000);return}
+    const p=byDay[t.d][t.k];
+    if(has(p)){await settled(load(srcOf(p)));if(tok!==run)return}
+    let extra=0;
+    if(t.d!==day){setDay(t.d,t.k);flash('Day 2','Loughborough → Yeadon');extra=1800}else show(t.k);
+    warm();
+    await wait(SPEED[speed]+extra);
+  }
+}
+function play(first=SPEED[speed]){if(playing)return;playing=true;$('play').textContent='Pause';$('photo').classList.add('playing');warm();loop(++run,first)}
+function stop(){playing=false;run++;$('play').textContent='Ride';$('photo').classList.remove('playing')}
+$('play').onclick=()=>playing?stop():play();
+function setSpeed(s){speed=s;document.querySelectorAll('[data-speed]').forEach(b=>b.setAttribute('aria-pressed',b.dataset.speed===s))}
+document.querySelectorAll('[data-speed]').forEach(b=>b.onclick=()=>setSpeed(b.dataset.speed));
+const ph=$('photo');
+if(ph.requestFullscreen){$('fs').hidden=false;
+  $('fs').onclick=()=>{try{(document.fullscreenElement?document.exitFullscreen():ph.requestFullscreen()).catch(()=>{})}catch(e){}};
+  document.addEventListener('fullscreenchange',()=>{$('fs').textContent=document.fullscreenElement?'Exit full screen':'Full screen'})}
+ph.addEventListener('click',e=>{if(e.target.closest('a'))return;if(playing)stop();else if(document.fullscreenElement)play()});
+$('lapse').onclick=()=>{
+  stop();setSpeed('lapse');setDay(1,0);
+  try{if(ph.requestFullscreen&&!document.fullscreenElement)ph.requestFullscreen().catch(()=>{})}catch(e){}
+  flash('Day 1','Barnes → Loughborough');
+  play(1800);
+};
+$('prev').onclick=()=>{stop();step(-1)};$('nxt').onclick=()=>{stop();step(1)};
+$('d1').onclick=()=>{stop();setDay(1)};$('d2').onclick=()=>{stop();setDay(2)};
+const prof=$('prof');
+function seek(ev){const r=prof.getBoundingClientRect();const x=(ev.clientX-r.left)/r.width*W;const n=byDay[day].length;show(Math.round((x-8)/(W-16)*(n-1)))}
+prof.addEventListener('pointerdown',e=>{stop();seek(e);prof.onpointermove=seek;try{prof.setPointerCapture(e.pointerId)}catch(_){}});
+prof.addEventListener('pointercancel',()=>prof.onpointermove=null);
+prof.addEventListener('pointerup',()=>prof.onpointermove=null);
+prof.addEventListener('keydown',e=>{if(e.key==='ArrowRight'){e.preventDefault();stop();step(1)}if(e.key==='ArrowLeft'){e.preventDefault();stop();step(-1)}});
+document.addEventListener('keydown',e=>{if(e.target===prof||e.target.tagName==='INPUT')return;if(e.key==='ArrowRight'){stop();step(1)}if(e.key==='ArrowLeft'){stop();step(-1)}if(e.key===' '){e.preventDefault();$('play').click()}});
+matchMedia('(prefers-color-scheme: dark)').addEventListener('change',()=>{drawMap();drawProfile();show(i)});
+new MutationObserver(()=>{drawMap();drawProfile();show(i)}).observe(document.documentElement,{attributes:true,attributeFilter:['data-theme']});
+// Look around: Google's interactive panorama in place of the photo (free; no daily allowance)
+function closePano(){const f=$('pano');if(!f.hidden){f.hidden=true;f.removeAttribute('src');$('photo').classList.remove('panning');$('look').textContent='Look around'}}
+$('look').onclick=()=>{const f=$('pano');if(!f.hidden){closePano();show(i);return}
+  stop();const p=byDay[day][i];
+  f.src=`https://www.google.com/maps/embed/v1/streetview?key=${GKEY}&location=${p.lat},${p.lon}&heading=${Math.round(p.heading)}&pitch=0&fov=80`;
+  f.hidden=false;$('img').hidden=true;$('gap').hidden=true;$('photo').classList.add('panning');$('look').textContent='Back to the photo'};
+// A picture Google does not send (allowance used up, network) is said in words, never left as a broken image.
+// Three in a row stops the ride and says where.
+$('img').addEventListener('load',()=>{fails=0});
+$('img').addEventListener('error',()=>{
+  if(!$('img').getAttribute('src'))return;
+  const p=byDay[day][i];p.gf=1;paint(p);fails++;
+  const wasPlaying=playing;
+  if(fails>=3&&wasPlaying)stop();
+  show(i);
+  if(fails>=3&&wasPlaying)flash('Google has stopped sending pictures',`Stopped at day ${day}, mile ${p.day_miles.toFixed(2)} — the day's allowance may be used up`,8000);
+});
+// Fill in the strip under the profile: ask Google about the rest of the shown day, a few at a time (the check is free)
+let sweepRun=0;
+async function sweep(){
+  if(!G)return;const tok=++sweepRun,pts=byDay[day];let k=0;
+  const worker=async()=>{while(tok===sweepRun&&!metaOff){const j=(i+k++)%pts.length;if(k>pts.length)return;if(unknown(pts[j]))await ask(pts[j])}};
+  await Promise.all([worker(),worker(),worker(),worker()]);
+}
+$('d1mi').textContent=D.days[0].miles.toFixed(1);$('d2mi').textContent=D.days[1].miles.toFixed(1);
+$('ver').textContent=`The final line: Day 1 ${D.days[0].version}, ${D.days[0].miles.toFixed(1)} miles · Day 2 ${D.days[1].version}, ${D.days[1].miles.toFixed(1)} miles`;
+$('built').textContent='Built from the route files on '+D.built+'.';
+let start={day:1,i:0};
+// a place remembered on an earlier line is a different place on this one — only this line's is used
+try{const s=JSON.parse(localStorage.getItem('jcmr-ride-pos'));if(s&&s.line===D.line_id&&byDay[s.day]&&byDay[s.day][s.i])start=s}catch(e){}
+setDay(start.day,start.i);
+})();
+</script>

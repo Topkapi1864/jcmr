@@ -213,8 +213,8 @@ export function RoutePlanner({ profiles, initial, saved: savedIn, me }: Props) {
           <button className="btn btn-primary" onClick={save} disabled={pending || (!dirty && !!saved)} title="Everyone sees this plan; the public route page shows the times">
             {pending ? "Saving…" : dirty || !saved ? "Save as the crew plan" : "Saved"}
           </button>
-          <a className="btn" href="/crew/ride/view.html" title="A street photo every quarter mile along the 5 October line — not yet the final route; being updated">
-            Ride the route in photos (old line)
+          <a className="btn" href="/crew/ride/view.html" title="A Google Street View picture every quarter mile along the final line">
+            Ride the route in photos
           </a>
           <a className="btn" href="/crew/weather" title="The forecast every 10 miles at the hour this plan has us there">
             Weather
