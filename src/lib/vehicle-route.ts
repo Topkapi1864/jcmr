@@ -12,14 +12,13 @@ import { listSpots, plannedLabel, plannedStops } from "./stops";
 // One meeting point (Day 2, place 6) is not here either: its coordinate and the three
 // map links that use it are filled in from the plan when the page is opened (legsFor).
 
-export const VEHICLE_ROUTE_VERSION = "1.0";
+export const VEHICLE_ROUTE_VERSION = "1.1";
 
 export const TOP_LINE =
   "These roads come from the map. Nobody has driven them, the times have no traffic in them, and nothing has been checked for the motorhome's height or width. Go by the roads named and your own eyes.";
 export const NAV_APP_LINE = "Google Maps cannot follow a GPX. Use OsmAnd (Navigate by track) for the whole route, or the Maps buttons below leg by leg.";
-/** Under the downloads while V 1.0 is what the page serves. It comes off (null) when V 1.1 goes in. */
-export const VERSION_NOTE: string | null =
-  "V 1.0 turns round in two places where it has followed the riders to a point a car cannot pass. Day 1, Leicester: the line goes to the end of Ryder Road, a dead end, and comes back about 690 m. Day 2, Sheffield: the line goes to the tram junction on Glossop Road and comes back about 300 m to Wilkinson Street. V 1.1 takes both out.";
+/** A line under the downloads about the version the page serves, when there is one to say. None for V 1.1. */
+export const VERSION_NOTE: string | null = null;
 export const DAY2_AB_LINE =
   "A goes to Leeds Dock and round the ring road; B goes straight to Kirkstall Road by the M621 and is the one for a single vehicle; with two vehicles, one each.";
 
@@ -235,16 +234,15 @@ export const LEGS: Leg[] = [
     day: 1,
     n: "7",
     title: "Leicester: the Kirby Frith path to Gynsill Lane (after dark)",
-    part: "The north end of Ryder Road, mile 108.7. The riders take a 140 m path, then about 1.7 mi of streets, then a 290 m cycle track at the A50 / Gynsill Lane roundabout.",
-    partAt: [52.63752, -1.19945],
-    car: "Ryder Road is a dead end for a car, so don't follow up it. From the end of Ryder Road: Fulford Road → Scudamore Road → A563 → A563 New Parks Way → Groby Road roundabout → A50 → the Gynsill Lane roundabout.",
+    part: "Golf Course Lane at Scudamore Road, mile 108.3. The riders turn left here, towards Ryder Road, which is a dead end for a car; from its north end (mile 108.7) they take a 140 m path, then about 1.7 mi of streets, then a 290 m cycle track at the A50 / Gynsill Lane roundabout.",
+    partAt: [52.63327, -1.19616],
+    car: "Turn right into Scudamore Road (the riders turn left) → A563 → A563 New Parks Way → Groby Road roundabout → A50 → the Gynsill Lane roundabout. Don't follow the riders: Ryder Road is a dead end for a car.",
     meet: "Gynsill Lane, mile 110.6.",
     meetAt: [52.6585, -1.1938],
-    carMiles: "2.9",
-    carMin: "10",
-    alone: "1.9 mi, 10 minutes (about 17:48 to 17:58, dark).",
-    note: "The GPX goes to the end of Ryder Road and turns round there, as the route was written.",
-    maps: `${G}origin=52.63752,-1.19945&destination=52.6585,-1.1938&travelmode=driving`,
+    carMiles: "2.6",
+    carMin: "8",
+    alone: "2.3 mi, about 12 minutes (about 17:46 to 17:58, dark).",
+    maps: `${G}origin=52.63327,-1.19616&destination=52.6585,-1.1938&travelmode=driving`,
   },
   {
     day: 1,
@@ -291,16 +289,16 @@ export const LEGS: Leg[] = [
     day: 2,
     n: "3",
     title: "Sheffield: Glossop Road to Upper Hanover Street (the tram junction)",
-    part: "Glossop Road at Upper Hanover Street, mile 59.8. The left turn is one the map does not allow a car; on foot it is about 75 m of footway and crossings.",
-    partAt: [53.38022, -1.48527],
-    car: "Wilkinson Street (off Glossop Road about 300 m before the junction) → Brunswick Street → Broomspring Lane → left onto the A61 Upper Hanover Street. One-ways here are not checked.",
+    part: "Glossop Road at Wilkinson Street, mile 59.6, about 270 m before the tram junction at Upper Hanover Street (mile 59.8). At that junction the riders' left turn is one the map does not allow a car; on foot it is about 75 m of footway and crossings.",
+    partAt: [53.37935, -1.48912],
+    car: "Right into Wilkinson Street → Brunswick Street → Broomspring Lane → left onto the A61 Upper Hanover Street. One-ways here are not checked.",
     meet: "A61 Upper Hanover Street, mile 59.9.",
     meetAt: [53.38093, -1.48421],
-    carMiles: "0.7",
-    carMin: "4",
-    alone: "A minute or two.",
-    note: "Turn off into Wilkinson Street before the junction. The GPX goes to the junction and doubles back 300 m, as the route was written.",
-    maps: `${G}origin=53.38022,-1.48527&destination=53.38093,-1.48421&travelmode=driving`,
+    carMiles: "0.5",
+    carMin: "3",
+    alone: "0.3 mi, two or three minutes, with the junction crossed on foot.",
+    note: "The GPX turns into Wilkinson Street with the car.",
+    maps: `${G}origin=53.37935,-1.48912&destination=53.38093,-1.48421&travelmode=driving`,
   },
   {
     day: 2,

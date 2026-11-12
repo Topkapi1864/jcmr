@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <gpx xmlns="http://www.topografix.com/GPX/1/1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.topografix.com/GPX/1/1 http://www.topografix.com/GPX/1/1/gpx.xsd" version="1.1" creator="JCMR vehicle route builder">
  <metadata>
-  <name>JCMR vehicle Day 1 (V 1.0)</name>
-  <desc>Barnes to The Link Hotel. Vehicle route V 1.0, built 12 Nov 2026 from the bike line (Day 1 V2.0) and the vehicle route document of 12 Nov. These roads come from the map. Nobody has driven them, the times have no traffic in them, and nothing has been checked for the motorhome's height or width. Go by the roads named and your own eyes.</desc>
-  <time>2026-11-12T15:36:10Z</time>
+  <name>JCMR vehicle Day 1 (V 1.1)</name>
+  <desc>Barnes to The Link Hotel. Vehicle route V 1.1, built 12 Nov 2026 from the bike line (Day 1 V2.0) and the vehicle route document of 12 Nov. These roads come from the map. Nobody has driven them, the times have no traffic in them, and nothing has been checked for the motorhome's height or width. Go by the roads named and your own eyes.</desc>
+  <time>2026-11-12T16:57:55Z</time>
  </metadata>
  <trk>
   <name>JCMR vehicle Day 1</name>
-  <desc>Barnes to The Link Hotel. Vehicle route V 1.0, built 12 Nov 2026 from the bike line (Day 1 V2.0) and the vehicle route document of 12 Nov. These roads come from the map. Nobody has driven them, the times have no traffic in them, and nothing has been checked for the motorhome's height or width. Go by the roads named and your own eyes.</desc>
+  <desc>Barnes to The Link Hotel. Vehicle route V 1.1, built 12 Nov 2026 from the bike line (Day 1 V2.0) and the vehicle route document of 12 Nov. These roads come from the map. Nobody has driven them, the times have no traffic in them, and nothing has been checked for the motorhome's height or width. Go by the roads named and your own eyes.</desc>
   <trkseg>
    <trkpt lat="51.477843" lon="-0.238186"/>
    <trkpt lat="51.477808" lon="-0.238201"/>
@@ -8116,67 +8116,9 @@
    <trkpt lat="52.6317430" lon="-1.1963040"><ele>93.75</ele></trkpt>
    <trkpt lat="52.6317940" lon="-1.1962420"><ele>93.75</ele></trkpt>
    <trkpt lat="52.6318540" lon="-1.1962210"><ele>94.00</ele></trkpt>
-   <trkpt lat="52.6320900" lon="-1.1962160"><ele>94.50</ele></trkpt>
-   <trkpt lat="52.6323010" lon="-1.1962050"><ele>95.00</ele></trkpt>
-   <trkpt lat="52.6332730" lon="-1.1961570"><ele>95.00</ele></trkpt>
-   <trkpt lat="52.6334320" lon="-1.1973500"><ele>96.00</ele></trkpt>
-   <trkpt lat="52.6340250" lon="-1.1970360"><ele>94.75</ele></trkpt>
-   <trkpt lat="52.6342370" lon="-1.1969310"><ele>93.75</ele></trkpt>
-   <trkpt lat="52.6343240" lon="-1.1969310"><ele>93.75</ele></trkpt>
-   <trkpt lat="52.6344110" lon="-1.1969620"><ele>94.00</ele></trkpt>
-   <trkpt lat="52.6344900" lon="-1.1970270"><ele>93.75</ele></trkpt>
-   <trkpt lat="52.6345670" lon="-1.1971220"><ele>93.75</ele></trkpt>
-   <trkpt lat="52.6348400" lon="-1.1980120"><ele>94.50</ele></trkpt>
-   <trkpt lat="52.6349150" lon="-1.1982560"><ele>95.00</ele></trkpt>
-   <trkpt lat="52.6350870" lon="-1.1988220"><ele>94.50</ele></trkpt>
-   <trkpt lat="52.6352000" lon="-1.1991920"><ele>94.50</ele></trkpt>
-   <trkpt lat="52.6354070" lon="-1.1991070"><ele>94.00</ele></trkpt>
-   <trkpt lat="52.6355320" lon="-1.1990180"><ele>94.00</ele></trkpt>
-   <trkpt lat="52.6355560" lon="-1.1989920"><ele>94.00</ele></trkpt>
-   <trkpt lat="52.6355960" lon="-1.1989500"><ele>94.00</ele></trkpt>
-   <trkpt lat="52.6356510" lon="-1.1988910"><ele>94.00</ele></trkpt>
-   <trkpt lat="52.6358560" lon="-1.1985700"><ele>94.00</ele></trkpt>
-   <trkpt lat="52.6359900" lon="-1.1983630"><ele>94.50</ele></trkpt>
-   <trkpt lat="52.6361170" lon="-1.1981950"><ele>95.00</ele></trkpt>
-   <trkpt lat="52.6362160" lon="-1.1981300"><ele>95.25</ele></trkpt>
-   <trkpt lat="52.6363160" lon="-1.1980910"><ele>95.50</ele></trkpt>
-   <trkpt lat="52.6364110" lon="-1.1980740"><ele>96.00</ele></trkpt>
-   <trkpt lat="52.6365180" lon="-1.1980760"><ele>96.25</ele></trkpt>
-   <trkpt lat="52.6366050" lon="-1.1981160"><ele>96.75</ele></trkpt>
-   <trkpt lat="52.6367020" lon="-1.1981840"><ele>97.00</ele></trkpt>
-   <trkpt lat="52.6367820" lon="-1.1982820"><ele>97.00</ele></trkpt>
-   <trkpt lat="52.6368640" lon="-1.1984060"><ele>97.00</ele></trkpt>
-   <trkpt lat="52.6372690" lon="-1.1990420"><ele>97.00</ele></trkpt>
-   <trkpt lat="52.6375200" lon="-1.1994530"><ele>98.00</ele></trkpt>
-   <trkpt lat="52.637519" lon="-1.199452"/>
-   <trkpt lat="52.637269" lon="-1.199042"/>
-   <trkpt lat="52.636864" lon="-1.198406"/>
-   <trkpt lat="52.636782" lon="-1.198282"/>
-   <trkpt lat="52.636701" lon="-1.198184"/>
-   <trkpt lat="52.636605" lon="-1.198116"/>
-   <trkpt lat="52.636518" lon="-1.198076"/>
-   <trkpt lat="52.636411" lon="-1.198074"/>
-   <trkpt lat="52.636316" lon="-1.198092"/>
-   <trkpt lat="52.636215" lon="-1.198130"/>
-   <trkpt lat="52.636116" lon="-1.198195"/>
-   <trkpt lat="52.635990" lon="-1.198363"/>
-   <trkpt lat="52.635856" lon="-1.198570"/>
-   <trkpt lat="52.635651" lon="-1.198891"/>
-   <trkpt lat="52.635596" lon="-1.198950"/>
-   <trkpt lat="52.635556" lon="-1.198992"/>
-   <trkpt lat="52.635532" lon="-1.199018"/>
-   <trkpt lat="52.635407" lon="-1.199107"/>
-   <trkpt lat="52.635200" lon="-1.199193"/>
-   <trkpt lat="52.635087" lon="-1.198822"/>
-   <trkpt lat="52.634915" lon="-1.198256"/>
-   <trkpt lat="52.634840" lon="-1.198012"/>
-   <trkpt lat="52.634567" lon="-1.197122"/>
-   <trkpt lat="52.634490" lon="-1.197027"/>
-   <trkpt lat="52.634411" lon="-1.196962"/>
-   <trkpt lat="52.634324" lon="-1.196931"/>
-   <trkpt lat="52.634237" lon="-1.196931"/>
-   <trkpt lat="52.634025" lon="-1.197036"/>
-   <trkpt lat="52.633432" lon="-1.197350"/>
+   <trkpt lat="52.631854" lon="-1.196221"/>
+   <trkpt lat="52.632090" lon="-1.196216"/>
+   <trkpt lat="52.632301" lon="-1.196205"/>
    <trkpt lat="52.633273" lon="-1.196157"/>
    <trkpt lat="52.633264" lon="-1.196048"/>
    <trkpt lat="52.633232" lon="-1.195443"/>

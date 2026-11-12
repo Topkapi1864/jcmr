@@ -27,10 +27,12 @@ const text = (html: string) =>
 
 const PAGE = "/crew/vehicle-route";
 const FILES = [
-  { path: `${PAGE}/gpx/JCMR_vehicle_Day1_V1.0.gpx`, name: "JCMR_vehicle_Day1_V1.0.gpx", src: "content/vehicle/day1.gpx", day: 1 },
-  { path: `${PAGE}/gpx/JCMR_vehicle_Day2A_via_Leeds_Dock_V1.0.gpx`, name: "JCMR_vehicle_Day2A_via_Leeds_Dock_V1.0.gpx", src: "content/vehicle/day2a.gpx", day: 2 },
-  { path: `${PAGE}/gpx/JCMR_vehicle_Day2B_direct_V1.0.gpx`, name: "JCMR_vehicle_Day2B_direct_V1.0.gpx", src: "content/vehicle/day2b.gpx", day: 2 },
+  { path: `${PAGE}/gpx/JCMR_vehicle_Day1_V1.1.gpx`, name: "JCMR_vehicle_Day1_V1.1.gpx", src: "content/vehicle/day1.gpx", day: 1, points: 8624 },
+  { path: `${PAGE}/gpx/JCMR_vehicle_Day2A_via_Leeds_Dock_V1.1.gpx`, name: "JCMR_vehicle_Day2A_via_Leeds_Dock_V1.1.gpx", src: "content/vehicle/day2a.gpx", day: 2, points: 5076 },
+  { path: `${PAGE}/gpx/JCMR_vehicle_Day2B_direct_V1.1.gpx`, name: "JCMR_vehicle_Day2B_direct_V1.1.gpx", src: "content/vehicle/day2b.gpx", day: 2, points: 4881 },
 ];
+// The addresses of the version before: nothing is served at them any more.
+const OLD_PATHS = ["JCMR_vehicle_Day1_V1.0.gpx", "JCMR_vehicle_Day2A_via_Leeds_Dock_V1.0.gpx", "JCMR_vehicle_Day2B_direct_V1.0.gpx"].map((f) => `${PAGE}/gpx/${f}`);
 const count = (s: string, re: RegExp) => (s.match(re) ?? []).length;
 
 async function main() {
@@ -49,8 +51,10 @@ async function main() {
     assert.equal(count(x, /<trk>/g), 1);
     assert.equal(count(x, /<trkseg>/g), 1);
     assert.ok(!/<extensions|gpxx:|gpxtpx:/.test(x), "plain GPX 1.1");
+    assert.equal(count(x, /<trkpt /g), f.points, `${f.src} is the V 1.1 line, point for point`);
+    assert.ok(x.includes("(V 1.1)</name>") && x.includes("Vehicle route V 1.1") && !x.includes("V 1.0"), `${f.src} says V 1.1 and nothing of V 1.0`);
   }
-  ok("the committed tracks: one trk, one trkseg, no waypoint, no extensions");
+  ok("the committed tracks: the V 1.1 lines, one trk, one trkseg, no waypoint, no extensions");
 
   // ---- the leg data: the one meeting point that comes from the plan is not written down, and no place is called a stop ----
   const lib = fs.readFileSync("src/lib/vehicle-route.ts", "utf8");
@@ -67,7 +71,7 @@ async function main() {
   ok("the leg data: the plan's point is not in the repo, and no place is called a stop");
 
   // ---- signed out: the page and each download give the sign-in page and nothing else ----
-  for (const p of [PAGE, ...FILES.map((f) => f.path), `${PAGE}/gpx/nothing.gpx`]) {
+  for (const p of [PAGE, ...FILES.map((f) => f.path), ...OLD_PATHS, `${PAGE}/gpx/nothing.gpx`]) {
     const r = await get(p, null);
     assert.equal(r.status, 307, `${p} signed out`);
     assert.ok((r.headers.get("location") ?? "").includes("/crew/signin"), `${p} goes to sign-in`);
@@ -75,7 +79,7 @@ async function main() {
     assert.ok(!body.includes("<trkpt") && !body.includes("Kirkstall"), `${p} signed out serves nothing of the route`);
   }
   for (const p of [PAGE, FILES[0].path]) assert.equal((await get(p, crew.slice(0, -3) + "abc")).status, 307, "a forged session is refused");
-  ok("signed out or forged: the page and the three downloads go to the sign-in page");
+  ok("signed out or forged: the page, the three downloads and the three V 1.0 addresses go to the sign-in page");
 
   for (const p of ["/", "/route", "/live", "/support-crew", "/weather", "/crew/signin", "/api/live", "/api/route-geo", "/api/route-geo?format=profile", "/robots.txt"]) {
     const t = await (await get(p, null)).text();
@@ -92,17 +96,24 @@ async function main() {
   assert.ok(page.includes("Google Maps cannot follow a GPX. Use OsmAnd (Navigate by track) for the whole route, or the Maps buttons below leg by leg."), "the OsmAnd line");
   assert.ok(page.includes("A goes to Leeds Dock and round the ring road; B goes straight to Kirkstall Road by the M621 and is the one for a single vehicle; with two vehicles, one each."), "what A and B are");
   for (const f of FILES) assert.ok(html.includes(`href="${f.path}"`), `a download button for ${f.name}`);
-  assert.equal(count(page, /download the GPX \(V 1\.0\)/g), 3, "three download buttons, each saying (V 1.0)");
+  assert.equal(count(page, /download the GPX \(V 1\.1\)/g), 3, "three download buttons, each saying (V 1.1)");
   const legIds = [...html.matchAll(/id="place-(\d)-(\w+)"/g)].map((m) => `${m[1]}-${m[2]}`);
   assert.deepEqual(legIds, ["1-1", "1-2", "1-3", "1-4", "1-5", "1-6", "1-7", "1-8", "2-1", "2-2", "2-3", "2-4", "2-5", "2-6a", "2-6b", "2-6c", "2-7"], "eight places on Day 1, seven on Day 2 with place 6 in three parts, in order");
   const legButtons = count(html, /<a[^>]*href="https:\/\/www\.google\.com\/maps\/dir\/\?api=1&amp;[^"]+"[^>]*>Google Maps: /g);
   assert.equal(legButtons, 17, "a Google Maps button on every place");
-  assert.ok(
-    page.includes(
-      "V 1.0 turns round in two places where it has followed the riders to a point a car cannot pass. Day 1, Leicester: the line goes to the end of Ryder Road, a dead end, and comes back about 690 m. Day 2, Sheffield: the line goes to the tram junction on Glossop Road and comes back about 300 m to Wilkinson Street. V 1.1 takes both out.",
-    ),
-    "the V 1.0 line under the downloads, word for word",
-  );
+  // V 1.1: the line about V 1.0's two turn-rounds is gone, and the two places say what the file now does.
+  assert.ok(!/V ?1\.0|turns round in two places|as the route was written|doubles back 300 m/.test(page), "nothing of V 1.0 or its turn-rounds is on the page");
+  const place = (id: string) => text(html.slice(html.indexOf(`id="place-${id}"`), html.indexOf("</li>", html.indexOf(`id="place-${id}"`))));
+  const p17 = place("1-7");
+  assert.ok(p17.includes("Golf Course Lane at Scudamore Road, mile 108.3. The riders turn left here, towards Ryder Road, which is a dead end for a car;"), "Day 1 place 7 parts at Golf Course Lane and Scudamore Road");
+  assert.ok(p17.includes("Turn right into Scudamore Road (the riders turn left)") && p17.includes("Don't follow the riders: Ryder Road is a dead end for a car."), "Day 1 place 7: the car turns right");
+  assert.ok(p17.includes("2.6 mi") && p17.includes("8 min with no traffic") && p17.includes("2.3 mi, about 12 minutes (about 17:46 to 17:58, dark)."), "Day 1 place 7: its figures");
+  assert.ok(p17.includes('href="https://www.google.com/maps/dir/?api=1&origin=52.63327,-1.19616&destination=52.6585,-1.1938&travelmode=driving"'), "Day 1 place 7: its Maps button starts at the junction");
+  const p23 = place("2-3");
+  assert.ok(p23.includes("Glossop Road at Wilkinson Street, mile 59.6, about 270 m before the tram junction at Upper Hanover Street (mile 59.8). At that junction the riders' left turn is one the map does not allow a car;"), "Day 2 place 3 parts at Wilkinson Street");
+  assert.ok(p23.includes("Right into Wilkinson Street → Brunswick Street → Broomspring Lane → left onto the A61 Upper Hanover Street. One-ways here are not checked."), "Day 2 place 3: the car's roads");
+  assert.ok(p23.includes("0.5 mi") && p23.includes("3 min with no traffic") && p23.includes("0.3 mi, two or three minutes, with the junction crossed on foot.") && p23.includes("The GPX turns into Wilkinson Street with the car."), "Day 2 place 3: its figures and its note");
+  assert.ok(p23.includes('href="https://www.google.com/maps/dir/?api=1&origin=53.37935,-1.48912&destination=53.38093,-1.48421&travelmode=driving"'), "Day 2 place 3: its Maps button starts at Wilkinson Street");
   assert.ok(/href="\/crew\/vehicle-route"[^>]*>Vehicle route</.test(html), "its own entry in the crew menu");
 
   // The stops on the page are the plan's own, as the Stops tool lists them.
@@ -130,7 +141,7 @@ async function main() {
     assert.equal(href("6c"), "https://www.google.com/maps/dir/?api=1&destination=53.79805,-1.56186&travelmode=driving");
     ok(`Day 2 place 6: no plan stop within 3 miles of mile 97.1 (nearest ${near.mile}); the links fall back to the turn and to where you are`);
   }
-  ok(`a crew session: the page, its three lines, 17 leg buttons, 3 downloads, ${stopButtons} stops from the plan`);
+  ok(`a crew session: the page, its three lines, 17 leg buttons, 3 downloads (V 1.1), no V 1.0 line, ${stopButtons} stops from the plan`);
 
   // ---- a crew session: the downloads ----
   const perDay: Record<number, number> = {};
@@ -145,6 +156,7 @@ async function main() {
     assert.equal(count(x, /<trk>/g), 1);
     assert.equal(count(x, /<trkseg>/g), 1);
     assert.equal(count(x, /<trkpt /g), count(src, /<trkpt /g), "every track point of the committed file");
+    assert.ok(x.includes("(V 1.1)</name>") && !x.includes("V 1.0"), "the download says V 1.1");
     assert.ok(!/<extensions|gpxx:/.test(x));
     const w = count(x, /<wpt /g);
     perDay[f.day] = perDay[f.day] ?? w;
@@ -155,7 +167,8 @@ async function main() {
   }
   assert.equal(perDay[1] + perDay[2], planStops, "the waypoints are the plan's stops, all of them");
   assert.equal((await get(`${PAGE}/gpx/nothing.gpx`, crew)).status, 404);
-  ok("a crew session: three downloads as application/gpx+xml with a .gpx filename, one trk, one trkseg, the plan's stops as waypoints");
+  for (const p of OLD_PATHS) assert.equal((await get(p, crew)).status, 404, `${p} is no longer a file`);
+  ok("a crew session: three V 1.1 downloads as application/gpx+xml with a .gpx filename, one trk, one trkseg, the plan's stops as waypoints; the V 1.0 names are gone");
 
   console.log(`# ${n} passed`);
 }

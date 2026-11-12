@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <gpx xmlns="http://www.topografix.com/GPX/1/1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.topografix.com/GPX/1/1 http://www.topografix.com/GPX/1/1/gpx.xsd" version="1.1" creator="JCMR vehicle route builder">
  <metadata>
-  <name>JCMR vehicle Day 2 B, direct to Kirkstall Road (V 1.0)</name>
-  <desc>The Link Hotel to Yeadon, direct to Kirkstall Road by the M621. Vehicle route V 1.0, built 12 Nov 2026 from the bike line (Day 2 V2.3) and the vehicle route document of 12 Nov. These roads come from the map. Nobody has driven them, the times have no traffic in them, and nothing has been checked for the motorhome's height or width. Go by the roads named and your own eyes.</desc>
-  <time>2026-11-12T15:36:10Z</time>
+  <name>JCMR vehicle Day 2 B, direct to Kirkstall Road (V 1.1)</name>
+  <desc>The Link Hotel to Yeadon, direct to Kirkstall Road by the M621. Vehicle route V 1.1, built 12 Nov 2026 from the bike line (Day 2 V2.3) and the vehicle route document of 12 Nov. These roads come from the map. Nobody has driven them, the times have no traffic in them, and nothing has been checked for the motorhome's height or width. Go by the roads named and your own eyes.</desc>
+  <time>2026-11-12T16:57:55Z</time>
  </metadata>
  <trk>
   <name>JCMR vehicle Day 2 B, direct to Kirkstall Road</name>
-  <desc>The Link Hotel to Yeadon, direct to Kirkstall Road by the M621. Vehicle route V 1.0, built 12 Nov 2026 from the bike line (Day 2 V2.3) and the vehicle route document of 12 Nov. These roads come from the map. Nobody has driven them, the times have no traffic in them, and nothing has been checked for the motorhome's height or width. Go by the roads named and your own eyes.</desc>
+  <desc>The Link Hotel to Yeadon, direct to Kirkstall Road by the M621. Vehicle route V 1.1, built 12 Nov 2026 from the bike line (Day 2 V2.3) and the vehicle route document of 12 Nov. These roads come from the map. Nobody has driven them, the times have no traffic in them, and nothing has been checked for the motorhome's height or width. Go by the roads named and your own eyes.</desc>
   <trkseg>
    <trkpt lat="52.7625450" lon="-1.2476150"><ele>55.75</ele></trkpt>
    <trkpt lat="52.7625050" lon="-1.2479510"><ele>56.00</ele></trkpt>
@@ -2592,37 +2592,16 @@
    <trkpt lat="53.3776300" lon="-1.4919300"><ele>123.31</ele></trkpt>
    <trkpt lat="53.3778600" lon="-1.4914600"><ele>122.54</ele></trkpt>
    <trkpt lat="53.3784100" lon="-1.4905850"><ele>119.07</ele></trkpt>
-   <trkpt lat="53.3789600" lon="-1.4897100"><ele>116.08</ele></trkpt>
-   <trkpt lat="53.3793400" lon="-1.4891300"><ele>113.81</ele></trkpt>
-   <trkpt lat="53.3797200" lon="-1.4885150"><ele>112.19</ele></trkpt>
-   <trkpt lat="53.3801000" lon="-1.4879000"><ele>110.93</ele></trkpt>
-   <trkpt lat="53.3801800" lon="-1.4877400"><ele>110.38</ele></trkpt>
-   <trkpt lat="53.3802200" lon="-1.4876000"><ele>109.22</ele></trkpt>
-   <trkpt lat="53.3802600" lon="-1.4872300"><ele>107.10</ele></trkpt>
-   <trkpt lat="53.3802600" lon="-1.4863200"><ele>105.65</ele></trkpt>
-   <trkpt lat="53.3802200" lon="-1.4852750"><ele>101.96</ele></trkpt>
-   <trkpt lat="53.380230" lon="-1.485269"/>
-   <trkpt lat="53.380233" lon="-1.485365"/>
-   <trkpt lat="53.380251" lon="-1.485885"/>
-   <trkpt lat="53.380257" lon="-1.486161"/>
-   <trkpt lat="53.380261" lon="-1.486320"/>
-   <trkpt lat="53.380269" lon="-1.486901"/>
-   <trkpt lat="53.380271" lon="-1.487039"/>
-   <trkpt lat="53.380269" lon="-1.487225"/>
-   <trkpt lat="53.380256" lon="-1.487420"/>
-   <trkpt lat="53.380235" lon="-1.487534"/>
-   <trkpt lat="53.380225" lon="-1.487591"/>
-   <trkpt lat="53.380184" lon="-1.487737"/>
-   <trkpt lat="53.380104" lon="-1.487897"/>
-   <trkpt lat="53.379955" lon="-1.488143"/>
-   <trkpt lat="53.379848" lon="-1.488316"/>
-   <trkpt lat="53.379801" lon="-1.488392"/>
-   <trkpt lat="53.379777" lon="-1.488432"/>
-   <trkpt lat="53.379707" lon="-1.488545"/>
-   <trkpt lat="53.379558" lon="-1.488788"/>
-   <trkpt lat="53.379485" lon="-1.488901"/>
-   <trkpt lat="53.379454" lon="-1.488948"/>
-   <trkpt lat="53.379427" lon="-1.488993"/>
+   <trkpt lat="53.378426" lon="-1.490573"/>
+   <trkpt lat="53.378458" lon="-1.490520"/>
+   <trkpt lat="53.378586" lon="-1.490317"/>
+   <trkpt lat="53.378695" lon="-1.490140"/>
+   <trkpt lat="53.378844" lon="-1.489898"/>
+   <trkpt lat="53.378977" lon="-1.489683"/>
+   <trkpt lat="53.379093" lon="-1.489513"/>
+   <trkpt lat="53.379125" lon="-1.489463"/>
+   <trkpt lat="53.379163" lon="-1.489406"/>
+   <trkpt lat="53.379232" lon="-1.489300"/>
    <trkpt lat="53.379349" lon="-1.489123"/>
    <trkpt lat="53.379313" lon="-1.489015"/>
    <trkpt lat="53.379298" lon="-1.488963"/>
@@ -4083,8 +4062,7 @@
    <trkpt lat="53.7557533" lon="-1.4427000"><ele>20.94</ele></trkpt>
    <trkpt lat="53.7564000" lon="-1.4420500"><ele>19.52</ele></trkpt>
    <trkpt lat="53.7569800" lon="-1.4413700"><ele>18.57</ele></trkpt>
-   <trkpt lat="53.7573800" lon="-1.4409950"><ele>19.02</ele></trkpt>
-   <trkpt lat="53.757391" lon="-1.441029"/>
+   <trkpt lat="53.757005" lon="-1.441423"/>
    <trkpt lat="53.757323" lon="-1.441090"/>
    <trkpt lat="53.757366" lon="-1.441255"/>
    <trkpt lat="53.757407" lon="-1.441365"/>
