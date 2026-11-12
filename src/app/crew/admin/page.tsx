@@ -27,6 +27,9 @@ export default async function AdminPage({ searchParams }: { searchParams: Promis
         <Link className="btn btn-sm" href="/crew/admin/links">
           Links
         </Link>
+        <Link className="btn btn-sm" href="/crew/admin/documents">
+          Documents
+        </Link>
         <Link className="btn btn-sm" href="/crew/admin/content">
           Content
         </Link>

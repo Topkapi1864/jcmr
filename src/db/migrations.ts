@@ -137,6 +137,18 @@ export const MIGRATIONS: string[] = [
      url TEXT NOT NULL,
      sort_order INTEGER NOT NULL DEFAULT 0
    )`,
+  `CREATE TABLE IF NOT EXISTS documents (
+     id INTEGER PRIMARY KEY AUTOINCREMENT,
+     label TEXT NOT NULL,
+     filename TEXT NOT NULL,
+     size INTEGER NOT NULL,
+     sha256 TEXT NOT NULL,
+     md5 TEXT NOT NULL,
+     data TEXT NOT NULL,
+     sort_order INTEGER NOT NULL DEFAULT 0,
+     added_by TEXT NOT NULL,
+     added_at TEXT NOT NULL
+   )`,
   `CREATE TABLE IF NOT EXISTS kit_catalogue (
      id INTEGER PRIMARY KEY AUTOINCREMENT,
      name TEXT NOT NULL,

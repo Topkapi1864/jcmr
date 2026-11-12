@@ -246,6 +246,22 @@ export const links = sqliteTable("links", {
   sortOrder: integer("sort_order").notNull().default(0),
 });
 
+// PDFs an admin uploads in Admin -> Documents, opened from the crew board's Links
+// with a crew session only. The file itself is kept here (base64), never in the
+// repository: see src/lib/documents.ts.
+export const documents = sqliteTable("documents", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
+  label: text("label").notNull(),
+  filename: text("filename").notNull(),
+  size: integer("size").notNull(),
+  sha256: text("sha256").notNull(),
+  md5: text("md5").notNull(),
+  data: text("data").notNull(),
+  sortOrder: integer("sort_order").notNull().default(0),
+  addedBy: text("added_by").notNull(),
+  addedAt: text("added_at").notNull(),
+});
+
 // ---- Kit (equipment lists) ---------------------------------------------
 
 export const KIT_CATEGORIES = ["bike", "ride-kit", "lights-power", "clothing", "repair", "nutrition", "off-bike", "tools-spares", "other"] as const;

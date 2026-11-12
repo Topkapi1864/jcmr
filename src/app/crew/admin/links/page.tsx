@@ -14,7 +14,7 @@ export default async function LinksPage() {
         ← Admin
       </Link>
       <h1>Links</h1>
-      <p className="muted small">Shown at the foot of the crew board. Links only — the site stores no documents.</p>
+      <p className="muted small">Shown at the foot of the crew board. Links only — a PDF for the crew goes in <Link href="/crew/admin/documents">Admin → Documents</Link>.</p>
       <p className="small">
         <b>{OLD_ROUTE_DOCS_NOTE}</b> A link to any of them is marked OLD ROUTE on the crew board, by its label or address (&ldquo;roadbook&rdquo;, &ldquo;route guide&rdquo;, &ldquo;towns and villages&rdquo;).
       </p>

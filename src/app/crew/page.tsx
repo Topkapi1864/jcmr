@@ -4,6 +4,8 @@ import { byDue, counts, listItems } from "@/lib/items";
 import { BoardHeader, DoneGroup, ItemList, StaleStrip, readFilters } from "@/components/board";
 import { db, ready, schema } from "@/db/client";
 import { OLD_ROUTE_DOCS_NOTE, OLD_ROUTE_LINK_MARK, isOldRouteDoc } from "@/lib/old-route-docs";
+import { listDocuments } from "@/lib/documents";
+import { CURRENT_DOCS_NOTE, awaitedState, fmtBytes } from "@/lib/document-rules";
 
 type SP = Promise<Record<string, string | undefined>>;
 
@@ -19,6 +21,10 @@ export default async function MinePage({ searchParams }: { searchParams: SP }) {
   const done = mine.filter((i) => i.status === "done");
   await ready();
   const links = await db.select().from(schema.links).orderBy(schema.links.sortOrder, schema.links.id).all();
+  // The crew's PDFs (Admin → Documents). The OLD ROUTE line stays word for word
+  // until every awaited V2.1 file is really here; a short list changes nothing.
+  const docs = await listDocuments();
+  const docsCurrent = awaitedState(docs).allHere;
 
   return (
     <div className="stack">
@@ -32,8 +38,20 @@ export default async function MinePage({ searchParams }: { searchParams: SP }) {
       <section className="mt-6">
         <h2>Links</h2>
         <p className="small">
-          <b>{OLD_ROUTE_DOCS_NOTE}</b>
+          <b>{docsCurrent ? CURRENT_DOCS_NOTE : OLD_ROUTE_DOCS_NOTE}</b>
         </p>
+        {docs.length > 0 && (
+          <ul className="list">
+            {docs.map((d) => (
+              <li key={d.id}>
+                <a href={`/crew/documents/${d.id}`} target="_blank" rel="noopener">
+                  {d.label}
+                </a>
+                <span className="small muted"> — PDF, {fmtBytes(d.size)}</span>
+              </li>
+            ))}
+          </ul>
+        )}
         {links.length === 0 ? (
           <p className="muted">No links yet{s.role === "admin" ? <> — <Link href="/crew/admin/links">add some</Link></> : null}.</p>
         ) : (

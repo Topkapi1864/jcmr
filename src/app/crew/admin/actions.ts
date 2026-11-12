@@ -11,6 +11,8 @@ import { SETTING_KEYS, setSetting, type SettingKey } from "@/lib/settings";
 import { randomToken, sha256Hex } from "@/lib/util";
 import { fetchJustGivingTotal, fetchJustGivingDonations } from "@/lib/donate";
 import { nowIso } from "@/lib/time";
+import { addDocument, relabelDocument, removeDocument, replaceDocument } from "@/lib/documents";
+import { MAX_DOCUMENT_BYTES } from "@/lib/document-rules";
 
 function bump() {
   revalidatePath("/", "layout");
@@ -127,6 +129,62 @@ export async function deleteLink(form: FormData) {
   await journal(s.name, `link deleted: #${id}`);
   bump();
   redirect("/crew/admin/links");
+}
+
+// ---- Documents ---------------------------------------------------------
+// PDFs for the crew, kept in the database (never in the repository): see
+// src/lib/documents.ts. Every refusal goes back to the page with its reason.
+
+export async function uploadDocument(form: FormData) {
+  const s = await requireAdmin();
+  const files = form.getAll("file").filter((f): f is File => f instanceof File && f.size > 0);
+  if (files.length === 0) redirect("/crew/admin/documents?error=empty");
+  // A typed label names one file; several at once each take their own name.
+  const typed = files.length === 1 ? String(form.get("label") ?? "") : "";
+  let added = 0;
+  for (const file of files) {
+    const r = file.size > MAX_DOCUMENT_BYTES ? ({ ok: false, why: "too-big" } as const) : await addDocument({ label: typed, filename: file.name, bytes: new Uint8Array(await file.arrayBuffer()), by: s.name });
+    if (!r.ok) {
+      if (added) bump();
+      redirect(`/crew/admin/documents?added=${added}&error=${r.why}`);
+    }
+    await journal(s.name, `document added: ${r.label} (${r.size} bytes, md5 ${r.md5})`);
+    added++;
+  }
+  bump();
+  redirect(`/crew/admin/documents?added=${added}`);
+}
+
+export async function replaceDocumentFile(form: FormData) {
+  const s = await requireAdmin();
+  const id = Number(form.get("id"));
+  const file = form.get("file");
+  if (!(file instanceof File) || file.size === 0) redirect("/crew/admin/documents?error=empty");
+  if (file.size > MAX_DOCUMENT_BYTES) redirect("/crew/admin/documents?error=too-big");
+  const r = await replaceDocument(id, { filename: file.name, bytes: new Uint8Array(await file.arrayBuffer()), by: s.name });
+  if (!r.ok) redirect(`/crew/admin/documents?error=${r.why}`);
+  await journal(s.name, `document replaced: #${id} ${r.label} (${r.size} bytes, md5 ${r.md5})`);
+  bump();
+  redirect("/crew/admin/documents?replaced=1");
+}
+
+export async function saveDocument(form: FormData) {
+  const s = await requireAdmin();
+  const id = Number(form.get("id"));
+  const label = String(form.get("label") ?? "");
+  if (!(await relabelDocument(id, label, Number(form.get("sortOrder")) || 0))) redirect("/crew/admin/documents?error=label");
+  await journal(s.name, `document relabelled: #${id} ${label.trim()}`);
+  bump();
+  redirect("/crew/admin/documents?saved=1");
+}
+
+export async function deleteDocument(form: FormData) {
+  const s = await requireAdmin();
+  const id = Number(form.get("id"));
+  const label = await removeDocument(id);
+  if (label !== null) await journal(s.name, `document removed: #${id} ${label}`);
+  bump();
+  redirect("/crew/admin/documents?removed=1");
 }
 
 // ---- Import (§8) -------------------------------------------------------
