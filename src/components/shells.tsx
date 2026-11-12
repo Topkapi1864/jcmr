@@ -15,6 +15,7 @@ const PUBLIC_NAV = [
   { href: "/support-crew", label: "The crew" },
   { href: "/route", label: "The route" },
   { href: "/weather", label: "Weather" },
+  { href: "/party", label: "The party" },
   { href: "/donate", label: "Charity" },
 ];
 

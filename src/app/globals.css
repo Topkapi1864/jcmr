@@ -646,6 +646,67 @@ select {
     padding: 32px 18px;
   }
 }
+/* The Destination Party (/party): the finish at the cemetery, then the
+   reception at the cricket club. Two photo cards, Sarah's words, the details. */
+.party-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-5);
+  margin-top: var(--space-5);
+}
+@media (max-width: 760px) {
+  .party-grid {
+    grid-template-columns: 1fr;
+  }
+}
+.party-card {
+  padding: 0;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+.party-card img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  object-fit: cover;
+}
+.party-body {
+  padding: 18px 20px 20px;
+}
+.party-body h2 {
+  font-size: var(--text-2xl);
+  margin: 8px 0 10px;
+}
+.party-body p {
+  margin: 0 0 10px;
+  line-height: var(--leading-loose);
+}
+.party-links {
+  display: flex;
+  gap: var(--space-4);
+  flex-wrap: wrap;
+  margin-bottom: 0;
+}
+.party-words {
+  margin: 0;
+  max-width: var(--measure);
+  border-left: 3px solid var(--duck-egg-deep);
+  padding-left: 16px;
+  font-size: var(--text-lg);
+  line-height: var(--leading-loose);
+}
+.party-details {
+  display: grid;
+  gap: var(--space-4);
+  margin: 0;
+}
+.party-details dd {
+  margin: 4px 0 0;
+}
+.party-credit {
+  margin-top: var(--space-5);
+}
 .donate-card {
   background: var(--navy);
   color: var(--cream);

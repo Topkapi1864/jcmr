@@ -2,7 +2,7 @@
 
 One codebase, one store, two doors (spec v0.1):
 
-- **Public front** — `/`, `/mum`, `/mum/album`, `/riders`, `/support-crew`, `/route`, `/weather`, `/donate`, `/live`, `/live/tv`. Dark (a holding page) until an admin flips the switch.
+- **Public front** — `/`, `/mum`, `/mum/album`, `/riders`, `/support-crew`, `/route`, `/weather`, `/party`, `/donate`, `/live`, `/live/tv`. Dark (a holding page) until an admin flips the switch.
 - **Crew job board** — `/crew/*` behind a shared password + name pick. Items with one owner, a due date, a status, what they're waiting on, and the **Stale** view. Also the crew's way onto the public site: **Messages** (the board on the home page) and **Live** (the status line and the day's map links).
 - **Fiona's read door** — `GET /api/board/<token>.json` and `.csv`.
 
