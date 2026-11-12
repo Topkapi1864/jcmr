@@ -29,7 +29,12 @@ Sign in at `/crew/signin` with the crew password, pick a name. Gary and Fiona ar
 ## Backups
 
 - Admin → **Download board as CSV** and **Download full backup** (every table as JSON).
-- `GET /api/backup?key=$BACKUP_KEY` returns the same JSON — the nightly job is a GitHub Actions workflow (`.github/workflows/backup.yml`) that fetches it and keeps the file as a workflow artifact for 90 days. Set `BACKUP_KEY` and `SITE_URL` as repository secrets.
+- `GET /api/backup?key=$BACKUP_KEY` returns the same JSON — the nightly job is a GitHub Actions workflow (`.github/workflows/backup.yml`) that fetches it, **encrypts it in the runner** (AES-256, with the `BACKUP_KEY` secret as the passphrase), proves the encrypted file opens again byte for byte, removes the plain file, and keeps only the encrypted one as a workflow artifact, `jcmr-backup-enc-<run id>`, for 90 days. Set `BACKUP_KEY` and `SITE_URL` as repository secrets.
+- **This repository is public, and anyone signed in to GitHub can download a public repository's workflow artifacts — so nothing personal may be committed to it or attached to its runs unencrypted.** The backup holds the crew's phone numbers, dates of birth, emergency contacts and where they sleep; that is why it is encrypted before it is kept. It is as safe as `BACKUP_KEY` is long and random.
+- To open a backup: download the artifact from the run's page, unzip it, and run this (it asks for the key — the `BACKUP_KEY` in Vercel → Project → Settings → Environment Variables):
+  ```
+  openssl enc -d -aes-256-cbc -pbkdf2 -iter 600000 -md sha256 -in jcmr-2026-11-12.json.enc -out jcmr-2026-11-12.json
+  ```
 - `npm run backup` writes `backups/jcmr-<date>.json` from whatever `DATABASE_URL` points at.
 
 ## Content and route files

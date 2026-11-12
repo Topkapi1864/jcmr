@@ -1,18 +1,78 @@
 name: Nightly backup
+# This repository is PUBLIC, and anyone signed in to GitHub can download a public
+# repository's workflow artifacts. So the backup is encrypted here, in the runner,
+# before it is kept: AES-256 with the BACKUP_KEY secret. The plain file never
+# leaves the runner. To open one, see "Backups" in the README.
 on:
   schedule:
     - cron: "17 2 * * *"   # 02:17 UTC nightly
   workflow_dispatch:
+  push:                    # ONE-OFF, 12 Nov 2026: comes out again in the next commit
+    branches: [main]
+    paths: [".github/workflows/backup.yml"]
+permissions:
+  contents: read
 jobs:
   backup:
     runs-on: ubuntu-latest
     steps:
-      - name: Fetch the backup
+      - name: Fetch the backup, encrypt it, prove it opens, remove the plain file
+        env:
+          SITE_URL: ${{ secrets.SITE_URL }}
+          BACKUP_KEY: ${{ secrets.BACKUP_KEY }}
         run: |
-          curl -fsS "${{ secrets.SITE_URL }}/api/backup?key=${{ secrets.BACKUP_KEY }}" -o "jcmr-$(date -u +%F).json"
-          ls -l jcmr-*.json
+          set -euo pipefail
+          umask 077
+          test -n "$BACKUP_KEY" || { echo "BACKUP_KEY is not set"; exit 1; }
+          plain="$RUNNER_TEMP/jcmr-plain.json"
+          check="$RUNNER_TEMP/jcmr-check.json"
+          out="jcmr-$(date -u +%F).json.enc"
+          curl -fsS "$SITE_URL/api/backup?key=$BACKUP_KEY" -o "$plain"
+          # It must be the backup, not an error page.
+          grep -q '"_exported_at"' "$plain" || { echo "that is not a backup"; exit 1; }
+          openssl enc -aes-256-cbc -pbkdf2 -iter 600000 -md sha256 -salt -pass env:BACKUP_KEY -in "$plain" -out "$out"
+          # The round trip: decrypt and compare byte for byte. Any difference fails the job.
+          openssl enc -d -aes-256-cbc -pbkdf2 -iter 600000 -md sha256 -pass env:BACKUP_KEY -in "$out" -out "$check"
+          cmp "$plain" "$check"
+          # And what is kept must really be the encrypted file.
+          head -c 8 "$out" | grep -q '^Salted__' || { echo "the output is not encrypted"; exit 1; }
+          if grep -q '"_exported_at"' "$out"; then echo "the output is readable"; exit 1; fi
+          rm -f "$plain" "$check"
+          ls -l "$out"
       - uses: actions/upload-artifact@v4
         with:
-          name: jcmr-backup-${{ github.run_id }}
-          path: jcmr-*.json
+          name: jcmr-backup-enc-${{ github.run_id }}
+          path: jcmr-*.json.enc
+          if-no-files-found: error
           retention-days: 90
+
+  # ONE-OFF, 12 Nov 2026 (Fiona's word on the cowork board, 08:29Z): the backups made
+  # before today were kept unencrypted. Once this run's encrypted backup has passed
+  # its round trip and been kept, every artifact that is not an encrypted backup is
+  # deleted. Runs only on the push that carries it; comes out again in the next commit.
+  purge-plain:
+    needs: backup
+    if: github.event_name == 'push'
+    runs-on: ubuntu-latest
+    permissions:
+      actions: write
+    steps:
+      - name: Delete every artifact that holds a plain backup (jcmr-backup-<run id>, never jcmr-backup-enc-…)
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          RUN_ID: ${{ github.run_id }}
+        run: |
+          set -euo pipefail
+          kept=$(gh api "repos/$REPO/actions/runs/$RUN_ID/artifacts" -q '.artifacts[] | select(.name | startswith("jcmr-backup-enc-")) | select(.size_in_bytes > 1000) | .id' | wc -l)
+          test "$kept" -ge 1 || { echo "this run kept no encrypted backup; nothing is deleted"; exit 1; }
+          plain() { gh api --paginate "repos/$REPO/actions/artifacts?per_page=100" -q '.artifacts[] | select(.name | startswith("jcmr-backup-")) | select(.name | startswith("jcmr-backup-enc-") | not) | .id'; }
+          n=0
+          for id in $(plain); do
+            gh api -X DELETE "repos/$REPO/actions/artifacts/$id"
+            n=$((n + 1))
+          done
+          echo "plain backups deleted: $n"
+          left=$(plain | wc -l)
+          echo "plain backups left: $left"
+          test "$left" -eq 0
