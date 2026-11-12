@@ -176,21 +176,32 @@ const srcOf=p=>p.img||gsrc(p);
 let metaOff=false,metaWhy='';   // Google refused the check itself: then each picture is simply asked for
 const asking=new Map();
 function ask(p){
-  if(p.g!==undefined||p.img||metaOff||!G)return Promise.resolve();
+  if(p.g!==undefined||p.gu||p.img||metaOff||!G)return Promise.resolve();
   let q=asking.get(p.id);
   if(!q){
-    q=fetch(`${API}/metadata?${at(p)}`).then(r=>r.json()).then(j=>{
-      if(j.status==='OK'){p.g=1;p.gd=typeof j.date==='string'?j.date:''}
-      else if(j.status==='ZERO_RESULTS'||j.status==='NOT_FOUND')p.g=0;
-      else{metaOff=true;metaWhy=String(j.status||'')}
-    }).catch(()=>{}).finally(()=>{asking.delete(p.id);paint(p)});
+    // Google's UNKNOWN_ERROR is its own passing fault ("trying again may be successful") and a dropped connection
+    // is ours: neither means the key is refused, so the point is asked again (three tries in all). Only a real
+    // refusal of the check (REQUEST_DENIED, OVER_QUERY_LIMIT, INVALID_REQUEST) turns the check off for the ride.
+    // A point still unanswered after three tries is marked p.gu: its picture is simply asked for.
+    q=(async()=>{
+      for(let n=0;n<3;n++){
+        let j=null;
+        try{j=await fetch(`${API}/metadata?${at(p)}`).then(r=>r.json())}catch(e){}
+        const st=j&&j.status;
+        if(st==='OK'){p.g=1;p.gd=typeof j.date==='string'?j.date:'';return}
+        if(st==='ZERO_RESULTS'||st==='NOT_FOUND'){p.g=0;return}
+        if(st&&st!=='UNKNOWN_ERROR'){metaOff=true;metaWhy=String(st);return}
+        if(n<2)await new Promise(r=>setTimeout(r,500*(n+1)));
+      }
+      p.gu=1;
+    })().catch(()=>{}).finally(()=>{asking.delete(p.id);paint(p)});
     asking.set(p.id,q);
   }
   return q;
 }
 // can a picture be asked for at this point?  (not known yet + the check refused → try the picture itself)
-const has=p=>G&&!p.gf&&(p.g===1||(p.g===undefined&&metaOff))||!!p.img;
-const unknown=p=>G&&!p.img&&p.g===undefined&&!metaOff;
+const has=p=>G&&!p.gf&&(p.g===1||(p.g===undefined&&(metaOff||!!p.gu)))||!!p.img;
+const unknown=p=>G&&!p.img&&p.g===undefined&&!metaOff&&!p.gu;
 const css=n=>getComputedStyle(document.documentElement).getPropertyValue(n).trim();
 const $=id=>document.getElementById(id);
 // a stop's name and words come from the crew's plan (typed by people): never put into the page as markup
@@ -279,7 +290,7 @@ function show(k){
   }else if(!G){
     card('Street View is not available in this copy','The pictures are fetched from Google by the ride site itself; this copy of the page has no way to ask for them.',p);
   }else if(p.gf){
-    card('Google did not send this picture',(metaOff?'There may be no Street View at this point, or ':'Google has a Street View picture here but did not send it: ')+"the day's allowance of pictures may be used up, or the connection dropped. Try again later.",p);
+    card('Google did not send this picture',(metaOff||p.g===undefined?'There may be no Street View at this point, or ':'Google has a Street View picture here but did not send it: ')+"the day's allowance of pictures may be used up, or the connection dropped. Try again later.",p);
   }else{
     card('No Street View here',"Google has no Street View picture at this point on the route — its camera has not been along here (often a path, a towpath or a park). Nothing has been put in its place.",p);
   }
