@@ -7,9 +7,6 @@ on:
   schedule:
     - cron: "17 2 * * *"   # 02:17 UTC nightly
   workflow_dispatch:
-  push:                    # ONE-OFF, 12 Nov 2026: comes out again in the next commit
-    branches: [main]
-    paths: [".github/workflows/backup.yml"]
 permissions:
   contents: read
 jobs:
@@ -45,34 +42,3 @@ jobs:
           path: jcmr-*.json.enc
           if-no-files-found: error
           retention-days: 90
-
-  # ONE-OFF, 12 Nov 2026 (Fiona's word on the cowork board, 08:29Z): the backups made
-  # before today were kept unencrypted. Once this run's encrypted backup has passed
-  # its round trip and been kept, every artifact that is not an encrypted backup is
-  # deleted. Runs only on the push that carries it; comes out again in the next commit.
-  purge-plain:
-    needs: backup
-    if: github.event_name == 'push'
-    runs-on: ubuntu-latest
-    permissions:
-      actions: write
-    steps:
-      - name: Delete every artifact that holds a plain backup (jcmr-backup-<run id>, never jcmr-backup-enc-…)
-        env:
-          GH_TOKEN: ${{ github.token }}
-          REPO: ${{ github.repository }}
-          RUN_ID: ${{ github.run_id }}
-        run: |
-          set -euo pipefail
-          kept=$(gh api "repos/$REPO/actions/runs/$RUN_ID/artifacts" -q '.artifacts[] | select(.name | startswith("jcmr-backup-enc-")) | select(.size_in_bytes > 1000) | .id' | wc -l)
-          test "$kept" -ge 1 || { echo "this run kept no encrypted backup; nothing is deleted"; exit 1; }
-          plain() { gh api --paginate "repos/$REPO/actions/artifacts?per_page=100" -q '.artifacts[] | select(.name | startswith("jcmr-backup-")) | select(.name | startswith("jcmr-backup-enc-") | not) | .id'; }
-          n=0
-          for id in $(plain); do
-            gh api -X DELETE "repos/$REPO/actions/artifacts/$id"
-            n=$((n + 1))
-          done
-          echo "plain backups deleted: $n"
-          left=$(plain | wc -l)
-          echo "plain backups left: $left"
-          test "$left" -eq 0
