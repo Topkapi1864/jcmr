@@ -179,11 +179,16 @@ function ask(p){
   if(p.g!==undefined||p.gu||p.img||metaOff||!G)return Promise.resolve();
   let q=asking.get(p.id);
   if(!q){
-    // Google's UNKNOWN_ERROR is its own passing fault ("trying again may be successful") and a dropped connection
-    // is ours: neither means the key is refused, so the point is asked again (three tries in all). Only a real
-    // refusal of the check (REQUEST_DENIED, OVER_QUERY_LIMIT, INVALID_REQUEST) turns the check off for the ride.
-    // A point still unanswered after three tries is marked p.gu: its picture is simply asked for.
+    // Google's UNKNOWN_ERROR and a dropped connection do not mean the key is refused, so the point is asked again
+    // (three tries in all). Only a real refusal of the check (REQUEST_DENIED, OVER_QUERY_LIMIT, INVALID_REQUEST)
+    // turns the check off for the ride.
+    // Three UNKNOWN_ERRORs running: Google has no picture to give there. Seen on the live site 12 Nov 2026 along
+    // the Woodlesford–Leeds waterside (Day 2 miles 94.25–98.75): the same points every time, and the picture
+    // itself was not sent either. Such a point is one with no Street View (p.g=0, p.gq=1 so it says why) —
+    // it is not a refused picture and never counts towards "Google has stopped sending pictures".
+    // No answer at all in three tries (the connection): p.gu — its picture is simply asked for.
     q=(async()=>{
+      let errs=0;
       for(let n=0;n<3;n++){
         let j=null;
         try{j=await fetch(`${API}/metadata?${at(p)}`).then(r=>r.json())}catch(e){}
@@ -191,9 +196,10 @@ function ask(p){
         if(st==='OK'){p.g=1;p.gd=typeof j.date==='string'?j.date:'';return}
         if(st==='ZERO_RESULTS'||st==='NOT_FOUND'){p.g=0;return}
         if(st&&st!=='UNKNOWN_ERROR'){metaOff=true;metaWhy=String(st);return}
+        if(st)errs++;
         if(n<2)await new Promise(r=>setTimeout(r,500*(n+1)));
       }
-      p.gu=1;
+      if(errs===3){p.g=0;p.gq=1}else p.gu=1;
     })().catch(()=>{}).finally(()=>{asking.delete(p.id);paint(p)});
     asking.set(p.id,q);
   }
@@ -292,7 +298,7 @@ function show(k){
   }else if(p.gf){
     card('Google did not send this picture',(metaOff||p.g===undefined?'There may be no Street View at this point, or ':'Google has a Street View picture here but did not send it: ')+"the day's allowance of pictures may be used up, or the connection dropped. Try again later.",p);
   }else{
-    card('No Street View here',"Google has no Street View picture at this point on the route — its camera has not been along here (often a path, a towpath or a park). Nothing has been put in its place.",p);
+    card('No Street View here',p.gq?"Google gave no Street View picture for this point on the route: its own check answered with an error each of the three times it was asked, as it does along some paths and watersides. Nothing has been put in its place.":"Google has no Street View picture at this point on the route — its camera has not been along here (often a path, a towpath or a park). Nothing has been put in its place.",p);
   }
   const q=P(p.lat,p.lon);const me=$('me');me.setAttribute('cx',q[0]);me.setAttribute('cy',q[1]);
   const x=px(i);$('cur').setAttribute('x1',x);$('cur').setAttribute('x2',x);
