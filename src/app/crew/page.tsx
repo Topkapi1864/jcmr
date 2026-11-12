@@ -3,6 +3,7 @@ import { requireCrew } from "@/lib/auth";
 import { byDue, counts, listItems } from "@/lib/items";
 import { BoardHeader, DoneGroup, ItemList, StaleStrip, readFilters } from "@/components/board";
 import { db, ready, schema } from "@/db/client";
+import { OLD_ROUTE_DOCS_NOTE, OLD_ROUTE_LINK_MARK, isOldRouteDoc } from "@/lib/old-route-docs";
 
 type SP = Promise<Record<string, string | undefined>>;
 
@@ -30,6 +31,9 @@ export default async function MinePage({ searchParams }: { searchParams: SP }) {
 
       <section className="mt-6">
         <h2>Links</h2>
+        <p className="small">
+          <b>{OLD_ROUTE_DOCS_NOTE}</b>
+        </p>
         {links.length === 0 ? (
           <p className="muted">No links yet{s.role === "admin" ? <> — <Link href="/crew/admin/links">add some</Link></> : null}.</p>
         ) : (
@@ -39,6 +43,12 @@ export default async function MinePage({ searchParams }: { searchParams: SP }) {
                 <a href={l.url} target="_blank" rel="noopener">
                   {l.label}
                 </a>
+                {isOldRouteDoc(l.label, l.url) && (
+                  <span className="small">
+                    {" "}
+                    — <b>{OLD_ROUTE_LINK_MARK}</b>
+                  </span>
+                )}
               </li>
             ))}
           </ul>

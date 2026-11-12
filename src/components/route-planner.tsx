@@ -4,6 +4,7 @@ import { useEffect, useMemo, useRef, useState, useTransition } from "react";
 import dynamic from "next/dynamic";
 import type { RouteProfile } from "@/lib/route";
 import { routeVersion } from "@/lib/constants";
+import { OLD_ROUTE_DOCS_NOTE } from "@/lib/old-route-docs";
 import {
   DEFAULT_PLAN,
   decodePlan,
@@ -366,6 +367,9 @@ export function RoutePlanner({ profiles, initial, saved: savedIn, me }: Props) {
                 Day 1 at 06:30
               </button>
             </div>
+            <p className="xs muted" style={{ margin: 0 }}>
+              &ldquo;Simon&rsquo;s roadbook&rdquo; here sets his pace and stop lengths only. <b>{OLD_ROUTE_DOCS_NOTE}</b>
+            </p>
           </section>
         </aside>
 

@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { db, ready, schema } from "@/db/client";
 import { requireAdmin } from "@/lib/auth";
+import { OLD_ROUTE_DOCS_NOTE, OLD_ROUTE_LINK_MARK, isOldRouteDoc } from "@/lib/old-route-docs";
 import { deleteLink, saveLink } from "../actions";
 
 export default async function LinksPage() {
@@ -14,8 +15,16 @@ export default async function LinksPage() {
       </Link>
       <h1>Links</h1>
       <p className="muted small">Shown at the foot of the crew board. Links only — the site stores no documents.</p>
+      <p className="small">
+        <b>{OLD_ROUTE_DOCS_NOTE}</b> A link to any of them is marked OLD ROUTE on the crew board, by its label or address (&ldquo;roadbook&rdquo;, &ldquo;route guide&rdquo;, &ldquo;towns and villages&rdquo;).
+      </p>
       {links.map((l) => (
         <div key={l.id} className="card stack-sm">
+          {isOldRouteDoc(l.label, l.url) && (
+            <p className="small" style={{ margin: 0 }}>
+              <b>{OLD_ROUTE_LINK_MARK}</b>
+            </p>
+          )}
           <form action={saveLink} className="form-inline">
             <input type="hidden" name="id" value={l.id} />
             <label className="field">
