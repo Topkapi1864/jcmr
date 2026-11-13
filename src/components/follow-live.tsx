@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import type { LivePayload } from "@/lib/live";
 import { RouteMap } from "./route-map";
 import { MessageBody, MessagePhoto } from "./message-body";
@@ -158,48 +158,95 @@ function dayShort(iso: string) {
 
 // The board: the crew's messages and, on the day, the road's status lines,
 // pinned first then newest first. Longer boards fold after `fold` entries.
+// The list keeps to a set height and scrolls inside its panel (.updates-scroll
+// in globals.css), so a growing board never lengthens the page. `more` says
+// whether there is anything above or below what shows: it draws the soft edge
+// and the "Earlier" button and, when the list does scroll, lets the keyboard
+// reach it.
 export function Updates({ initial, fold = 6 }: { initial: LivePayload; fold?: number }) {
   const { data } = useLive(initial);
   const [open, setOpen] = useState(false);
+  const [more, setMore] = useState({ above: false, below: false });
+  const box = useRef<HTMLDivElement>(null);
+  const rows = useRef<HTMLDivElement>(null);
   const list = data.updates;
   const shown = open || list.length <= fold + 1 ? list : list.slice(0, fold);
   const hidden = list.length - shown.length;
+
+  useEffect(() => {
+    const el = box.current;
+    if (!el) return;
+    const measure = () => {
+      const above = el.scrollTop > 1;
+      const below = el.scrollHeight - el.clientHeight - el.scrollTop > 1;
+      setMore((m) => (m.above === above && m.below === below ? m : { above, below }));
+    };
+    measure();
+    el.addEventListener("scroll", measure, { passive: true });
+    // The box changes with the window; its rows with a new post, "Show earlier" or a picture arriving.
+    const watch = typeof ResizeObserver === "undefined" ? null : new ResizeObserver(measure);
+    watch?.observe(el);
+    if (rows.current) watch?.observe(rows.current);
+    return () => {
+      el.removeEventListener("scroll", measure);
+      watch?.disconnect();
+    };
+  }, []);
+
+  const scrolls = more.above || more.below;
+  // Most of a boxful down, so the last row read is still in sight (smooth where motion is welcome: globals.css).
+  const earlier = () => {
+    const el = box.current;
+    if (el) el.scrollBy({ top: Math.round(el.clientHeight * 0.8) });
+  };
   return (
     <div>
       <div className="small muted" style={{ marginBottom: 10 }}>
         {list.length ? `${list.length} message${list.length === 1 ? "" : "s"} so far` : "Nothing posted yet. The crew write here before the ride, and from the road on the day."}
       </div>
-      {shown.map((m) => (
-        <div key={m.id} className="update" data-kind={m.kind} data-pinned={m.pinned ? "" : undefined}>
-          <div>
-            <div className="mono time">{hhmm(m.postedAt)}</div>
-            <div className="mono xs muted">{m.mile != null ? `${m.mile} mi` : dayShort(m.postedAt)}</div>
-          </div>
-          <div>
-            {m.kind === "message" ? (
-              <>
-                {m.text && <MessageBody text={m.text} className="text" />}
-                {m.photo && <MessagePhoto src={m.photo} />}
-              </>
-            ) : (
-              <div className="text">
-                {m.place && <b>{m.place} — </b>}
-                {m.text}
+      <div className="updates-frame" data-more-above={more.above ? "" : undefined} data-more-below={more.below ? "" : undefined}>
+        <div ref={box} className="updates-scroll" {...(scrolls ? { tabIndex: 0, role: "region", "aria-label": "Messages from the crew" } : {})}>
+          <div ref={rows} className="updates-rows">
+            {shown.map((m) => (
+              <div key={m.id} className="update" data-kind={m.kind} data-pinned={m.pinned ? "" : undefined}>
+                <div>
+                  <div className="mono time">{hhmm(m.postedAt)}</div>
+                  <div className="mono xs muted">{m.mile != null ? `${m.mile} mi` : dayShort(m.postedAt)}</div>
+                </div>
+                <div>
+                  {m.kind === "message" ? (
+                    <>
+                      {m.text && <MessageBody text={m.text} className="text" />}
+                      {m.photo && <MessagePhoto src={m.photo} />}
+                    </>
+                  ) : (
+                    <div className="text">
+                      {m.place && <b>{m.place} — </b>}
+                      {m.text}
+                    </div>
+                  )}
+                  <div className="xs muted">
+                    {m.postedBy}, {m.who}
+                    {m.pinned ? " · pinned" : ""}
+                    {m.edited ? " · edited" : ""}
+                  </div>
+                </div>
               </div>
+            ))}
+            {hidden > 0 && (
+              <button type="button" className="btn btn-sm" style={{ marginTop: 12 }} onClick={() => setOpen(true)}>
+                Show {hidden} earlier
+              </button>
             )}
-            <div className="xs muted">
-              {m.postedBy}, {m.who}
-              {m.pinned ? " · pinned" : ""}
-              {m.edited ? " · edited" : ""}
-            </div>
           </div>
         </div>
-      ))}
-      {hidden > 0 && (
-        <button type="button" className="btn btn-sm" style={{ marginTop: 12 }} onClick={() => setOpen(true)}>
-          Show {hidden} earlier
-        </button>
-      )}
+        {/* For a finger or a mouse: phones hide their scrollbars, so this says there is more. The keyboard has the box itself; a screen reader reads every row anyway. */}
+        {more.below && (
+          <button type="button" className="updates-more" tabIndex={-1} aria-hidden="true" onClick={earlier}>
+            Earlier ↓
+          </button>
+        )}
+      </div>
     </div>
   );
 }
