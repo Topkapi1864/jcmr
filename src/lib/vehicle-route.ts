@@ -414,3 +414,33 @@ export function legsFor(stops: VehicleStop[]): Leg[] {
 }
 
 export const DAY_TITLES: Record<number, string> = { 1: "Barnes to The Link Hotel", 2: "The Link Hotel to Yeadon" };
+
+// ---- stops only: for the motorhome and the Crew Chief ----
+// A table of the stops with a map link to each, from wherever the phone is. No track and
+// no download: nothing that places a stop is in this file or in content/vehicle. The rows
+// and their links are made from the crew's plan and pins when the page is opened.
+
+export const STOPS_ONLY_HEADING = "Stops only (motorhome and Crew Chief)";
+export const STOPS_ONLY_LINE = "Stop to stop for the motorhome and Crew Chief. This does NOT follow the riders between stops.";
+export const STOPS_ONLY_MOTORHOME_LINE = "The motorhome's height and width have been checked against nothing: not on any road, and not at any stop.";
+export const STOPS_ONLY_TIGHT_LINE = "Three legs are tight even with no traffic: Barnes to stop 1, stop 8 to stop 9, and stop 17 to Yeadon. On those, leave BEFORE the riders.";
+export const STOPS_ONLY_TURN_LINE = "At stops 1, 2, 9, 10, 11 and 17 you leave the way you came in. Nobody has checked there is room to turn the motorhome.";
+
+export type StopsOnlyRow = { day: number; n: number | null; name: string; arrive: string; kind: "main" | "short" | "finish"; maps: string };
+
+/** The table: every stop in the plan in order, numbered through the two days, then each day's finish. */
+export function stopsOnlyRows(stops: VehicleStop[], finishes: { day: number; name: string; arrive: string; lat: number; lon: number }[]): StopsOnlyRow[] {
+  const turn = planPoint(stops);
+  const out: StopsOnlyRow[] = [];
+  let n = 0;
+  for (const day of [1, 2]) {
+    for (const s of stops.filter((x) => x.day === day)) {
+      // The one stop that is reached by its own road is sent in by the turn off Pontefract Road, as place 6 above is.
+      const viaTurn = !!turn && s.day === 2 && s.lat === turn[0] && s.lon === turn[1];
+      out.push({ day, n: ++n, name: s.name, arrive: s.arrive, kind: s.durMin >= 15 ? "main" : "short", maps: viaTurn ? `${G}destination=${s.lat},${s.lon}&waypoints=53.77167,-1.50876&travelmode=driving` : mapsTo(s.lat, s.lon) });
+    }
+    const f = finishes.find((x) => x.day === day);
+    if (f) out.push({ day, n: null, name: f.name, arrive: f.arrive, kind: "finish", maps: mapsTo(f.lat, f.lon) });
+  }
+  return out;
+}

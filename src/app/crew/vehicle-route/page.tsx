@@ -5,6 +5,9 @@ import { routeVersion } from "@/lib/constants";
 import { LinesMap } from "@/components/lines-map";
 import type { MapDot, MapLine } from "@/components/lines-map-inner";
 import { DAY2_AB_LINE, DAY_TITLES, NAV_APP_LINE, TOP_LINE, VEHICLE_FILES, VEHICLE_ROUTE_VERSION, VERSION_NOTE, legsFor, mapsTo, ownStretch, vehicleFileHref, vehicleLine, vehicleStops, type LatLonPair, type Leg, type VehicleStop } from "@/lib/vehicle-route";
+import { STOPS_ONLY_HEADING, STOPS_ONLY_LINE, STOPS_ONLY_MOTORHOME_LINE, STOPS_ONLY_TIGHT_LINE, STOPS_ONLY_TURN_LINE, stopsOnlyRows } from "@/lib/vehicle-route";
+import { loadRoutePlan } from "@/lib/plan-server";
+import { fmtHm, planAll } from "@/lib/plan";
 
 export const dynamic = "force-dynamic";
 
@@ -20,6 +23,14 @@ export default async function VehicleRoutePage() {
   await requireCrew();
   const stops = await vehicleStops();
   const allLegs = legsFor(stops);
+  // Stops only: each day's finish is the plan's own finish, at the last point of the bike line.
+  const { profiles, initial } = await loadRoutePlan();
+  const finishes = planAll(initial, profiles).flatMap((r) => {
+    const f = r.events.find((e) => e.kind === "finish");
+    const last = bikeLine(r.day).at(-1);
+    return f && last ? [{ day: r.day, name: f.name, arrive: fmtHm(f.arrive), lat: last[0], lon: last[1] }] : [];
+  });
+  const onlyRows = stopsOnlyRows(stops, finishes);
   const d1 = vehicleLine("day1");
   const d2a = vehicleLine("day2a");
   const d2b = vehicleLine("day2b");
@@ -48,6 +59,35 @@ export default async function VehicleRoutePage() {
           <Link href="/crew/stops">Stops</Link>, read as they are now.
         </p>
       </div>
+
+      <section className="stack-sm" id="stops-only">
+        <h2>{STOPS_ONLY_HEADING}</h2>
+        <p style={{ margin: 0 }}>
+          <b>{STOPS_ONLY_LINE}</b>
+        </p>
+        <p className="notice" style={{ margin: 0 }}>
+          {STOPS_ONLY_MOTORHOME_LINE}
+        </p>
+        <p style={{ margin: 0 }}>{STOPS_ONLY_TIGHT_LINE}</p>
+        <p style={{ margin: 0 }}>{STOPS_ONLY_TURN_LINE}</p>
+        <ul className="list">
+          {onlyRows.map((r) => (
+            <li key={`${r.day}-${r.n ?? "finish"}`} className="card" style={{ display: "grid", gridTemplateColumns: "1fr minmax(11rem, 16rem)", gap: "var(--space-3)", alignItems: "center" }} data-stops-only={r.kind}>
+              <div>
+                {r.n != null && <span className="stop-n">{r.n}</span>} <b>{r.kind === "finish" ? `Day ${r.day} finish: ${r.name}` : r.name}</b>
+                <br />
+                <span className="small muted">
+                  Day {r.day} · riders due {r.arrive}
+                  {r.kind === "finish" ? "" : ` · ${r.kind} stop`}
+                </span>
+              </div>
+              <a className="btn" style={{ minHeight: "56px", textAlign: "center" }} href={r.maps} target="_blank" rel="noopener">
+                {r.n != null ? `Maps to stop ${r.n}` : `Maps to the Day ${r.day} finish`}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </section>
 
       <section className="stack-sm">
         <h2>The vehicle GPX files</h2>
