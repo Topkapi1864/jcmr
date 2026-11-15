@@ -8,6 +8,7 @@ import { gpxExists } from "./gpx";
 import { listMessages, messagePhotoUrl } from "./messages";
 import { ridersLive, trackingPublic, type RiderLive } from "./tracking";
 import { getSession } from "./auth";
+import { applyDay2Start } from "./day2-start";
 
 export type LivePayload = {
   now: string;
@@ -67,6 +68,7 @@ const FEED_MAX = 80; // feed entries sent to the page (messages + status lines)
 
 export async function livePayload(): Promise<LivePayload> {
   await ready();
+  await applyDay2Start();
   const s = await getAllSettings();
   const today = londonDate();
   const day = today === RIDE_DAYS[0] ? 1 : today === RIDE_DAYS[1] ? 2 : null;

@@ -4,6 +4,7 @@ import { db, ready, schema } from "@/db/client";
 import { loadProfiles } from "./route";
 import { getSetting } from "./settings";
 import { refreshForRouteVersion, stableWaypointKey } from "./route-version";
+import { applyDay2Start } from "./day2-start";
 import { DEFAULT_PLAN, normalisePlan, planAll, type DayResult, type NamedStop, type Plan, type SavedPlan } from "./plan";
 
 // The route plan as the server sees it: the stops the planner can use, the saved
@@ -72,6 +73,7 @@ function spotStops(spots: (typeof schema.stopSpots.$inferSelect)[], base: Plan):
 export async function loadRoutePlan(): Promise<{ profiles: ReturnType<typeof loadProfiles>; days: (typeof schema.routeDays.$inferSelect)[]; saved: SavedPlan; initial: Plan }> {
   await ready();
   await refreshForRouteVersion();
+  await applyDay2Start();
   const profiles = loadProfiles();
   const days = await db.select().from(schema.routeDays).orderBy(schema.routeDays.day).all();
   const rows = await db.select().from(schema.routeStops).orderBy(schema.routeStops.dayId, schema.routeStops.sortOrder).all();

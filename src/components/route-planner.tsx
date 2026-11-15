@@ -363,7 +363,7 @@ export function RoutePlanner({ profiles, initial, saved: savedIn, me }: Props) {
               <button className="btn btn-sm" onClick={() => update((p) => ({ ...p, speedMph: 13.5 }))}>
                 Brisk 13.5
               </button>
-              <button className="btn btn-sm" onClick={() => update((p) => ({ ...p, days: { 1: { ...p.days[1], start: "06:30" }, 2: { ...p.days[2], start: "07:00" } } }))}>
+              <button className="btn btn-sm" onClick={() => update((p) => ({ ...p, days: { ...p.days, 1: { ...p.days[1], start: "06:30" } } }))}>
                 Day 1 at 06:30
               </button>
             </div>

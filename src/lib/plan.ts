@@ -53,7 +53,7 @@ export type Plan = {
 export const DEFAULT_PLAN: Plan = {
   version: 1,
   speedMph: 12,
-  days: { 1: { start: "07:00", speedMph: null }, 2: { start: "07:00", speedMph: null } },
+  days: { 1: { start: "07:00", speedMph: null }, 2: { start: "07:30", speedMph: null } },
   shortStop: { enabled: true, everyMin: 60, durMin: 5 },
   longStop: { enabled: true, everyMin: 180, durMin: 15 },
   halfway: { enabled: false, durMin: 30 },
