@@ -6,6 +6,8 @@ import { RIDE_DAYS } from "./public";
 import { londonDate } from "./time";
 import { gpxExists } from "./gpx";
 import { listMessages, messagePhotoUrl } from "./messages";
+import { boardVideo } from "./message-video";
+import type { BoardVideo } from "./video-rules";
 import { ridersLive, trackingPublic, type RiderLive } from "./tracking";
 import { getSession } from "./auth";
 import { applyDay2Start } from "./day2-start";
@@ -42,8 +44,9 @@ export type Who = "rider" | "crew";
 export type LiveUpdate = {
   id: string; // "m12" for a message, "s5" for a status line
   kind: "message" | "status";
-  text: string; // a message keeps its paragraphs (blank-line separated); may be empty when there is a picture
+  text: string; // a message keeps its paragraphs (blank-line separated); may be empty when there is a picture or a video
   photo: string | null; // the picture's address, for a message that has one
+  video: BoardVideo | null; // the video's pieces and its box, for a message that has one
   place: string;
   mile: number | null;
   postedAt: string;
@@ -137,8 +140,8 @@ export async function livePayload(): Promise<LivePayload> {
   const who = await whoPosted();
   const posts = await listMessages(FEED_MESSAGES);
   const updates: LiveUpdate[] = [
-    ...posts.map((m) => ({ id: `m${m.id}`, kind: "message" as const, text: m.body, photo: messagePhotoUrl(m), place: "", mile: null, postedAt: m.postedAt, postedBy: m.postedBy, who: who(m.personId, m.postedBy), pinned: m.pinned, edited: !!m.editedAt })),
-    ...recent.map((r) => ({ id: `s${r.id}`, kind: "status" as const, text: r.text, photo: null, place: r.place, mile: r.mile ?? null, postedAt: r.postedAt, postedBy: r.postedBy, who: who(null, r.postedBy), pinned: false, edited: false })),
+    ...posts.map((m) => ({ id: `m${m.id}`, kind: "message" as const, text: m.body, photo: messagePhotoUrl(m), video: m.video ? boardVideo(m.video) : null, place: "", mile: null, postedAt: m.postedAt, postedBy: m.postedBy, who: who(m.personId, m.postedBy), pinned: m.pinned, edited: !!m.editedAt })),
+    ...recent.map((r) => ({ id: `s${r.id}`, kind: "status" as const, text: r.text, photo: null, video: null, place: r.place, mile: r.mile ?? null, postedAt: r.postedAt, postedBy: r.postedBy, who: who(null, r.postedBy), pinned: false, edited: false })),
   ]
     .sort((a, b) => Number(b.pinned) - Number(a.pinned) || b.postedAt.localeCompare(a.postedAt))
     .slice(0, FEED_MAX);

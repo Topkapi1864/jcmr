@@ -1,4 +1,4 @@
-import { sqliteTable, text, integer, real, index, uniqueIndex } from "drizzle-orm/sqlite-core";
+import { sqliteTable, text, integer, real, blob, index, primaryKey, uniqueIndex } from "drizzle-orm/sqlite-core";
 
 // ---- Enumerations (spec §5.3, §6) --------------------------------------
 
@@ -157,6 +157,45 @@ export const messages = sqliteTable("messages", {
   deleted: integer("deleted", { mode: "boolean" }).notNull().default(false),
   photo: text("photo"), // one picture, a resized JPEG as a data: URL — served by /api/messages/photo/<id>
 });
+
+// A video posted with a message (Crew → Messages). This row is what the board
+// needs to draw and fetch it; the bytes are kept apart, in pieces of
+// VIDEO_PART_BYTES (messageVideoParts), so no list and no backup ever loads
+// them. An upload starts with no message; posting the message claims it. A
+// video that is removed or replaced stays here marked deleted, its pieces gone.
+export const messageVideos = sqliteTable(
+  "message_videos",
+  {
+    id: integer("id").primaryKey({ autoIncrement: true }),
+    key: text("key").notNull().unique(), // random; the video's address is /api/messages/video/<key>
+    messageId: integer("message_id").references(() => messages.id), // null until its message is posted
+    personId: integer("person_id").references(() => people.id),
+    postedBy: text("posted_by").notNull(),
+    mime: text("mime").notNull().default(""), // read from the first piece's own bytes: video/mp4 or video/webm
+    bytes: integer("bytes").notNull(),
+    parts: integer("parts").notNull(),
+    seconds: real("seconds").notNull().default(0),
+    width: integer("width").notNull().default(0),
+    height: integer("height").notNull().default(0),
+    poster: text("poster"), // the still shown before it plays, a small JPEG as a data: URL
+    complete: integer("complete", { mode: "boolean" }).notNull().default(false),
+    deleted: integer("deleted", { mode: "boolean" }).notNull().default(false),
+    createdAt: text("created_at").notNull(),
+  },
+  (t) => [index("message_videos_message_idx").on(t.messageId)],
+);
+
+export const messageVideoParts = sqliteTable(
+  "message_video_parts",
+  {
+    videoId: integer("video_id")
+      .notNull()
+      .references(() => messageVideos.id),
+    n: integer("n").notNull(),
+    data: blob("data", { mode: "buffer" }).notNull(),
+  },
+  (t) => [primaryKey({ columns: [t.videoId, t.n] })],
+);
 
 // Night jobs: each rider's and crew member's own checklist of things to do on
 // the Friday night (before day 1) and the Saturday night (before day 2) —
@@ -596,4 +635,5 @@ export type RouteStop = typeof routeStops.$inferSelect;
 export type TrackerLink = typeof trackerLinks.$inferSelect;
 export type LiveStatus = typeof liveStatus.$inferSelect;
 export type Message = typeof messages.$inferSelect;
+export type MessageVideo = typeof messageVideos.$inferSelect;
 export type Link = typeof links.$inferSelect;

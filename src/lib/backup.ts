@@ -2,6 +2,9 @@ import { client, ready } from "@/db/client";
 
 const TABLES = ["settings", "people", "riders", "content", "assets", "route_days", "route_stops", "tracker_links", "live_status", "messages", "night_jobs", "items", "item_notes", "item_events", "links", "kit_catalogue", "kit_items", "crew_details", "people_photos", "sleeping_places", "sleeping", "vehicles", "vehicle_crew", "vehicle_checklist", "vehicle_positions", "people_positions", "stop_spots", "stop_spot_photos", "documents", "audit"];
 
+// The board's videos are not here, on purpose: "message_video_parts" is megabytes
+// apiece, and "message_videos" without it would restore to videos that cannot play.
+// A restore from this file brings back every message, without its video.
 // "documents" (the crew's PDFs) is in the backup only because the nightly job now
 // encrypts this file in the runner before it is kept (.github/workflows/backup.yml).
 // The repository is public: never let this JSON be kept anywhere unencrypted.

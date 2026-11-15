@@ -3,8 +3,10 @@ import { notFound } from "next/navigation";
 import { requireCrew } from "@/lib/auth";
 import { canEditMessage, getMessage, MESSAGE_MAX, messagePhotoUrl } from "@/lib/messages";
 import { fmtWhen } from "@/lib/time";
+import { boardVideo } from "@/lib/message-video";
 import { MessageBody, MessagePhoto } from "@/components/message-body";
-import { MessagePhotoInput } from "@/components/message-photo-input";
+import { MessageAttachments } from "@/components/message-attachments";
+import { MessageVideo } from "@/components/message-video";
 import { pinMessageAction, removeMessageAction, updateMessageAction } from "../actions";
 
 export default async function EditMessagePage({ params, searchParams }: { params: Promise<{ id: string }>; searchParams: Promise<Record<string, string | undefined>> }) {
@@ -23,8 +25,9 @@ export default async function EditMessagePage({ params, searchParams }: { params
         </Link>
       </div>
       {sp.denied && <p className="error">Only {m.postedBy} or an admin can change this message.</p>}
-      {sp.empty && <p className="error">A message needs words, a picture, or both. To take it down, use Remove below.</p>}
+      {sp.empty && <p className="error">A message needs words, a picture or a video. To take it down, use Remove below.</p>}
       {sp.badphoto && <p className="error">That picture didn&rsquo;t come through. Try again, or try a different one.</p>}
+      {sp.badvideo && <p className="error">That video didn&rsquo;t come through, so nothing was changed. Pick the video again, then save.</p>}
 
       <section className="card stack-sm">
         <div className="small muted">
@@ -38,15 +41,13 @@ export default async function EditMessagePage({ params, searchParams }: { params
               <span>The message</span>
               <textarea name="body" rows={9} maxLength={MESSAGE_MAX} defaultValue={m.body} />
             </label>
-            <MessagePhotoInput key={m.editedAt ?? m.postedAt} current={messagePhotoUrl(m)} />
-            <button className="btn btn-primary" type="submit" style={{ width: "100%" }}>
-              Save
-            </button>
+            <MessageAttachments key={m.editedAt ?? m.postedAt} currentPhoto={messagePhotoUrl(m)} currentVideo={m.video ? boardVideo(m.video) : null} submit="Save" submitting="Saving…" />
           </form>
         ) : (
           <>
             {m.body && <MessageBody text={m.body} className="message-text" />}
             {m.hasPhoto && <MessagePhoto src={messagePhotoUrl(m)!} />}
+            {m.video && <MessageVideo video={boardVideo(m.video)} />}
           </>
         )}
       </section>
@@ -57,7 +58,7 @@ export default async function EditMessagePage({ params, searchParams }: { params
           {sp.confirm ? (
             <>
               <p className="small" style={{ margin: 0 }}>
-                Remove this message from the home page and Live? It can&rsquo;t be put back from here.
+                Remove this message from the home page and Live? It can&rsquo;t be put back from here{m.video ? ", and its video is deleted for good" : ""}.
               </p>
               <div className="row">
                 <form action={removeMessageAction}>

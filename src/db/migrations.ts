@@ -81,6 +81,30 @@ export const MIGRATIONS: string[] = [
      deleted INTEGER NOT NULL DEFAULT 0,
      photo TEXT
    )`,
+  `CREATE TABLE IF NOT EXISTS message_videos (
+     id INTEGER PRIMARY KEY AUTOINCREMENT,
+     key TEXT NOT NULL UNIQUE,
+     message_id INTEGER REFERENCES messages(id),
+     person_id INTEGER REFERENCES people(id),
+     posted_by TEXT NOT NULL,
+     mime TEXT NOT NULL DEFAULT '',
+     bytes INTEGER NOT NULL,
+     parts INTEGER NOT NULL,
+     seconds REAL NOT NULL DEFAULT 0,
+     width INTEGER NOT NULL DEFAULT 0,
+     height INTEGER NOT NULL DEFAULT 0,
+     poster TEXT,
+     complete INTEGER NOT NULL DEFAULT 0,
+     deleted INTEGER NOT NULL DEFAULT 0,
+     created_at TEXT NOT NULL
+   )`,
+  `CREATE INDEX IF NOT EXISTS message_videos_message_idx ON message_videos(message_id)`,
+  `CREATE TABLE IF NOT EXISTS message_video_parts (
+     video_id INTEGER NOT NULL REFERENCES message_videos(id),
+     n INTEGER NOT NULL,
+     data BLOB NOT NULL,
+     PRIMARY KEY (video_id, n)
+   )`,
   `CREATE TABLE IF NOT EXISTS night_jobs (
      id INTEGER PRIMARY KEY AUTOINCREMENT,
      night TEXT NOT NULL,

@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import type { LivePayload } from "@/lib/live";
 import { RouteMap } from "./route-map";
 import { MessageBody, MessagePhoto } from "./message-body";
+import { MessageVideo } from "./message-video";
 
 // The "Follow the Ride" live card from the design handoff: status line, big
 // miles, where they are, next stop + ETA, progress bar with the overnight
@@ -183,7 +184,7 @@ export function Updates({ initial, fold = 6 }: { initial: LivePayload; fold?: nu
     };
     measure();
     el.addEventListener("scroll", measure, { passive: true });
-    // The box changes with the window; its rows with a new post, "Show earlier" or a picture arriving.
+    // The box changes with the window; its rows with a new post, "Show earlier", or a picture or a video's still arriving.
     const watch = typeof ResizeObserver === "undefined" ? null : new ResizeObserver(measure);
     watch?.observe(el);
     if (rows.current) watch?.observe(rows.current);
@@ -218,6 +219,7 @@ export function Updates({ initial, fold = 6 }: { initial: LivePayload; fold?: nu
                     <>
                       {m.text && <MessageBody text={m.text} className="text" />}
                       {m.photo && <MessagePhoto src={m.photo} />}
+                      {m.video && <MessageVideo key={m.video.src} video={m.video} />}
                     </>
                   ) : (
                     <div className="text">
